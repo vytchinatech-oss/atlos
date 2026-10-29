@@ -412,6 +412,34 @@ details{border:none;border-radius:18px;box-shadow:var(--shadow);padding:14px 18p
 .stab .sr span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .delta-up{color:var(--ok);font-weight:600}.delta-down{color:var(--warn);font-weight:600}
 
+/* library v2 */
+.seg{display:flex;background:var(--sunk);border-radius:999px;padding:3px;gap:2px}
+.segb{all:unset;cursor:pointer;flex:1;text-align:center;padding:8px 6px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted)}
+.segb[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.segb .num{font-size:12px;opacity:.7}
+.segb:focus-visible{outline:2px solid var(--fg)}
+.lib-groups{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+.lib-groups::-webkit-scrollbar{display:none}
+.lib-groups .chip{flex:none}
+.inw{width:30px;height:30px;display:grid;place-items:center;border-radius:999px;background:var(--sunk);font-size:14px;font-weight:600}
+.cnum{font-size:11px;opacity:.6;margin-left:2px}
+.chip[aria-pressed="true"] .cnum{opacity:.8}
+.gymrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.gymrow .chip,.gympanel .chip{font-family:var(--body)}
+.gympanel{background:var(--sunk);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.lh{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--fg);padding:14px 8px 4px;border-top:1px solid var(--line);margin-top:4px}
+.lh:first-child{border-top:none;margin-top:0;padding-top:4px}
+.lh .muted{text-transform:none;letter-spacing:0;font-weight:400}
+.libit{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px;padding:0;cursor:default}
+.libit:hover{background:transparent}
+.libmain{all:unset;cursor:pointer;display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 8px;border-radius:14px;min-width:0}
+.libmain:hover,.libmain:focus-visible{background:var(--sunk)}
+.libmain svg{width:48px;height:40px;background:var(--sunk);border-radius:12px}
+.star{all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:999px;color:var(--muted);font-size:18px}
+.star[aria-pressed="true"]{color:var(--fg)}
+.star:focus-visible{outline:2px solid var(--fg)}
+.tag{display:inline-block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--line);border-radius:999px;padding:0 6px;margin-left:2px;color:var(--fg)}
+
 /* standalone app */
 :root{--display:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif;--body:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif;--mono:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif}
 body{padding-top:env(safe-area-inset-top,0px)}
@@ -519,12 +547,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <div class="sheet" id="lib" hidden role="dialog" aria-modal="true" aria-labelledby="lib-title">
   <div class="sheet-panel" style="height:80%">
     <div class="grab"></div>
-    <div class="pkrow"><h2 id="lib-title" style="font-size:22px">Добавить упражнение</h2><button class="btn ghost small" id="lib-close" aria-label="Закрыть">✕</button></div>
+    <div class="pkrow" style="flex-wrap:nowrap;align-items:flex-start"><div style="min-width:0;flex:1"><h2 id="lib-title" style="font-size:22px">Добавить упражнение</h2><div class="muted" id="lib-sub" style="font-size:13px"></div></div><button class="btn ghost small" id="lib-close" aria-label="Закрыть">✕</button></div>
     <input id="lib-q" type="search" placeholder="Поиск: тяга, жим, присед…" aria-label="Поиск упражнения" autocomplete="off">
-    <div class="lib-groups" id="lib-groups" role="group" aria-label="Группа мышц"></div>
-    <div class="lib-groups" id="lib-eq" role="group" aria-label="Оборудование"></div>
-    <div class="lib-groups" id="lib-lvl" role="group" aria-label="Сложность"></div>
-    <div class="muted" id="lib-count" style="font-size:12px"></div>
+    <div class="seg" id="lib-kinds" role="tablist" aria-label="Тип тренировки"></div>
+    <div class="lib-groups" id="lib-groups" role="group" aria-label="Мышцы"></div>
+    <div class="gymrow" id="lib-gymrow"></div>
+    <div class="gympanel" id="lib-gym" hidden></div>
     <div class="lib-list" id="lib-list"></div>
   </div>
 </div>
@@ -768,7 +796,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.10.29-074c824";
+const APP_VERSION="2026.10.29-19e5649";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -840,23 +868,54 @@ const LIB_RAW = [
   ["abs","Пресс с утяжелением","Пресс","plate","w","abs",null,0,5],
   ["plank","Планка","Пресс","bw","time","plank",null,0,0,{tu:"сек"}],
   ["legraise","Подъём ног в висе","Пресс","bw","bw","legraise"],
+  ["hipthrust","Ягодичный мост со штангой","Ноги","barbell","w",null,"squat",.8,40,{m:"Ягодицы, задняя поверхность бедра",c:["Лопатки на скамье, гриф на сгибе бёдер через мягкую накладку.","Поднимайте таз до прямой линии плечи–колени, сжимая ягодицы.","Подбородок к груди, поясница не прогибается.","Опускайте медленно, не касаясь пола."]}],
+  ["seatcalf","Подъём на носки сидя","Ноги","machine","w",null,"calf",.5,30,{m:"Камбаловидная, икроножные",c:["Валик на нижней части бёдер, носки на краю платформы.","Поднимайтесь на носки максимально высоко, пауза 1 с.","Опускайте пятки ниже платформы до растяжения.","Без рывков и пружин."]}],
+  ["cablecurl","Сгибание рук на нижнем блоке","Руки","cable","w","curl","curl",.6,15,{m:"Бицепс, плечевая",c:["Прямая рукоять нижнего блока, локти у корпуса.","Сгибайте руки, не отводя локти вперёд.","Вверху короткая пауза.","Опускайте под контролем до прямых рук."]}],
+  ["superman","Супермен (лёжа на животе)","Спина","bw","bw",null,null,0,0,{m:"Разгибатели спины, ягодицы",c:["Лёжа на животе, руки вытянуты вперёд.","Одновременно поднимите руки и ноги на 10–15 см.","Пауза 2 с, взгляд в пол, шея ровная.","Опускайтесь медленно."]}],
   ["rope","Скакалка","Кардио","none","time","rope"],
   ["run","Бег / беговая дорожка","Кардио","none","time",null,null,0,0,{c:["Начинайте с 5 минут быстрой ходьбы.","Темп разговорный: можете говорить фразами.","Шаг короткий, приземление под центром тяжести.","В конце 3–5 минут заминки."],m:"Сердечно-сосудистая выносливость"}],
-  ["bike","Велотренажёр","Кардио","none","time",null,null,0,0,{c:["Высота седла: нога почти прямая в нижней точке.","Каденс 70–90 об/мин.","Спина ровная, плечи расслаблены.","Нагрузку повышайте постепенно."],m:"Квадрицепс, выносливость"}]
+  ["bike","Велотренажёр","Кардио","none","time",null,null,0,0,{c:["Высота седла: нога почти прямая в нижней точке.","Каденс 70–90 об/мин.","Спина ровная, плечи расслаблены.","Нагрузку повышайте постепенно."],m:"Квадрицепс, выносливость"}],
+  ["mob_hams","Растяжка задней поверхности бедра","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Задняя поверхность бедра",c:["Сидя, одна нога прямая, другая согнута.","Тянитесь грудью к колену прямой ноги с ровной спиной.","Лёгкое натяжение, без боли; дышите спокойно.","По 30 с на каждую ногу."]}],
+  ["mob_glutes","Растяжка ягодиц лёжа («четвёрка»)","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Ягодицы, грушевидная",c:["Лёжа на спине, лодыжка на колене другой ноги.","Подтяните нижнюю ногу к груди руками.","Поясница прижата к полу.","По 30 с на каждую сторону."]}],
+  ["mob_quads","Растяжка квадрицепса стоя","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Квадрицепс, сгибатели бедра",c:["Стоя, возьмите стопу рукой и подтяните пятку к ягодице.","Колени рядом, таз слегка подкручен вперёд.","Держитесь за опору при необходимости.","По 30 с на каждую ногу."]}],
+  ["mob_chest","Растяжка грудных у стены","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Грудные, передние дельты",c:["Предплечье на стене, локоть на уровне плеча.","Медленно разворачивайте корпус от стены.","Плечо опущено, без боли в суставе.","По 30 с на каждую сторону."]}],
+  ["mob_shoulder","Растяжка плеча поперёк груди","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Задние дельты, верх спины",c:["Прямая рука поперёк груди.","Другой рукой прижмите её выше локтя к себе.","Плечо не поднимается к уху.","По 30 с на каждую руку."]}],
+  ["mob_catcow","Кошка-корова","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Разгибатели спины, пресс",c:["Стоя на четвереньках, ладони под плечами.","На вдохе прогнитесь, взгляд вперёд.","На выдохе округлите спину, подбородок к груди.","Медленно, 8–10 циклов за 30–40 с."]}]
 ];
 const LIB={}; LIB_RAW.forEach(([id,name,g,eq,type,anim,ref,ratio,base,extra])=>LIB[id]=Object.assign({id,name,g,eq,type,anim,ref,ratio,base},extra||{}));
-const GROUPS=["Все","Спина","Грудь","Ноги","Плечи","Руки","Пресс","Кардио"];
-const LVL={hyper:1,latpull:1,widelat:1,seatrow:1,pecdeck:1,legpress:1,legext:1,legcurl:1,calf:1,lateral:1,curl:1,dbcurl:1,hammer:1,tricep:1,crunch:1,abs:1,plank:1,rope:1,run:1,bike:1,pushup:1,dips:1,goblet:1,facepull:1,dbbench:1,cableup:1,dbpress:2,reardelt:2,crossover:2,bbrow:2,bench:2,closegrip:2,incline:2,squat:2,lunge:2,dbrow:2,uprow:2,french:2,tricepdb:2,shrug:2,ohp:2,bulgarian:2,rdl:2,legraise:2,deadlift:3,pullup:3};
+/* taxonomy v2: what to train (muscle) · training type · what equipment it needs · movement pattern */
+const MUS={chest:"Грудь",lats:"Широчайшие",upper:"Верх спины",lower:"Поясница",delts:"Плечи",biceps:"Бицепс",triceps:"Трицепс",abs:"Пресс",glutes:"Ягодицы",quads:"Квадрицепс",hams:"Бицепс бедра",calves:"Икры"};
+const MUS_ORDER=["chest","lats","upper","lower","delts","biceps","triceps","abs","glutes","quads","hams","calves"];
+const MUS_HINT={chest:"грудные мышцы",lats:"широчайшие мышцы спины",upper:"трапеции, ромбовидные, задние дельты",lower:"разгибатели спины",delts:"дельтовидные мышцы",biceps:"бицепс и плечевая мышца",triceps:"трёхглавая мышца плеча",abs:"прямая и косые мышцы живота",glutes:"ягодичные мышцы",quads:"передняя поверхность бедра",hams:"задняя поверхность бедра",calves:"икроножные и камбаловидные"};
+const KINDS=[["str","Силовые"],["cardio","Кардио"],["mob","Растяжка"]];
+const EQN={barbell:"штанга",dumbbell:"гантели",bench:"скамья",cable:"блок",machine:"тренажёр",bar:"турник",rope:"скакалка",cardio:"кардиотренажёр"};
+const GYM_ITEMS=[["barbell","Штанга"],["dumbbell","Гантели"],["bench","Скамья"],["cable","Блоки"],["machine","Силовые тренажёры"],["bar","Турник"],["rope","Скакалка"],["cardio","Кардиотренажёры"]];
+const PATN={squat:"присед",hinge:"тяга бёдрами",lunge:"выпад",hpush:"жим от себя",vpush:"жим вверх",hpull:"тяга к себе",vpull:"тяга сверху",iso:"изолирующее",core:"мышцы кора",cardio:"кардио",mob:"растяжка"};
+/* id: [main muscles, secondary muscles, equipment needed, movement pattern, type] */
+const META={hyper:[["lower","glutes"],["hams"],["machine"],"hinge"],bbrow:[["lats","upper"],["biceps","lower"],["barbell"],"hpull"],latpull:[["lats"],["biceps","upper"],["cable"],"vpull"],widelat:[["lats"],["upper","biceps"],["cable"],"vpull"],seatrow:[["upper","lats"],["biceps"],["cable"],"hpull"],pullup:[["lats"],["biceps","upper"],["bar"],"vpull"],dbrow:[["lats"],["upper","biceps"],["dumbbell","bench"],"hpull"],deadlift:[["glutes","hams","lower"],["upper","quads"],["barbell"],"hinge"],rdl:[["hams","glutes"],["lower"],["barbell"],"hinge"],facepull:[["delts","upper"],[],["cable"],"hpull"],superman:[["lower"],["glutes"],[],"hinge"],
+bench:[["chest"],["triceps","delts"],["barbell","bench"],"hpush"],closegrip:[["triceps"],["chest","delts"],["barbell","bench"],"hpush"],incline:[["chest"],["delts","triceps"],["dumbbell","bench"],"hpush"],dbbench:[["chest"],["triceps","delts"],["dumbbell","bench"],"hpush"],pecdeck:[["chest"],["delts"],["machine"],"iso"],crossover:[["chest"],["delts"],["cable"],"iso"],pushup:[["chest"],["triceps","delts","abs"],[],"hpush"],dips:[["chest","triceps"],["delts"],["machine"],"hpush"],
+squat:[["quads","glutes"],["hams","lower"],["barbell"],"squat"],legpress:[["quads","glutes"],["hams"],["machine"],"squat"],lunge:[["quads","glutes"],["hams"],["dumbbell"],"lunge"],bulgarian:[["quads","glutes"],["hams"],["dumbbell","bench"],"lunge"],goblet:[["quads","glutes"],["abs"],["dumbbell"],"squat"],legext:[["quads"],[],["machine"],"iso"],legcurl:[["hams"],["calves"],["machine"],"iso"],calf:[["calves"],[],["machine"],"iso"],seatcalf:[["calves"],[],["machine"],"iso"],hipthrust:[["glutes"],["hams"],["barbell","bench"],"hinge"],
+dbpress:[["delts"],["triceps"],["dumbbell"],"vpush"],ohp:[["delts"],["triceps","upper"],["barbell"],"vpush"],uprow:[["delts","upper"],["biceps"],["barbell"],"iso"],cableup:[["delts","upper"],["biceps"],["cable"],"iso"],lateral:[["delts"],[],["dumbbell"],"iso"],reardelt:[["delts","upper"],[],["dumbbell"],"iso"],shrug:[["upper"],[],["barbell"],"iso"],
+curl:[["biceps"],[],["barbell"],"iso"],dbcurl:[["biceps"],[],["dumbbell"],"iso"],hammer:[["biceps"],[],["dumbbell"],"iso"],cablecurl:[["biceps"],[],["cable"],"iso"],tricep:[["triceps"],[],["cable"],"iso"],french:[["triceps"],[],["barbell","bench"],"iso"],tricepdb:[["triceps"],[],["dumbbell"],"iso"],
+crunch:[["abs"],[],[],"core"],abs:[["abs"],[],["dumbbell"],"core"],plank:[["abs"],["lower","delts"],[],"core"],legraise:[["abs"],[],["bar"],"core"],
+rope:[[],["calves"],["rope"],"cardio","cardio"],run:[[],[],["cardio"],"cardio","cardio"],bike:[[],["quads"],["cardio"],"cardio","cardio"],
+mob_hams:[["hams"],[],[],"mob","mob"],mob_glutes:[["glutes"],["lower"],[],"mob","mob"],mob_quads:[["quads"],[],[],"mob","mob"],mob_chest:[["chest"],["delts"],[],"mob","mob"],mob_shoulder:[["delts"],["upper"],[],"mob","mob"],mob_catcow:[["lower"],["abs"],[],"mob","mob"]};
+const CDEF={kind:"str",mus:[],sec:[],need:[],pat:null};
+Object.entries(META).forEach(([id,[m,sc,need,pat,kind]])=>{ const x=LIB[id]; if(!x) return; Object.assign(x,{mus:m,sec:sc,need,pat,kind:kind||"str"}); x.g = kind==="cardio"?"Кардио" : (MUS[m[0]]||x.g); });
+Object.values(LIB).forEach(x=>{ if(!x.kind) Object.assign(x,CDEF,{}); });
+const musLine = x => x.kind==="cardio" ? "выносливость" : (x.mus&&x.mus.length ? x.mus.map(k=>MUS[k].toLowerCase()).join(", ") : "своё упражнение") + (x.sec&&x.sec.length ? " · вспом.: "+x.sec.map(k=>MUS[k].toLowerCase()).join(", ") : "");
+const needLine = x => x.need&&x.need.length ? x.need.map(e=>EQN[e]).join(", ") : (x.kind==="cardio"||x.kind==="mob"||x.type==="bw"||x.type==="time" ? "без оборудования" : "любое");
+let myGym=load("atlos:gym"), onlyMine=load("atlos:onlyMine")!==false, favs=new Set(load("atlos:favs")||[]);
+const availableFor = x => !myGym || !onlyMine || (x.need||[]).every(e=>myGym.includes(e));
+const LVL={hipthrust:2,seatcalf:1,cablecurl:1,superman:1,mob_hams:1,mob_glutes:1,mob_quads:1,mob_chest:1,mob_shoulder:1,mob_catcow:1,hyper:1,latpull:1,widelat:1,seatrow:1,pecdeck:1,legpress:1,legext:1,legcurl:1,calf:1,lateral:1,curl:1,dbcurl:1,hammer:1,tricep:1,crunch:1,abs:1,plank:1,rope:1,run:1,bike:1,pushup:1,dips:1,goblet:1,facepull:1,dbbench:1,cableup:1,dbpress:2,reardelt:2,crossover:2,bbrow:2,bench:2,closegrip:2,incline:2,squat:2,lunge:2,dbrow:2,uprow:2,french:2,tricepdb:2,shrug:2,ohp:2,bulgarian:2,rdl:2,legraise:2,deadlift:3,pullup:3};
 const LVLN=["","новичок","средний","опытный"];
-const KIND={free:"Свободный вес",bw:"Свой вес",machine:"Тренажёры и блоки",cardio:"Кардио"};
-function kindOf(x){ return x.eq==="bw"?"bw" : (x.eq==="machine"||x.eq==="cable")?"machine" : x.eq==="none"?"cardio" : "free"; }
 function lvlOf(x){ return LVL[x.id]||2; }
 const lvlDots = n => "●".repeat(n)+"○".repeat(3-n);
 const EQ={barbell:"штанга",dumbbell:"гантели",cable:"блок",machine:"тренажёр",bw:"свой вес",plate:"блин",none:""};
 const CUSTOM={};
-function exOf(it){ return LIB[it.ex] || CUSTOM[it.ex] || {id:it.ex,name:it.name||"Упражнение",g:"Своё",eq:"barbell",type:it.type||"w",anim:null}; }
+function exOf(it){ return LIB[it.ex] || CUSTOM[it.ex] || Object.assign({},CDEF,{id:it.ex,name:it.name||"Упражнение",g:"Своё",eq:"barbell",type:it.type||"w",anim:null}); }
 window.exInfo = id => { const x=LIB[id]||CUSTOM[id]; return x?{name:x.name,m:x.m,c:x.c}:{}; };
-function noteCustom(it){ if(it && it.name && !LIB[it.ex]) CUSTOM[it.ex]={id:it.ex,name:it.name,g:"Своё",eq:"barbell",type:it.type||"w",anim:null}; }
+function noteCustom(it){ if(it && it.name && !LIB[it.ex]) CUSTOM[it.ex]=Object.assign({},CDEF,{id:it.ex,name:it.name,g:"Своё",eq:"barbell",type:it.type||"w",anim:null}); }
 
 /* ===== helpers ===== */
 const $ = id => document.getElementById(id);
@@ -913,6 +972,7 @@ function defaultSets(x){
   if(l) return {sets:l.sets.map(s=>({w:s.w??null,r:s.r??null,done:false})), est:false, src:"последний раз "+fmtDate(l.date)};
   for(const w of wList()) for(const it of w.items||[]) if(it.ex===x.id && it.sets && it.sets.length) return {sets:it.sets.map(s=>({w:s.w??null,r:s.r??null,done:false})), est:false, src:"из тренировки «"+w.name+"»"};
   const ty=typical();
+  if(x.kind==="mob") return {sets:[{w:null,r:30,done:false},{w:null,r:30,done:false}], est:true, src:"по умолчанию"};
   if(x.type==="time"){ const v=x.tu==="сек"?60:(x.id==="rope"?5:20), n=x.tu==="сек"?3:1; return {sets:Array.from({length:n},()=>({w:null,r:v,done:false})), est:true, src:"по умолчанию"}; }
   if(x.type==="bw") return {sets:Array.from({length:Math.min(ty.n,4)},()=>({w:null,r:Math.min(ty.r,15),done:false})), est:true, src:"по умолчанию"};
   if(x.type==="assist") return {sets:Array.from({length:ty.n},()=>({w:x.base,r:ty.r,done:false})), est:true, src:"по умолчанию"};
@@ -986,8 +1046,8 @@ function cardHTML(i){
       ${one?'<span></span>':`<button class="rmset" aria-label="Убрать подход ${j+1}" title="Убрать подход">−</button>`}</div>`; }).join("");
   return `<article class="ex${done?" done":""}" data-i="${i}">
     <div class="exhead">${anim?`<button class="thumb" data-anim="${anim}" data-ex="${esc(it.ex)}" aria-label="Техника: ${esc(x.name)}"><svg viewBox="0 0 120 100" data-fig="${anim}" aria-hidden="true"></svg><span class="tlbl">техника</span></button>`:`<div class="thumb nofig" aria-hidden="true"><span>${esc(x.g.slice(0,1))}</span></div>`}
-      <div class="exname"><h3>${esc(x.name)}</h3><div class="sub">${esc(x.g)}${EQ[x.eq]?" · "+EQ[x.eq]:""} · <span class="lv" title="Сложность: ${LVLN[lvlOf(x)]}">${lvlDots(lvlOf(x))}</span>${it.est?` · <span class="pill" title="${esc(it.src||"")}">оценка</span>`:""}</div></div>
-      <div class="exmenu"><button class="ib" data-mv="-1" aria-label="Выше" ${i===0?"disabled":""}>↑</button><button class="ib" data-mv="1" aria-label="Ниже" ${i===draft.items.length-1?"disabled":""}>↓</button><button class="ib" data-delex aria-label="Убрать упражнение">✕</button></div>
+      <div class="exname"><h3>${esc(x.name)}</h3><div class="sub">${esc(x.kind==="cardio"?"Кардио":(x.mus||[]).map(k=>MUS[k]).join(", ")||"Своё")} · ${esc(needLine(x))} · <span class="lv" title="Сложность: ${LVLN[lvlOf(x)]}">${lvlDots(lvlOf(x))}</span>${it.est?` · <span class="pill" title="${esc(it.src||"")}">оценка</span>`:""}</div></div>
+      <div class="exmenu"><button class="ib" data-mv="-1" aria-label="Выше" ${i===0?"disabled":""}>↑</button><button class="ib" data-mv="1" aria-label="Ниже" ${i===draft.items.length-1?"disabled":""}>↓</button><button class="ib" data-repl aria-label="Заменить упражнение" title="Заменить">⇄</button><button class="ib" data-delex aria-label="Убрать упражнение">✕</button></div>
     </div>
     <div class="sets2" role="group" aria-label="Подходы">
       <div class="row hdr"><span>№</span><span>Прошлый${pv?" · "+fmtDate(pv.date):""}</span><span>${time?"старт":wLabel(x)}</span><span>${unitOf(x)}</span><span>✓</span><span></span></div>
@@ -1161,36 +1221,107 @@ $("picker").addEventListener("click",e=>{
 $("pk-next").addEventListener("change",e=>{ pk.next=e.target.checked; });
 
 /* ===== library sheet ===== */
-let libGroup="Все", libEq="all", libLvl=0;
-function openLib(){ $("lib-q").value=""; renderLib(); $("lib").hidden=false; setTimeout(()=>$("lib-q").focus(),30); }
+let libKind="str", libMus="all", libRepl=null, gymOpen=false;
+function openLib(replIdx){
+  libRepl = replIdx==null ? null : replIdx; $("lib-q").value="";
+  if(libRepl!=null){ const x=exOf(draft.items[libRepl]); libKind=x.kind||"str"; libMus="all"; }
+  $("lib-title").textContent = libRepl!=null ? "Заменить упражнение" : "Добавить упражнение";
+  $("lib-sub").textContent = libRepl!=null ? `Вместо «${exOf(draft.items[libRepl]).name}»: те же мышцы, похожее движение` : "";
+  gymOpen=false; renderLib(); $("lib").hidden=false; setTimeout(()=>$("lib-q").focus(),30);
+}
+const SYN={deadlift:"становая",rdl:"румынка румынская мертвая",bench:"жим лежа",squat:"присед приседания",legpress:"платформа ноги",pullup:"турник подтягивание",crunch:"пресс",hipthrust:"мостик ягодичный",pushup:"отжимания",latpull:"верхний блок",widelat:"верхний блок",seatrow:"нижний блок",run:"дорожка бег",bike:"велосипед",dips:"брусья"};
+const norm=t=>String(t).toLowerCase().replace(/ё/g,"е");
+function qMuscles(q){ q=norm(q); const exact=MUS_ORDER.filter(m=>norm(MUS[m])===q); if(exact.length) return exact; return q.length<3?[]:MUS_ORDER.filter(m=>norm(MUS[m]).startsWith(q)||norm(MUS_HINT[m]).split(/[ ,]+/).some(w=>w.startsWith(q))); }
+function qScore(x,q){ const ws=norm(q).split(/\s+/).filter(Boolean), nm=norm(x.name+" "+(SYN[x.id]||""));
+  if(ws.every(w=>nm.includes(w))) return 3;
+  const ms=qMuscles(q); if(ms.length && (x.mus||[]).some(m=>ms.includes(m))) return 2;
+  const eq=norm(needLine(x)); if(ws.every(w=>nm.includes(w)||eq.includes(w))) return 1;
+  return 0; }
+function matchQ(x,q){ return qScore(x,q)>0; }
+function recentIds(){ const out=[]; for(const s of sSorted().reverse()){ for(const it of s.items||[]){ if(it.sets&&it.sets.some(z=>z.done)&&!out.includes(it.ex)) out.push(it.ex); } if(out.length>=8) break; } return out.slice(0,8); }
+function libItem(x,inW,extra){
+  const l=lastSetsOf(x.id); let info;
+  if(l){ const ws=l.sets.filter(s=>s.done).map(s=>+s.w).filter(v=>v>0); info = ws.length? `делали: ${fmtN(Math.max(...ws))} кг · ${fmtDate(l.date)}` : `делали ${fmtDate(l.date)}`; }
+  else if(x.type==="w"){ const e=estimate(x.id); info = e? (e.est?`новое · оценка ≈ ${fmtN(e.w)} кг`:`в тренировках: ${fmtN(e.w)} кг`) : "новое"; }
+  else info = x.kind==="mob" ? "на время, 2 × 30 с" : x.type==="time" ? "на время" : "новое";
+  const lv=lvlOf(x), lvTag = lv===1?'<span class="tag">новичку</span>':lv===3?'<span class="tag">опытным</span>':"";
+  return `<div class="libit"><button class="libmain" data-addex="${esc(x.id)}">${x.anim&&ANIM.has(x.anim)?`<svg viewBox="0 0 120 100" data-mini="${x.anim}" aria-hidden="true"></svg>`:`<span class="lg">${esc((x.g||"·").slice(0,1))}</span>`}
+    <span class="ln"><b>${esc(x.name)}</b><span class="muted">${esc(x.kind==="cardio"?"Выносливость":(x.mus||[]).map((k,i)=>i?MUS[k].toLowerCase():MUS[k]).join(", ")||"Своё")} · ${esc(needLine(x))}${extra?" · "+esc(extra):""}</span><span class="muted">${esc(info)} ${lvTag}</span></span>${inW.has(x.id)?'<span class="inw" title="Уже в тренировке" aria-label="Уже в тренировке">✓</span>':`<span class="addi" aria-hidden="true">${libRepl!=null?"⇄":"+"}</span>`}</button>
+    ${String(x.id).startsWith("c-")?"":`<button class="star" data-fav="${esc(x.id)}" aria-pressed="${favs.has(x.id)}" aria-label="${favs.has(x.id)?"Убрать из избранного":"В избранное"}">${favs.has(x.id)?"★":"☆"}</button>`}</div>`;
+}
 function renderLib(){
-  const q=$("lib-q").value.trim().toLowerCase();
-  $("lib-groups").innerHTML=GROUPS.map(g=>`<button class="chip" data-g="${g}" aria-pressed="${g===libGroup}">${g}</button>`).join("");
-  $("lib-eq").innerHTML=[["all","Любое оборудование"],...Object.entries(KIND)].map(([k,v])=>`<button class="chip" data-eq="${k}" aria-pressed="${k===libEq}">${v}</button>`).join("");
-  $("lib-lvl").innerHTML=[[0,"Любая сложность"],[1,"●○○ Новичок"],[2,"●●○ Средний"],[3,"●●● Опытный"]].map(([k,v])=>`<button class="chip" data-lvl="${k}" aria-pressed="${k===libLvl}">${v}</button>`).join("");
+  const qRaw=$("lib-q").value.trim(), q=qRaw.toLowerCase();
+  const all=Object.values(LIB).concat(Object.values(CUSTOM));
+  const cur = libRepl!=null ? exOf(draft.items[libRepl]) : null;
   const inW=new Set(draft?draft.items.map(i=>i.ex):[]);
-  const list=Object.values(LIB).concat(Object.values(CUSTOM)).filter(x=>(libGroup==="Все"||x.g===libGroup)&&(libEq==="all"||kindOf(x)===libEq)&&(!libLvl||lvlOf(x)===libLvl)&&(!q||x.name.toLowerCase().includes(q)));
-  $("lib-count").textContent=`Найдено: ${list.length}`;
-  $("lib-list").innerHTML = list.map(x=>{
-    const l=lastSetsOf(x.id); let info;
-    if(l){ const ws=l.sets.filter(s=>s.done).map(s=>+s.w).filter(v=>v>0); info = ws.length? `делали: ${fmtN(Math.max(...ws))} кг · ${fmtDate(l.date)}` : `делали ${fmtDate(l.date)}`; }
-    else if(x.type==="w"){ const e=estimate(x.id); info = e? (e.est?`новое · оценка ≈ ${fmtN(e.w)} кг`:`в тренировках: ${fmtN(e.w)} кг`) : "новое"; }
-    else info = x.type==="time"?"кардио / время":"новое";
-    return `<button class="libit" data-addex="${esc(x.id)}">${x.anim&&ANIM.has(x.anim)?`<svg viewBox="0 0 120 100" data-mini="${x.anim}" aria-hidden="true"></svg>`:`<span class="lg">${esc(x.g.slice(0,1))}</span>`}
-      <span class="ln"><b>${esc(x.name)}</b><span class="muted">${esc(x.g)} · ${esc(KIND[kindOf(x)])} · <span class="lv" title="Сложность: ${LVLN[lvlOf(x)]}">${lvlDots(lvlOf(x))}</span></span><span class="muted">${esc(info)}</span></span>${inW.has(x.id)?'<span class="pill ok">в тренировке</span>':'<span class="addi">+</span>'}</button>`;
-  }).join("") + (q?`<button class="libit" data-custom><span class="lg">+</span><span class="ln"><b>Своё упражнение: «${esc($("lib-q").value.trim())}»</b><span class="muted">Вес × повторы, подходы по умолчанию</span></span><span class="addi">+</span></button>`:"")
-    + (!list.length&&!q?'<div class="empty">Ничего не найдено</div>':"");
-  document.querySelectorAll("#lib-list svg[data-mini]").forEach(s=>ANIM.draw(s,s.dataset.mini,1,0));
+  const pool=k=>all.filter(x=>(x.kind||"str")===k && availableFor(x) && (!q||matchQ(x,q)) && (!cur||x.id!==cur.id));
+  $("lib-kinds").hidden = cur!=null;
+  $("lib-kinds").innerHTML=KINDS.map(([k,v])=>`<button class="segb" role="tab" data-kind="${k}" aria-selected="${k===libKind}">${v} <span class="num">${pool(k).length}</span></button>`).join("");
+  let base=pool(libKind);
+  // muscle chips (only muscles that actually have exercises right now)
+  if(libKind!=="cardio" && !cur){
+    const cnt={}; base.forEach(x=>(x.mus||[]).forEach(m=>cnt[m]=(cnt[m]||0)+1));
+    if(libMus!=="all" && !cnt[libMus]) libMus="all";
+    $("lib-groups").hidden=false;
+    $("lib-groups").innerHTML=`<button class="chip" data-mus="all" aria-pressed="${libMus==="all"}">Все <span class="cnum">${base.length}</span></button>`+MUS_ORDER.filter(m=>cnt[m]).map(m=>`<button class="chip" data-mus="${m}" aria-pressed="${m===libMus}" title="${MUS_HINT[m]}">${MUS[m]} <span class="cnum">${cnt[m]}</span></button>`).join("");
+  } else { $("lib-groups").hidden=true; libMus="all"; }
+  let list = libMus==="all" ? base : base.filter(x=>(x.mus||[]).includes(libMus));
+  const rank=x=>(favs.has(x.id)?-4:0)+(lastSetsOf(x.id)?-2:0)+lvlOf(x)*0.1;
+  // gym row
+  const lacking = myGym ? GYM_ITEMS.length-myGym.length : 0;
+  const hidden = myGym&&onlyMine ? all.filter(x=>(x.kind||"str")===libKind && !(x.need||[]).every(e=>myGym.includes(e)) && (!q||matchQ(x,q))).length : 0;
+  $("lib-gymrow").innerHTML=`<button class="chip" data-gym aria-expanded="${gymOpen}">⚙ Мой зал${myGym?(lacking?` · нет ${lacking} из ${GYM_ITEMS.length}`:" · всё есть"):": не настроен"}</button>`+(myGym&&lacking?`<button class="chip" data-onlymine aria-pressed="${onlyMine}">Только доступное</button>`:"")+(hidden?`<span class="muted" style="font-size:12px">скрыто ${hidden}</span>`:"");
+  $("lib-gym").hidden=!gymOpen;
+  if(gymOpen){ const g=myGym||GYM_ITEMS.map(x=>x[0]); $("lib-gym").innerHTML=`<p class="muted" style="margin:0;font-size:13px">Отметьте, что есть в вашем зале. Упражнения, для которых чего-то нет, скроются, а «Заменить» будет предлагать только доступное.</p><div class="chips" style="justify-content:flex-start">${GYM_ITEMS.map(([k,v])=>`<button class="chip" data-gymitem="${k}" aria-pressed="${g.includes(k)}">${v}</button>`).join("")}</div><div class="actions"><button class="btn small" data-gymdone>Готово</button><button class="btn ghost small" data-gymall>Всё есть</button><button class="btn ghost small" data-gymhome>Только свой вес</button></div>`; }
+  let html="";
+  if(cur){
+    const shares=x=>(x.mus||[]).some(m=>(cur.mus||[]).includes(m));
+    const score=x=> (shares(x)&&x.pat===cur.pat?3:0) + (shares(x)?2:0) + (x.pat&&x.pat===cur.pat?1:0) + ((x.mus||[])[0]===(cur.mus||[])[0]?1:0);
+    const fit=x=>(shares(x)&&x.pat===cur.pat)||((x.mus||[])[0]&&(x.mus||[])[0]===(cur.mus||[])[0]);
+    let c0=list.filter(x=>q||fit(x)); if(!q&&!c0.length) c0=list.filter(shares);
+    const c=c0.sort((a,b)=>score(b)-score(a)||rank(a)-rank(b)||a.name.localeCompare(b.name,"ru"));
+    html = c.length ? `<div class="lh">${q?"Найдено":"Похожие упражнения"}</div>`+c.map(x=>libItem(x,inW,x.pat===cur.pat&&x.pat?PATN[x.pat]:"")).join("") : `<div class="empty">Похожих упражнений с доступным оборудованием нет. Попробуйте поиск или отметьте больше оборудования в «Моём зале».</div>`;
+  } else if(!q && libMus==="all" && libKind!=="cardio"){
+    const fav=list.filter(x=>favs.has(x.id)), rec=recentIds().map(id=>list.find(x=>x.id===id)).filter(Boolean).filter(x=>!favs.has(x.id));
+    if(fav.length) html+=`<div class="lh">★ Избранное</div>`+fav.map(x=>libItem(x,inW)).join("");
+    if(rec.length) html+=`<div class="lh">Недавние</div>`+rec.map(x=>libItem(x,inW)).join("");
+    MUS_ORDER.forEach(m=>{ const g=list.filter(x=>(x.mus||[])[0]===m).sort((a,b)=>rank(a)-rank(b)||a.name.localeCompare(b.name,"ru")); if(g.length) html+=`<div class="lh">${MUS[m]} <span class="muted">· ${MUS_HINT[m]}</span></div>`+g.map(x=>libItem(x,inW)).join(""); });
+    const own=list.filter(x=>!(x.mus||[]).length); if(own.length) html+=`<div class="lh">Свои упражнения</div>`+own.map(x=>libItem(x,inW)).join("");
+  } else {
+    const sorted=list.slice().sort((a,b)=>(q?qScore(b,q)-qScore(a,q):0)||rank(a)-rank(b)||a.name.localeCompare(b.name,"ru"));
+    if(libMus!=="all") html+=`<div class="lh">${MUS[libMus]} <span class="muted">· ${MUS_HINT[libMus]}</span></div>`;
+    html+=sorted.map(x=>libItem(x,inW)).join("");
+    if(!sorted.length&&!q) html+=`<div class="empty">Здесь пока нет упражнений с доступным оборудованием.</div>`;
+  }
+  if(q && libRepl==null) html+=`<div class="libit"><button class="libmain" data-custom><span class="lg">+</span><span class="ln"><b>Своё упражнение: «${esc(qRaw)}»</b><span class="muted">Вес × повторы, подходы по умолчанию</span></span><span class="addi">+</span></button></div>`;
+  $("lib-list").innerHTML=html;
+  document.querySelectorAll("#lib-list svg[data-mini]").forEach(z=>ANIM.draw(z,z.dataset.mini,1,0));
 }
 $("lib-q").addEventListener("input",renderLib);
 $("lib").addEventListener("click",e=>{
   if(e.target.id==="lib"||e.target.closest("#lib-close")){ $("lib").hidden=true; return; }
-  const g=e.target.closest("[data-g]"); if(g){ libGroup=g.dataset.g; renderLib(); return; }
-  const fe=e.target.closest("[data-eq]"); if(fe){ libEq=fe.dataset.eq; renderLib(); return; }
-  const fl=e.target.closest("[data-lvl]"); if(fl){ libLvl=+fl.dataset.lvl; renderLib(); return; }
-  const a=e.target.closest("[data-addex]"), c=e.target.closest("[data-custom]");
-  if(a) addExercise(a.dataset.addex); else if(c){ const name=$("lib-q").value.trim(); const id="c-"+Date.now().toString(36); CUSTOM[id]={id,name,g:"Своё",eq:"barbell",type:"w",anim:null}; addExercise(id,name); }
+  const t=e.target;
+  const k=t.closest("[data-kind]"); if(k){ libKind=k.dataset.kind; libMus="all"; renderLib(); return; }
+  const m=t.closest("[data-mus]"); if(m){ libMus=m.dataset.mus; renderLib(); return; }
+  if(t.closest("[data-gym]")){ gymOpen=!gymOpen; renderLib(); return; }
+  if(t.closest("[data-onlymine]")){ onlyMine=!onlyMine; store("atlos:onlyMine",onlyMine); renderLib(); return; }
+  const gi=t.closest("[data-gymitem]"); if(gi){ const g=new Set(myGym||GYM_ITEMS.map(x=>x[0])); g.has(gi.dataset.gymitem)?g.delete(gi.dataset.gymitem):g.add(gi.dataset.gymitem); myGym=[...g]; onlyMine=true; store("atlos:gym",myGym); store("atlos:onlyMine",true); renderLib(); return; }
+  if(t.closest("[data-gymall]")){ myGym=GYM_ITEMS.map(x=>x[0]); store("atlos:gym",myGym); renderLib(); return; }
+  if(t.closest("[data-gymhome]")){ myGym=[]; onlyMine=true; store("atlos:gym",myGym); store("atlos:onlyMine",true); renderLib(); return; }
+  if(t.closest("[data-gymdone]")){ gymOpen=false; if(!myGym){ myGym=GYM_ITEMS.map(x=>x[0]); store("atlos:gym",myGym); } renderLib(); return; }
+  const f=t.closest("[data-fav]"); if(f){ const id=f.dataset.fav; favs.has(id)?favs.delete(id):favs.add(id); store("atlos:favs",[...favs]); renderLib(); return; }
+  const a=t.closest("[data-addex]"), c=t.closest("[data-custom]");
+  if(a){ if(libRepl!=null) replaceExercise(libRepl,a.dataset.addex); else addExercise(a.dataset.addex); }
+  else if(c){ const name=$("lib-q").value.trim(); const id="c-"+Date.now().toString(36); CUSTOM[id]=Object.assign({},CDEF,{id,name,g:"Своё",eq:"barbell",type:"w",anim:null}); addExercise(id,name); }
 });
+function replaceExercise(i,id){
+  const old=draft.items[i], ox=exOf(old), x=LIB[id]||CUSTOM[id], d=defaultSets(x), n=old.sets.length;
+  const sets=Array.from({length:n},(_,k)=>{ const src=d.sets[Math.min(k,d.sets.length-1)]||{w:null,r:10}; const keepR = x.type===ox.type && old.sets[k] && old.sets[k].r!=null; return {w:src.w??null, r: keepR?old.sets[k].r:(src.r??null), done:false}; });
+  const it={ex:id,note:"",sets}; if(d.est){ it.est=true; it.src=d.src; } if(CUSTOM[id]){ it.name=x.name; it.type=x.type; }
+  draft.items[i]=it; scheduleTpl(); $("lib").hidden=true; renderItems(); renderProgress();
+  const el=document.querySelector(`#items .ex[data-i="${i}"]`); if(el){ el.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"center"}); el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"),1600); }
+  toast(`Заменено: ${ox.name} → ${x.name}`, ()=>{ draft.items[i]=old; scheduleTpl(); renderItems(); renderProgress(); });
+}
 function addExercise(id,customName){
   const x=LIB[id]||CUSTOM[id]; const d=defaultSets(x);
   const it={ex:id, note:"", sets:d.sets}; if(d.est){ it.est=true; it.src=d.src; } if(customName||CUSTOM[id]){ it.name=x.name; it.type=x.type; }
@@ -1221,7 +1352,7 @@ $("wk").addEventListener("click",async e=>{
   if(e.target.closest("#w-del-yes")){ const id=draft.wid; confirmW=false; store("dr5-"+id,null); delete workouts[id]; const rest=wList(); draft=null; selW=rest[0]?rest[0].id:null; if(selW) selectWorkout(selW); else renderAll();
     try{ await db.collection("workouts").doc(id).delete(); toast("Тренировка удалена"); }catch(err){ toast("Не удалось удалить"); } return; }
   if(e.target.closest("#edit-cancel")){ store("dr5-"+draft.wid,null); draft=fromTemplate(workouts[draft.wid]); saveDraft(); renderHead(); renderItems(); return; }
-  if(e.target.closest("#add-ex")) return openLib();
+  if(e.target.closest("#add-ex")) return openLib(null);
   if(e.target.closest("#w-start")){ markStart(); renderWprog(); toast("Тренировка началась — время идёт"); return; }
 });
 
@@ -1240,6 +1371,7 @@ $("items").addEventListener("click",e=>{
   if(e.target.closest(".rmset")){ if(it.sets.length<=1) return; if(T.mode==="work"&&T.ref&&T.ref.i===i) stopTimer(); it.sets.splice(j,1); scheduleTpl(); rerenderCard(i); return; }
   if(e.target.closest("[data-addset]")){ const l=it.sets[it.sets.length-1]||{w:null,r:10}; it.sets.push({w:l.w,r:l.r,done:false}); scheduleTpl(); rerenderCard(i); return; }
   const mv=e.target.closest("[data-mv]"); if(mv){ const k=i+(+mv.dataset.mv); if(k<0||k>=draft.items.length) return; [draft.items[i],draft.items[k]]=[draft.items[k],draft.items[i]]; scheduleTpl(); renderItems(); const b=document.querySelector(`#items .ex[data-i="${k}"] [data-mv="${mv.dataset.mv}"]`); if(b&&!b.disabled) b.focus(); return; }
+  if(e.target.closest("[data-repl]")){ return openLib(i); }
   if(e.target.closest("[data-delex]")){ const removed=draft.items.splice(i,1)[0]; scheduleTpl(); renderItems(); renderProgress(); renderWorkouts();
     toast(`Убрано: ${exOf(removed).name}`,()=>{ draft.items.splice(i,0,removed); scheduleTpl(); renderItems(); renderProgress(); renderWorkouts(); }); }
 });

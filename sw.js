@@ -1,6 +1,6 @@
 /* Атлос service worker: the app works offline; a new version downloads in the background
    and is applied when the user taps «Обновить». build.py stamps VERSION on every release. */
-const VERSION = "2026.10.29-074c824";
+const VERSION = "2026.10.29-02ac373";
 const CACHE = "atlos-" + VERSION;
 const ASSETS = [
   "./", "./index.html", "./manifest.webmanifest",
