@@ -421,12 +421,17 @@ details{border:none;border-radius:18px;box-shadow:var(--shadow);padding:14px 18p
 .lib-groups{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
 .lib-groups::-webkit-scrollbar{display:none}
 .lib-groups .chip{flex:none}
+.chip:disabled{opacity:.35;cursor:default}
+.eqseg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.eqb{all:unset;cursor:pointer;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:48px;padding:6px 4px;border:1px solid var(--line);border-radius:14px;font-size:14px;font-weight:500;text-align:center;line-height:1.15;color:var(--fg)}
+.eqb span{font-size:11px;font-weight:400;color:var(--muted)}
+.eqb[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.eqb[aria-pressed="true"] span{color:inherit;opacity:.75}
+.eqb:disabled{opacity:.35;cursor:default}
+.eqb:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 .inw{width:30px;height:30px;display:grid;place-items:center;border-radius:999px;background:var(--sunk);font-size:14px;font-weight:600}
 .cnum{font-size:11px;opacity:.6;margin-left:2px}
 .chip[aria-pressed="true"] .cnum{opacity:.8}
-.gymrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.gymrow .chip,.gympanel .chip{font-family:var(--body)}
-.gympanel{background:var(--sunk);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px}
 .lh{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--fg);padding:14px 8px 4px;border-top:1px solid var(--line);margin-top:4px}
 .lh:first-child{border-top:none;margin-top:0;padding-top:4px}
 .lh .muted{text-transform:none;letter-spacing:0;font-weight:400}
@@ -550,9 +555,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <div class="pkrow" style="flex-wrap:nowrap;align-items:flex-start"><div style="min-width:0;flex:1"><h2 id="lib-title" style="font-size:22px">Добавить упражнение</h2><div class="muted" id="lib-sub" style="font-size:13px"></div></div><button class="btn ghost small" id="lib-close" aria-label="Закрыть">✕</button></div>
     <input id="lib-q" type="search" placeholder="Поиск: тяга, жим, присед…" aria-label="Поиск упражнения" autocomplete="off">
     <div class="seg" id="lib-kinds" role="tablist" aria-label="Тип тренировки"></div>
+    <div class="eqseg" id="lib-eqf" role="group" aria-label="Оборудование"></div>
     <div class="lib-groups" id="lib-groups" role="group" aria-label="Мышцы"></div>
-    <div class="gymrow" id="lib-gymrow"></div>
-    <div class="gympanel" id="lib-gym" hidden></div>
     <div class="lib-list" id="lib-list"></div>
   </div>
 </div>
@@ -796,7 +800,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.10.29-19e5649";
+const APP_VERSION="2026.10.29-9e29368";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -889,7 +893,9 @@ const MUS_ORDER=["chest","lats","upper","lower","delts","biceps","triceps","abs"
 const MUS_HINT={chest:"грудные мышцы",lats:"широчайшие мышцы спины",upper:"трапеции, ромбовидные, задние дельты",lower:"разгибатели спины",delts:"дельтовидные мышцы",biceps:"бицепс и плечевая мышца",triceps:"трёхглавая мышца плеча",abs:"прямая и косые мышцы живота",glutes:"ягодичные мышцы",quads:"передняя поверхность бедра",hams:"задняя поверхность бедра",calves:"икроножные и камбаловидные"};
 const KINDS=[["str","Силовые"],["cardio","Кардио"],["mob","Растяжка"]];
 const EQN={barbell:"штанга",dumbbell:"гантели",bench:"скамья",cable:"блок",machine:"тренажёр",bar:"турник",rope:"скакалка",cardio:"кардиотренажёр"};
-const GYM_ITEMS=[["barbell","Штанга"],["dumbbell","Гантели"],["bench","Скамья"],["cable","Блоки"],["machine","Силовые тренажёры"],["bar","Турник"],["rope","Скакалка"],["cardio","Кардиотренажёры"]];
+const EQC=[["machine","Тренажёры"],["free","Свободный вес"],["bw","Свой вес"]];
+/* тренажёры = силовые тренажёры, блоки, кардиотренажёры; свободный вес = штанга, гантели; свой вес = без оборудования, турник, скамья, скакалка */
+const eqCat = x => { const n=x.need||[]; if(n.some(e=>e==="machine"||e==="cable"||e==="cardio")) return "machine"; if(n.some(e=>e==="barbell"||e==="dumbbell")) return "free"; if(!n.length && x.type==="w" && String(x.id).startsWith("c-")) return "free"; return "bw"; };
 const PATN={squat:"присед",hinge:"тяга бёдрами",lunge:"выпад",hpush:"жим от себя",vpush:"жим вверх",hpull:"тяга к себе",vpull:"тяга сверху",iso:"изолирующее",core:"мышцы кора",cardio:"кардио",mob:"растяжка"};
 /* id: [main muscles, secondary muscles, equipment needed, movement pattern, type] */
 const META={hyper:[["lower","glutes"],["hams"],["machine"],"hinge"],bbrow:[["lats","upper"],["biceps","lower"],["barbell"],"hpull"],latpull:[["lats"],["biceps","upper"],["cable"],"vpull"],widelat:[["lats"],["upper","biceps"],["cable"],"vpull"],seatrow:[["upper","lats"],["biceps"],["cable"],"hpull"],pullup:[["lats"],["biceps","upper"],["bar"],"vpull"],dbrow:[["lats"],["upper","biceps"],["dumbbell","bench"],"hpull"],deadlift:[["glutes","hams","lower"],["upper","quads"],["barbell"],"hinge"],rdl:[["hams","glutes"],["lower"],["barbell"],"hinge"],facepull:[["delts","upper"],[],["cable"],"hpull"],superman:[["lower"],["glutes"],[],"hinge"],
@@ -905,8 +911,7 @@ Object.entries(META).forEach(([id,[m,sc,need,pat,kind]])=>{ const x=LIB[id]; if(
 Object.values(LIB).forEach(x=>{ if(!x.kind) Object.assign(x,CDEF,{}); });
 const musLine = x => x.kind==="cardio" ? "выносливость" : (x.mus&&x.mus.length ? x.mus.map(k=>MUS[k].toLowerCase()).join(", ") : "своё упражнение") + (x.sec&&x.sec.length ? " · вспом.: "+x.sec.map(k=>MUS[k].toLowerCase()).join(", ") : "");
 const needLine = x => x.need&&x.need.length ? x.need.map(e=>EQN[e]).join(", ") : (x.kind==="cardio"||x.kind==="mob"||x.type==="bw"||x.type==="time" ? "без оборудования" : "любое");
-let myGym=load("atlos:gym"), onlyMine=load("atlos:onlyMine")!==false, favs=new Set(load("atlos:favs")||[]);
-const availableFor = x => !myGym || !onlyMine || (x.need||[]).every(e=>myGym.includes(e));
+let libEqf=load("atlos:eqf")||"all", favs=new Set(load("atlos:favs")||[]);
 const LVL={hipthrust:2,seatcalf:1,cablecurl:1,superman:1,mob_hams:1,mob_glutes:1,mob_quads:1,mob_chest:1,mob_shoulder:1,mob_catcow:1,hyper:1,latpull:1,widelat:1,seatrow:1,pecdeck:1,legpress:1,legext:1,legcurl:1,calf:1,lateral:1,curl:1,dbcurl:1,hammer:1,tricep:1,crunch:1,abs:1,plank:1,rope:1,run:1,bike:1,pushup:1,dips:1,goblet:1,facepull:1,dbbench:1,cableup:1,dbpress:2,reardelt:2,crossover:2,bbrow:2,bench:2,closegrip:2,incline:2,squat:2,lunge:2,dbrow:2,uprow:2,french:2,tricepdb:2,shrug:2,ohp:2,bulgarian:2,rdl:2,legraise:2,deadlift:3,pullup:3};
 const LVLN=["","новичок","средний","опытный"];
 function lvlOf(x){ return LVL[x.id]||2; }
@@ -1221,13 +1226,13 @@ $("picker").addEventListener("click",e=>{
 $("pk-next").addEventListener("change",e=>{ pk.next=e.target.checked; });
 
 /* ===== library sheet ===== */
-let libKind="str", libMus="all", libRepl=null, gymOpen=false;
+let libKind="str", libMus="all", libRepl=null, replEqf="all";
 function openLib(replIdx){
   libRepl = replIdx==null ? null : replIdx; $("lib-q").value="";
   if(libRepl!=null){ const x=exOf(draft.items[libRepl]); libKind=x.kind||"str"; libMus="all"; }
   $("lib-title").textContent = libRepl!=null ? "Заменить упражнение" : "Добавить упражнение";
   $("lib-sub").textContent = libRepl!=null ? `Вместо «${exOf(draft.items[libRepl]).name}»: те же мышцы, похожее движение` : "";
-  gymOpen=false; renderLib(); $("lib").hidden=false; setTimeout(()=>$("lib-q").focus(),30);
+  replEqf="all"; renderLib(); $("lib").hidden=false; setTimeout(()=>$("lib-q").focus(),30);
 }
 const SYN={deadlift:"становая",rdl:"румынка румынская мертвая",bench:"жим лежа",squat:"присед приседания",legpress:"платформа ноги",pullup:"турник подтягивание",crunch:"пресс",hipthrust:"мостик ягодичный",pushup:"отжимания",latpull:"верхний блок",widelat:"верхний блок",seatrow:"нижний блок",run:"дорожка бег",bike:"велосипед",dips:"брусья"};
 const norm=t=>String(t).toLowerCase().replace(/ё/g,"е");
@@ -1254,33 +1259,36 @@ function renderLib(){
   const all=Object.values(LIB).concat(Object.values(CUSTOM));
   const cur = libRepl!=null ? exOf(draft.items[libRepl]) : null;
   const inW=new Set(draft?draft.items.map(i=>i.ex):[]);
-  const pool=k=>all.filter(x=>(x.kind||"str")===k && availableFor(x) && (!q||matchQ(x,q)) && (!cur||x.id!==cur.id));
+  const pool=k=>all.filter(x=>(x.kind||"str")===k && (!q||matchQ(x,q)) && (!cur||x.id!==cur.id));
+  let eqf = cur ? replEqf : libEqf;
+  const eqOk = x => eqf==="all" || eqCat(x)===eqf, musOk = x => libMus==="all" || (x.mus||[]).includes(libMus);
   $("lib-kinds").hidden = cur!=null;
   $("lib-kinds").innerHTML=KINDS.map(([k,v])=>`<button class="segb" role="tab" data-kind="${k}" aria-selected="${k===libKind}">${v} <span class="num">${pool(k).length}</span></button>`).join("");
   let base=pool(libKind);
+  const shares=x=>cur&&(x.mus||[]).some(m=>(cur.mus||[]).includes(m));
+  const fit=x=>cur&&((shares(x)&&x.pat===cur.pat)||((x.mus||[])[0]&&(x.mus||[])[0]===(cur.mus||[])[0]));
+  if(cur&&!q){ const f=base.filter(fit); base = f.length?f:base.filter(shares); }
+  // equipment row: Тренажёры / Свободный вес / Свой вес (counts respect the muscle filter)
+  if(libKind!=="mob"){
+    const eb=base.filter(musOk), ec={}; eb.forEach(x=>{ const c=eqCat(x); ec[c]=(ec[c]||0)+1; });
+    if(eqf!=="all" && !ec[eqf] && !q){ eqf="all"; if(cur) replEqf="all"; else { libEqf="all"; store("atlos:eqf","all"); } }
+    $("lib-eqf").hidden=false;
+    $("lib-eqf").innerHTML=EQC.map(([k,v])=>{ const n=ec[k]||0; return `<button class="eqb" data-eqf="${k}" aria-pressed="${k===eqf}"${n||k===eqf?"":" disabled"}>${v}<span>${n} упр.</span></button>`; }).join("");
+  } else { $("lib-eqf").hidden=true; eqf="all"; }
   // muscle chips (only muscles that actually have exercises right now)
   if(libKind!=="cardio" && !cur){
-    const cnt={}; base.forEach(x=>(x.mus||[]).forEach(m=>cnt[m]=(cnt[m]||0)+1));
+    const mb=base.filter(eqOk), cnt={}; mb.forEach(x=>(x.mus||[]).forEach(m=>cnt[m]=(cnt[m]||0)+1));
     if(libMus!=="all" && !cnt[libMus]) libMus="all";
     $("lib-groups").hidden=false;
-    $("lib-groups").innerHTML=`<button class="chip" data-mus="all" aria-pressed="${libMus==="all"}">Все <span class="cnum">${base.length}</span></button>`+MUS_ORDER.filter(m=>cnt[m]).map(m=>`<button class="chip" data-mus="${m}" aria-pressed="${m===libMus}" title="${MUS_HINT[m]}">${MUS[m]} <span class="cnum">${cnt[m]}</span></button>`).join("");
+    $("lib-groups").innerHTML=`<button class="chip" data-mus="all" aria-pressed="${libMus==="all"}">Все мышцы <span class="cnum">${mb.length}</span></button>`+MUS_ORDER.filter(m=>cnt[m]).map(m=>`<button class="chip" data-mus="${m}" aria-pressed="${m===libMus}" title="${MUS_HINT[m]}">${MUS[m]} <span class="cnum">${cnt[m]}</span></button>`).join("");
   } else { $("lib-groups").hidden=true; libMus="all"; }
-  let list = libMus==="all" ? base : base.filter(x=>(x.mus||[]).includes(libMus));
+  let list = base.filter(x=>eqOk(x)&&musOk(x));
   const rank=x=>(favs.has(x.id)?-4:0)+(lastSetsOf(x.id)?-2:0)+lvlOf(x)*0.1;
-  // gym row
-  const lacking = myGym ? GYM_ITEMS.length-myGym.length : 0;
-  const hidden = myGym&&onlyMine ? all.filter(x=>(x.kind||"str")===libKind && !(x.need||[]).every(e=>myGym.includes(e)) && (!q||matchQ(x,q))).length : 0;
-  $("lib-gymrow").innerHTML=`<button class="chip" data-gym aria-expanded="${gymOpen}">⚙ Мой зал${myGym?(lacking?` · нет ${lacking} из ${GYM_ITEMS.length}`:" · всё есть"):": не настроен"}</button>`+(myGym&&lacking?`<button class="chip" data-onlymine aria-pressed="${onlyMine}">Только доступное</button>`:"")+(hidden?`<span class="muted" style="font-size:12px">скрыто ${hidden}</span>`:"");
-  $("lib-gym").hidden=!gymOpen;
-  if(gymOpen){ const g=myGym||GYM_ITEMS.map(x=>x[0]); $("lib-gym").innerHTML=`<p class="muted" style="margin:0;font-size:13px">Отметьте, что есть в вашем зале. Упражнения, для которых чего-то нет, скроются, а «Заменить» будет предлагать только доступное.</p><div class="chips" style="justify-content:flex-start">${GYM_ITEMS.map(([k,v])=>`<button class="chip" data-gymitem="${k}" aria-pressed="${g.includes(k)}">${v}</button>`).join("")}</div><div class="actions"><button class="btn small" data-gymdone>Готово</button><button class="btn ghost small" data-gymall>Всё есть</button><button class="btn ghost small" data-gymhome>Только свой вес</button></div>`; }
   let html="";
   if(cur){
-    const shares=x=>(x.mus||[]).some(m=>(cur.mus||[]).includes(m));
     const score=x=> (shares(x)&&x.pat===cur.pat?3:0) + (shares(x)?2:0) + (x.pat&&x.pat===cur.pat?1:0) + ((x.mus||[])[0]===(cur.mus||[])[0]?1:0);
-    const fit=x=>(shares(x)&&x.pat===cur.pat)||((x.mus||[])[0]&&(x.mus||[])[0]===(cur.mus||[])[0]);
-    let c0=list.filter(x=>q||fit(x)); if(!q&&!c0.length) c0=list.filter(shares);
-    const c=c0.sort((a,b)=>score(b)-score(a)||rank(a)-rank(b)||a.name.localeCompare(b.name,"ru"));
-    html = c.length ? `<div class="lh">${q?"Найдено":"Похожие упражнения"}</div>`+c.map(x=>libItem(x,inW,x.pat===cur.pat&&x.pat?PATN[x.pat]:"")).join("") : `<div class="empty">Похожих упражнений с доступным оборудованием нет. Попробуйте поиск или отметьте больше оборудования в «Моём зале».</div>`;
+    const c=list.slice().sort((a,b)=>score(b)-score(a)||rank(a)-rank(b)||a.name.localeCompare(b.name,"ru"));
+    html = c.length ? `<div class="lh">${q?"Найдено":"Похожие упражнения"}</div>`+c.map(x=>libItem(x,inW,x.pat===cur.pat&&x.pat?PATN[x.pat]:"")).join("") : `<div class="empty">Похожих упражнений с таким оборудованием нет. Выберите «Всё» или попробуйте поиск.</div>`;
   } else if(!q && libMus==="all" && libKind!=="cardio"){
     const fav=list.filter(x=>favs.has(x.id)), rec=recentIds().map(id=>list.find(x=>x.id===id)).filter(Boolean).filter(x=>!favs.has(x.id));
     if(fav.length) html+=`<div class="lh">★ Избранное</div>`+fav.map(x=>libItem(x,inW)).join("");
@@ -1291,7 +1299,7 @@ function renderLib(){
     const sorted=list.slice().sort((a,b)=>(q?qScore(b,q)-qScore(a,q):0)||rank(a)-rank(b)||a.name.localeCompare(b.name,"ru"));
     if(libMus!=="all") html+=`<div class="lh">${MUS[libMus]} <span class="muted">· ${MUS_HINT[libMus]}</span></div>`;
     html+=sorted.map(x=>libItem(x,inW)).join("");
-    if(!sorted.length&&!q) html+=`<div class="empty">Здесь пока нет упражнений с доступным оборудованием.</div>`;
+    if(!sorted.length&&!q) html+=`<div class="empty">С таким оборудованием здесь упражнений нет.</div>`;
   }
   if(q && libRepl==null) html+=`<div class="libit"><button class="libmain" data-custom><span class="lg">+</span><span class="ln"><b>Своё упражнение: «${esc(qRaw)}»</b><span class="muted">Вес × повторы, подходы по умолчанию</span></span><span class="addi">+</span></button></div>`;
   $("lib-list").innerHTML=html;
@@ -1303,12 +1311,7 @@ $("lib").addEventListener("click",e=>{
   const t=e.target;
   const k=t.closest("[data-kind]"); if(k){ libKind=k.dataset.kind; libMus="all"; renderLib(); return; }
   const m=t.closest("[data-mus]"); if(m){ libMus=m.dataset.mus; renderLib(); return; }
-  if(t.closest("[data-gym]")){ gymOpen=!gymOpen; renderLib(); return; }
-  if(t.closest("[data-onlymine]")){ onlyMine=!onlyMine; store("atlos:onlyMine",onlyMine); renderLib(); return; }
-  const gi=t.closest("[data-gymitem]"); if(gi){ const g=new Set(myGym||GYM_ITEMS.map(x=>x[0])); g.has(gi.dataset.gymitem)?g.delete(gi.dataset.gymitem):g.add(gi.dataset.gymitem); myGym=[...g]; onlyMine=true; store("atlos:gym",myGym); store("atlos:onlyMine",true); renderLib(); return; }
-  if(t.closest("[data-gymall]")){ myGym=GYM_ITEMS.map(x=>x[0]); store("atlos:gym",myGym); renderLib(); return; }
-  if(t.closest("[data-gymhome]")){ myGym=[]; onlyMine=true; store("atlos:gym",myGym); store("atlos:onlyMine",true); renderLib(); return; }
-  if(t.closest("[data-gymdone]")){ gymOpen=false; if(!myGym){ myGym=GYM_ITEMS.map(x=>x[0]); store("atlos:gym",myGym); } renderLib(); return; }
+  const ef=t.closest("[data-eqf]"); if(ef){ const v=ef.dataset.eqf===(libRepl!=null?replEqf:libEqf)?"all":ef.dataset.eqf; if(libRepl!=null) replEqf=v; else { libEqf=v; store("atlos:eqf",v); } renderLib(); return; }
   const f=t.closest("[data-fav]"); if(f){ const id=f.dataset.fav; favs.has(id)?favs.delete(id):favs.add(id); store("atlos:favs",[...favs]); renderLib(); return; }
   const a=t.closest("[data-addex]"), c=t.closest("[data-custom]");
   if(a){ if(libRepl!=null) replaceExercise(libRepl,a.dataset.addex); else addExercise(a.dataset.addex); }
