@@ -518,6 +518,50 @@ details{border:none;border-radius:18px;box-shadow:var(--shadow);padding:14px 18p
 .wcard.arch{opacity:.6}
 @media (max-width:420px){.obgrid.g5{grid-template-columns:repeat(3,minmax(0,1fr))}.vr{grid-template-columns:96px 44px minmax(0,1fr)}}
 
+/* v12: навигация и экран «Сегодня» */
+header h1{font-size:clamp(34px,7vw,48px)}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:var(--sunk);border-radius:999px;padding:4px;margin-top:-14px}
+.tabs button{all:unset;cursor:pointer;text-align:center;padding:10px 4px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.tabs button:focus-visible{outline:2px solid var(--fg);outline-offset:1px}
+.wrap[data-tab="today"]>[data-pane]:not([data-pane="today"]),.wrap[data-tab="prog"]>[data-pane]:not([data-pane="prog"]),.wrap[data-tab="log"]>[data-pane]:not([data-pane="log"]){display:none!important}
+.wrap{gap:28px}
+.tcard{background:var(--surface);border-radius:24px;box-shadow:var(--shadow);padding:20px 18px;display:flex;flex-direction:column;gap:14px;font-size:15px}
+.tcard h3{font-family:var(--display);font-weight:400;font-size:28px;letter-spacing:-.02em;line-height:1.1;margin:0}
+.tcard p{margin:0;line-height:1.5}
+.tcard.hero h3{font-size:26px}
+.tmeta{font-size:14px;color:var(--muted);margin-top:-6px}
+.stepper{display:flex;gap:6px;flex-wrap:wrap}
+.stepper span{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--sunk);color:var(--muted);font-weight:500}
+.stepper .ok{color:var(--ok);background:var(--ok-soft)}
+.stepper .on{background:var(--fg);color:var(--bg)}
+.road{margin:0;padding:0;list-style:none;counter-reset:r;display:flex;flex-direction:column;gap:10px}
+.road li{counter-increment:r;display:grid;grid-template-columns:28px 1fr;column-gap:10px;align-items:baseline}
+.road li::before{content:counter(r);grid-row:span 2;width:26px;height:26px;border-radius:999px;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:13px;font-weight:600}
+.road li span{font-size:13px;color:var(--muted)}
+.tl{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45}
+.chg{box-shadow:none;background:var(--sunk);border-radius:16px;padding:10px 14px}
+.chg summary{font-size:14px;font-weight:500}
+.chg ul{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.chg li{display:grid;grid-template-columns:18px 1fr;gap:4px}
+.chg .ar{font-weight:600}
+.wlegend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--muted);margin-top:-8px}
+.wd b{font-size:12px}.wd.done b{font-size:15px}
+.wd span{font-size:10px;white-space:nowrap}
+body.notimer .timer{display:none}
+body.notimer .toast{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13.5px}.kv span{color:var(--muted)}.kv b{font-weight:500}
+.gsub{grid-column:1/-1;font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:600;color:var(--muted);margin-top:6px}
+.gsub:first-child{margin-top:0}
+.rh{margin:6px 0 0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.rws{display:flex;flex-direction:column;gap:8px}
+.rw{box-shadow:none;background:var(--sunk);border-radius:16px;padding:10px 14px}
+.rw summary{display:flex;justify-content:space-between;gap:8px;font-size:14px}
+.rw summary .muted{font-size:12.5px}
+.exl{list-style:none;padding:0;margin:8px 0 2px;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.exl li{display:flex;justify-content:space-between;gap:10px}.exl li .num{color:var(--muted);white-space:nowrap}
+#sum-body{gap:12px}
+
 /* standalone app */
 :root{--display:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif;--body:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif;--mono:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif}
 body{padding-top:env(safe-area-inset-top,0px)}
@@ -531,40 +575,35 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .dcard p{margin:0}
 .welcome{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:22px 18px;display:flex;flex-direction:column;gap:12px}
 .welcome h3{font-family:var(--display);font-weight:400;font-size:22px;margin:0}
+.hdate{font-size:clamp(28px,7vw,40px)}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="app" data-tab="today">
   <header>
     <div class="brand"><img src="icons/icon-192.png" alt=""><span>Атлос</span></div>
-    <h1>Журнал тренировок</h1>
-    <p class="goal" style="margin:0">Соберите тренировку из упражнений, отмечайте подходы галочкой и меняйте вес и повторы касанием по цифре.</p>
+    <h1 id="h-date" class="hdate"></h1>
     <div class="note-card" id="upd" hidden><p><b>Доступна новая версия.</b> Данные и начатая тренировка сохранятся.</p><button class="btn small" id="upd-btn">Обновить</button></div>
     <div class="note-card" id="install" hidden><p id="install-txt"></p><span style="display:flex;gap:8px"><button class="btn small" id="install-btn" hidden>Установить</button><button class="btn ghost small" id="install-close">Понятно</button></span></div>
     <div class="note-card" id="bk-banner" hidden><p id="bk-banner-txt"></p><button class="btn small" id="bk-banner-btn">Сохранить копию</button></div>
-    <div class="stats" id="stats"></div>
     <div class="status" id="status" hidden></div>
   </header>
+  <nav class="tabs" role="tablist" aria-label="Разделы">
+    <button role="tab" data-tab="today" aria-selected="true">Сегодня</button>
+    <button role="tab" data-tab="prog" aria-selected="false">Программа</button>
+    <button role="tab" data-tab="log" aria-selected="false">Журнал</button>
+  </nav>
 
-  <section id="prog-sec" aria-labelledby="h-plan" style="display:flex;flex-direction:column;gap:12px">
-    <h2 id="h-plan">Моя программа</h2>
-    <div id="plan"></div>
-  </section>
-
-  <section aria-labelledby="h-w" style="display:flex;flex-direction:column;gap:12px">
-    <h2 id="h-w">Тренировки</h2>
-    <div class="wgrid" id="wgrid"></div>
-  </section>
-
-  <div class="welcome" id="wk-empty" hidden>
+  <section data-pane="today" aria-label="Сегодня"><div id="today"></div></section>
+  <div class="welcome" id="wk-empty" data-pane="today" hidden>
     <h3>Уже тренировались в Атласе?</h3>
     <p class="muted" style="margin:0">Если у вас есть файл резервной копии — восстановите его: вернутся тренировки, история, анкета и программа. Новичкам — кнопка «Подобрать программу» выше.</p>
     <div class="actions"><button class="btn" id="e-import">Восстановить из файла</button><button class="btn ghost" id="e-new">Своя тренировка</button></div>
   </div>
-  <section id="wk" aria-label="Текущая тренировка" style="display:flex;flex-direction:column;gap:14px" hidden>
+  <section id="wk" data-pane="today" aria-label="Тренировка" style="display:flex;flex-direction:column;gap:14px" hidden>
     <div class="whead">
       <div style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1">
-        <div class="eyebrow">Тренировка · название можно изменить</div>
+        <div class="eyebrow" id="w-eye">Тренировка</div>
         <input id="w-name" class="title-input" aria-label="Название тренировки">
       </div>
       <label for="w-date">Дата<input type="date" id="w-date"></label>
@@ -581,18 +620,34 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <p class="stopsig">Стоп-сигналы: боль в груди, сильное головокружение, острая боль в суставе — прекратите тренировку и обратитесь к врачу.</p>
   </section>
 
-  <section aria-labelledby="h-prog" style="display:flex;flex-direction:column;gap:12px">
+  <section id="prog-sec" data-pane="prog" aria-labelledby="h-plan" style="display:flex;flex-direction:column;gap:12px">
+    <h2 id="h-plan">Моя программа</h2>
+    <div id="plan"></div>
+  </section>
+
+  <section data-pane="prog" aria-labelledby="h-w" style="display:flex;flex-direction:column;gap:12px">
+    <h2 id="h-w">Все тренировки</h2>
+    <p class="muted" style="margin:0;font-size:13px">Нажмите на тренировку, чтобы открыть её во вкладке «Сегодня».</p>
+    <div class="wgrid" id="wgrid"></div>
+  </section>
+
+  <section data-pane="log" aria-labelledby="h-st" style="display:flex;flex-direction:column;gap:12px">
+    <h2 id="h-st">Итоги</h2>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section data-pane="log" aria-labelledby="h-prog" style="display:flex;flex-direction:column;gap:12px">
     <h2 id="h-prog">Прогресс по весам</h2>
-    <p class="muted" style="margin:0;font-size:13px">Максимальный рабочий вес по каждому упражнению текущей тренировки, последние 10 записей.</p>
+    <p class="muted" id="prog-note" style="margin:0;font-size:13px"></p>
     <div class="prog" id="prog"></div>
   </section>
 
-  <section aria-labelledby="h-hist" style="display:flex;flex-direction:column;gap:12px">
+  <section data-pane="log" aria-labelledby="h-hist" style="display:flex;flex-direction:column;gap:12px">
     <h2 id="h-hist">История</h2>
     <div class="hist" id="hist"></div>
   </section>
 
-  <section aria-labelledby="h-data" style="display:flex;flex-direction:column;gap:12px">
+  <section data-pane="log" aria-labelledby="h-data" style="display:flex;flex-direction:column;gap:12px">
     <h2 id="h-data">Данные</h2>
     <div class="dcard">
       <p id="data-info"></p>
@@ -644,7 +699,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <div class="sheet" id="sum" hidden role="dialog" aria-modal="true" aria-labelledby="sum-title">
   <div class="sheet-panel">
     <div class="grab"></div>
-    <div class="pkrow"><div><div class="eyebrow">Тренировка завершена</div><h2 id="sum-title" style="font-size:24px"></h2></div><button class="btn small" id="sum-close">Готово</button></div>
+    <div class="pkrow" style="flex-wrap:nowrap;align-items:flex-start"><div style="min-width:0;flex:1"><div class="eyebrow" id="sum-eye">Тренировка завершена</div><h2 id="sum-title" style="font-size:24px"></h2></div><button class="btn small" id="sum-close">Готово</button></div>
     <div id="sum-body" style="display:flex;flex-direction:column;gap:14px"></div>
   </div>
 </div>
@@ -898,7 +953,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.10.30-e3ddea3";
+const APP_VERSION="2026.10.30-c502ad9";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -1150,23 +1205,29 @@ function renderWorkouts(){
   const card=(w,cls)=>{ const l=sSorted().filter(s=>s.workoutId===w.id).pop(), dd=days(w);
     return `<button class="wcard${cls||""}" data-w="${w.id}" aria-pressed="${w.id===selW}"><span class="t">${esc(w.name)}</span>
       <span class="m">${w.kind==="cardio"?"кардио":`${(w.items||[]).length} упр.`} · ≈ ${estMin(w.items,w.kind==="cardio")} мин${l?" · "+fmtDate(l.date):""}</span>${dd?`<span class="m2">${esc(dd)}</span>`:""}${w.id===nx?'<span class="pill">следующая</span>':""}${w.archived?'<span class="m2">в архиве</span>':""}</button>`; };
-  $("wgrid").innerHTML = wList().map(w=>card(w)).join("") + (test?card(test):"")
+  const pw=wList().filter(w=>w.prog), own=wList().filter(w=>!w.prog), c0=PROG?cycleInfo():null;
+  const showTest = test && PROG && (PROG.testPending || (c0&&(c0.retest||c0.overdue)) || selW==="p-test");
+  $("wgrid").innerHTML = (pw.length?`<div class="gsub">Программа</div>`+pw.map(w=>card(w)).join(""):"") + (showTest?card(test):"")
+    + `<div class="gsub">Свои тренировки</div>` + own.map(w=>card(w)).join("")
     + (showArch?arch.map(w=>card(w," arch")).join(""):"")
     + `<button class="wcard add" id="w-new"><span class="plus">+</span><span class="t">Своя тренировка</span></button>`
     + (arch.length?`<button class="wcard add" id="w-arch"><span class="t">${showArch?"Скрыть архив":"Архив"}</span><span class="m">${arch.length} ${plural3(arch.length,"тренировка","тренировки","тренировок")}</span></button>`:"");
 }
 function renderHead(){
   const has=!!(draft&&workouts[draft.wid]);
-  $("wk").hidden=!has; $("wk-empty").hidden = has || !loaded.w;
-  if(!has) return;
+  $("wk").hidden=!has||!wkVisible(); $("wk-empty").hidden = has || !loaded.w || !loaded.m || !!PROG;
+  if(!has){ syncTimerBar(); return; }
   const w=workouts[draft.wid];
+  const st=PROG?todayState():{};
+  $("w-eye").textContent = draft.editing ? "Правка записи" : w.kind==="test" ? "Тестовая тренировка" : w.prog ? (st.wid===w.id&&st.k==="train" ? "Сегодня по плану" : "Тренировка программы") : "Своя тренировка · название можно изменить";
+  $("finish").textContent = w.kind==="test" ? "Завершить тест" : "Завершить тренировку";
   if(document.activeElement!==$("w-name")) $("w-name").value=w.name;
   $("w-date").value=draft.date; $("w-note").value=draft.note||"";
   $("editing").hidden=!draft.editing; if(draft.editing) $("editing-txt").textContent=`Правка записи от ${fmtDate(draft.editing.slice(0,10))}. Сохранение перезапишет её; шаблон тренировки не меняется.`;
   $("w-confirm").innerHTML = confirmW ? `<span>Удалить «${esc(w.name)}»? История останется.</span> <button class="btn small" id="w-del-yes">Удалить</button> <button class="btn ghost small" id="w-del-no">Отмена</button>` : "";
-  $("w-del").hidden=confirmW;
+  $("w-del").hidden=confirmW||!!w.prog; $("w-reset").hidden=!draft.items.some(it=>it.sets.some(s=>s.done));
   $("w-confirm").innerHTML += w.archived ? ` <button class="btn ghost small" id="w-unarch">Вернуть из архива</button>` : "";
-  renderWprog(); renderFlags();
+  renderWprog(); renderFlags(); syncTimerBar();
 }
 function prevText(x,s){ if(!s) return "—"; if(x.type==="walk") return s.r!=null?fmtMS(s.r)+(s.w?" · "+Math.round(s.w):""):"—"; if(x.type==="dist") return s.r!=null?`${s.r} м`:"—"; if(x.type==="time") return s.r!=null?`${fmtN(s.r)} ${x.tu||"мин"}`:"—"; const w=s.w!=null&&!(+s.w===0&&x.type!=="assist")?fmtW(x,s.w):""; return (w?w+"×":"")+(s.r??"—"); }
 function cardHTML(i){
@@ -1262,9 +1323,11 @@ function spark(vals){
   return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><path d="${vals.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1)).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="1.7"/><circle cx="${X(vals.length-1)}" cy="${Y(vals[vals.length-1])}" r="2.7" fill="var(--accent)"/></svg>`;
 }
 function renderProgress(){
-  if(!draft){ $("prog").innerHTML=""; return; }
+  const src = PROG ? (PROG.seq||[]).map(id=>workouts[id]).filter(Boolean).flatMap(w=>w.items||[]) : draft ? draft.items : [];
+  $("prog-note").textContent = PROG ? "Максимальный рабочий вес по упражнениям программы, последние 10 записей." : "Максимальный рабочий вес по упражнениям открытой тренировки, последние 10 записей.";
+  if(!src.length){ $("prog").innerHTML=""; return; }
   const rows=[]; const seen=new Set();
-  draft.items.forEach(it=>{ const x=exOf(it); if(seen.has(it.ex)||!(x.type==="w"||x.type==="assist")) return; seen.add(it.ex);
+  src.forEach(it=>{ const x=exOf(it); if(seen.has(it.ex)||!(x.type==="w"||x.type==="assist")) return; seen.add(it.ex);
     const pts=sSorted().map(s=>{ const z=(s.items||[]).find(q=>q.ex===it.ex); if(!z) return null; const ws=z.sets.filter(q=>q.done).map(q=>+q.w).filter(v=>v>0); return ws.length?{d:s.date,v:Math.max(...ws)}:null; }).filter(Boolean).slice(-10);
     rows.push({x,pts}); });
   if(!rows.length){ $("prog").innerHTML=`<div class="empty">Здесь появится динамика рабочих весов по упражнениям этой тренировки.</div>`; return; }
@@ -1297,11 +1360,11 @@ function renderHistory(){
     </details>`;
   }).join("");
 }
-function renderAll(){ renderPlan(); renderStats(); renderWorkouts(); renderHead(); renderItems(); renderProgress(); renderHistory(); }
+function renderAll(){ renderToday(); renderPlan(); renderStats(); renderWorkouts(); renderHead(); renderItems(); renderProgress(); renderHistory(); }
 
 function selectWorkout(id){
   if(!workouts[id]) return; selW=id; store("selW5",id); confirmW=false; draft=getDraft(id); saveDraft();
-  renderWorkouts(); renderHead(); renderItems(); renderProgress(); renderPlan();
+  renderWorkouts(); renderHead(); renderItems(); renderProgress(); renderPlan(); renderToday();
 }
 
 /* ===== toast with undo ===== */
@@ -1497,12 +1560,12 @@ function addExercise(id,customName){
 
 /* ===== events: workout cards & head ===== */
 $("wgrid").addEventListener("click",async e=>{
-  const c=e.target.closest("[data-w]"); if(c) return selectWorkout(c.dataset.w);
+  const c=e.target.closest("[data-w]"); if(c){ if(started(draft)&&draft.wid!==c.dataset.w&&!draft.editing){ toast("Сначала завершите или сбросьте начатую тренировку"); return openWorkout(draft.wid); } return openWorkout(c.dataset.w); }
   if(e.target.closest("#w-arch")){ showArch=!showArch; renderWorkouts(); return; }
   if(e.target.closest("#w-new")){
     if(!db) return toast("Журнал недоступен в этом просмотре");
     const ws=wList(), id="w"+Date.now().toString(36), body={name:`Тренировка ${ws.length+1}`, order:(ws.length?Math.max(...ws.map(w=>w.order??0)):0)+1, items:[], updatedAt:new Date().toISOString()};
-    workouts[id]={id,...body}; selectWorkout(id); setTimeout(()=>{ $("w-name").focus(); $("w-name").select(); },50);
+    workouts[id]={id,...body}; openWorkout(id); setTimeout(()=>{ $("w-name").focus(); $("w-name").select(); },50);
     try{ await db.collection("workouts").doc(id).set(body); }catch(err){ toast("Не удалось создать тренировку"); }
   }
 });
@@ -1552,7 +1615,9 @@ $("finish").addEventListener("click",async()=>{
   if(!draft) return; if(!draft.items.some(it=>it.sets.some(s=>s.done))){ $("save-msg").textContent="Отметьте галочкой хотя бы один выполненный подход."; return; }
   if(!db){ $("save-msg").textContent="Журнал недоступен в этом просмотре."; return; }
   const w=workouts[draft.wid], S=wStats(draft);
-  let id=`${draft.date}-${draft.wid}`; if(!draft.editing && sessions.some(x=>x.id===id)) id+=`-${Date.now().toString(36)}`;
+  if(w && w.kind==="test" && !draft.editing){ const miss=draft.items.filter(it=>!it.sets.some(s=>s.done)).map(it=>exOf(it).name);
+    if(miss.length && draft.missOk!==miss.join("|")){ draft.missOk=miss.join("|"); $("save-msg").innerHTML=`Не отмечено: <b>${esc(miss.join(", "))}</b>. Отметьте ✓ или нажмите «Завершить тест» ещё раз, чтобы сохранить без них.`; return; } }
+  let id=`${draft.date}-${draft.wid}`; if(!draft.editing && w && w.kind!=="test" && sessions.some(x=>x.id===id)) id+=`-${Date.now().toString(36)}`;
   const rnd=v=>v==null?null:Math.round(v);
   const body={date:draft.date, workoutId:draft.wid, workoutName:w?w.name:"", note:(draft.note||"").trim(), savedAt:new Date().toISOString(),
     startedAt:draft.startedAt||null, restPlan:restSec,
@@ -1568,13 +1633,15 @@ $("finish").addEventListener("click",async()=>{
     if(T.mode) stopTimer();
     let isProg=!draft.editing && w && w.prog && PROG; if(isProg){ clearTimeout(tplTimer); tplHold=true; }
     sessions=sessions.filter(x=>x.id!==id).concat([{id,...body}]);
-    if(isProg && w.kind==="test"){ const res=await finishTest(draft,body.date); showSummary(S,body,null,{test:res}); }
-    else if(isProg && !draft.mode){ const pr=await applyProgression(draft,workouts[draft.wid],body.date); showSummary(S,body,prev,{prog:pr}); }
-    else showSummary(S, body, prev, draft.mode?{note:draft.mode==="deload"?"Разгрузочная тренировка: веса программы не меняются.":"Облегчённая тренировка: веса программы не меняются."}:null);
-    if(isProg){ store("dr5-"+draft.wid,null); draft=fromTemplate(workouts[draft.wid]); tplHold=false; }
+    if(isProg && w.kind==="test"){ const res=await finishTest(draft,body.date); showReady(res); }
+    else if(isProg && !draft.mode){ const pr=await applyProgression(draft,workouts[draft.wid],body.date); showSummary(S,body,prev,{prog:pr,next:true}); }
+    else showSummary(S, body, prev, draft.mode?{note:draft.mode==="deload"?"Разгрузочная тренировка: веса программы не меняются.":"Облегчённая тренировка: веса программы не меняются.",next:true}:null);
+    wkOpen=false;
+    if(isProg){ store("dr5-"+draft.wid,null); draft=fromTemplate(workouts[draft.wid]); tplHold=false; saveDraft();
+      const n=progNext(); if(n&&workouts[n.wid]&&n.wid!==draft.wid){ selW=n.wid; store("selW5",selW); draft=getDraft(n.wid); } }
     else if(draft.editing){ draft=fromTemplate(workouts[draft.wid]); }
     else { draft.items.forEach(it=>{ it.sets.forEach(s=>{ s.done=false; delete s.t; delete s.wt; delete s.fb; delete s.rir; }); it.note=""; delete it.est; }); draft.date=today(); draft.note=""; delete draft.startedAt; }
-    saveDraft(); if(!isProg) flushTpl(); renderHead(); renderItems(); renderPlan(); renderWorkouts(); keepAwake(false); renderData();
+    saveDraft(); if(!isProg) flushTpl(); renderHead(); renderItems(); renderPlan(); renderWorkouts(); keepAwake(false); renderData(); renderToday();
   }catch(err){ tplHold=false; $("save-msg").textContent = err&&err.code==="invalid_argument" ? "Нет прав на запись в этот журнал." : "Не удалось сохранить, попробуйте ещё раз."; }
   finally{ $("finish").disabled=false; }
 });
@@ -1603,7 +1670,7 @@ function ensureAudio(){ try{ actx=actx||new (window.AudioContext||window.webkitA
 function runTimer(sec,mode,label,ref){
   ensureAudio(); clearInterval(T.tick); clearTimeout(T.idle);
   Object.assign(T,{mode,end:Date.now()+sec*1000,ref:ref||null,total:sec});
-  $("clock-lbl").textContent=label; $("t-plus").hidden=false; T.tick=setInterval(tickTimer,250); tickTimer();
+  $("clock-lbl").textContent=label; $("t-plus").hidden=false; T.tick=setInterval(tickTimer,250); tickTimer(); syncTimerBar();
 }
 function tickTimer(){
   const left=Math.ceil((T.end-Date.now())/1000);
@@ -1652,6 +1719,7 @@ idleClock();
 
 /* ===== summary after finishing ===== */
 function showSummary(S, body, prev, ex){
+  $("sum-eye").textContent="Тренировка завершена"; $("sum-close").textContent="Готово"; sumAfter=PROG?"today":null;
   $("sum-title").textContent=`${body.workoutName||"Тренировка"} · ${fmtDate(body.date)}`;
   const tile=(k,v)=>`<div class="tile"><span class="k">${k}</span><span class="v num">${v}</span></div>`;
   let cmp="";
@@ -1669,11 +1737,13 @@ function showSummary(S, body, prev, ex){
     ${tl.length?`<div class="tline">${tl.map(t=>`<span>${t}</span>`).join("")}</div>`:`<div class="tline muted">Время подходов не записано: отмечайте подходы галочкой во время тренировки, и здесь появится разбор отдыха.</div>`}
     <div class="stab"><div class="sr h"><span>Упражнение</span><span>подх.</span><span>повт.</span><span>тоннаж</span><span>время</span></div>${rows}</div>`;
   if(ex&&ex.test){ $("sum-title").textContent=`Итоги теста · ${fmtDate(body.date)}`; $("sum-body").innerHTML=testSummaryHTML(ex.test); }
-  else if(ex&&ex.prog) $("sum-body").insertAdjacentHTML("beforeend",progSummaryHTML(ex.prog));
-  else if(ex&&ex.note) $("sum-body").insertAdjacentHTML("beforeend",`<div class="banner"><span>${esc(ex.note)}</span></div>`);
+  else { const top=$("sum-body").querySelector(".tiles"), add=h=>top?top.insertAdjacentHTML("beforebegin",h):$("sum-body").insertAdjacentHTML("afterbegin",h);
+    if(ex&&ex.prog) add(progSummaryHTML(ex.prog));
+    if(ex&&ex.note) add(`<div class="banner"><span>${esc(ex.note)}</span></div>`);
+    if(ex&&ex.next&&PROG){ const n=progNext(); if(n&&workouts[n.wid]) add(`<div class="tline"><span class="eyebrow">Дальше</span><span>Следующая тренировка — <b>${fmtDay(n.date)}: ${esc(workouts[n.wid].name)}</b>.${ex.prog&&ex.prog.changes.length?` Новые веса для «${esc(body.workoutName)}» сохранены — они будут в следующий раз.`:""}</span></div>`); } }
   $("toast").hidden=true; $("sum").hidden=false; setTimeout(()=>$("sum-close").focus(),30);
 }
-$("sum").addEventListener("click",e=>{ if(e.target.id==="sum"||e.target.closest("#sum-close")) $("sum").hidden=true; });
+$("sum").addEventListener("click",e=>{ if(e.target.id==="sum"||e.target.closest("#sum-close")||e.target.closest("[data-close]")){ $("sum").hidden=true; if(sumAfter){ setTab(sumAfter); sumAfter=null; renderAll(); } } });
 
 document.addEventListener("keydown",e=>{ if(e.key!=="Escape"||ANIM.isOpen()) return; if(!$("ci").hidden) $("ci").hidden=true; else if(!$("ob").hidden) $("ob").hidden=true; else if(!$("sum").hidden) $("sum").hidden=true; else if(!$("picker").hidden) closePicker(); else if(!$("lib").hidden){ $("lib").hidden=true; $("add-ex").focus(); } });
 
@@ -2012,7 +2082,7 @@ function progressItem(it,tpl){
     return {sets:sets(w0,tgt), why:"вес и повторы те же: запас как в плане"};
   }
   if(allTop && !hard){
-    if(st/w0>0.10 && maxR<hi+2) return {sets:sets(w0,Math.min(hi+2,maxR+1)), why:`шаг веса больше 10% — сначала повторы: цель ${Math.min(hi+2,maxR+1)}`};
+    if(st/w0>0.10 && maxR<hi+2) return {sets:sets(w0,Math.min(hi+2,maxR+1)), why:`вес тот же, цель ${Math.min(hi+2,maxR+1)} повт.: прибавка веса здесь пока слишком большая`};
     return {sets:sets(w0+st,lo), why:`+${fmtN(st)} кг: все подходы — ${hi} повт. и больше`, dir:1};
   }
   if(hard && minR<lo){ const miss=(tpl.miss||0)+1;
@@ -2085,7 +2155,7 @@ async function finishTest(d,date){
     changes.push(`Программа пересобрана под уровень «${LEVELS[R.level]}»: ${SPLITN[prog.split]}.`);
   } else {
     for(const id of PROG.seq||[]){ const w=workouts[id]; if(!w) continue; let ch=false;
-      (w.items||[]).forEach(it=>{ const x=exOf(it); if(!it.rx||it.rx.test||x.type!=="w"||!it.rx.lo) return; const ww=workW(x,it.rx); if(ww.w){ it.sets.forEach(s=>s.w=ww.w); it.why=`вес ${ww.src}`; ch=true; } });
+      (w.items||[]).forEach(it=>{ const x=exOf(it); if(!it.rx||it.rx.test||x.type!=="w"||!it.rx.lo) return; const ww=workW(x,it.rx); if(ww.w){ it.sets.forEach(s=>s.w=ww.w); it.why="вес рассчитан по тесту"; ch=true; } });
       if(ch){ try{ await db.collection("workouts").doc(id).update({items:cleanObj(w.items),updatedAt:new Date().toISOString()}); }catch(e){} }
     }
     await saveProg();
@@ -2119,33 +2189,20 @@ function renderPlan(){
   const el=$("plan"); if(!el) return;
   if(!loaded.m){ el.innerHTML=`<div class="empty">Загружаю программу…</div>`; return; }
   if(!PROFILE||!PROG){
-    el.innerHTML=`<div class="pcard hero"><div class="eyebrow">Научная база Атласа</div><h3>Программа под вашу цель</h3>
-      <p class="muted">Анкета на 2 минуты и тестовая тренировка — и Атлос составит программу как опытный тренер: упражнения, веса, отдых, разгрузочные недели и автопрогрессию. Менять можно всё.</p>
+    el.innerHTML=`<div class="pcard hero"><div class="eyebrow">Программы пока нет</div><h3>Программа под вашу цель</h3>
+      <p class="muted">Анкета на 2 минуты и тестовая тренировка — и Атлос составит тренировки: упражнения, веса, отдых, разгрузочные недели и рост весов. Менять можно всё.</p>
       <div class="actions"><button class="btn" data-ob>Подобрать программу</button></div></div>`; return; }
-  const c=cycleInfo()||{}, nx=progNext(), td=today(), mon=mondayOf(td), ck=CHECKS[td];
-  const strip=WEEK.map((wd,k)=>{ const d=addDays(mon,k), t=PROG.plan[wd], dn=sessions.filter(s=>s.date===d), on=d===td;
-    const ico = dn.length ? "✓" : t==="S" ? "С" : t==="C" ? "К" : "·";
-    return `<div class="wd${on?" on":""}${dn.length?" done":""}${t?" plan":""}" title="${WDS[wd]} ${fmtDate(d)}${t==="S"?" · силовая":t==="C"?" · кардио":""}${dn.length?" · сделано":""}"><span>${WDS[wd]}</span><b>${ico}</b></div>`; }).join("");
-  const nxW = nx && workouts[nx.wid];
-  const nxTxt = nxW ? `${nx.date===td?"Сегодня":WDS[wdOf(nx.date)]+", "+fmtDate(nx.date)}: <b>${esc(nxW.name)}</b> · ≈ ${estMin(nxW.items,nxW.kind==="cardio")} мин` : "";
-  const cm=cardioWeekMin();
-  const banners=[];
-  if(PROG.testPending) banners.push(`<div class="pban"><span>Сначала — тестовая тренировка: по ней рассчитаем уровень и рабочие веса. До теста веса оценены по истории.</span><button class="btn small" data-open="p-test">Открыть тест</button></div>`);
-  else if(c.overdue) banners.push(`<div class="pban"><span>Пора пройти повторный тест: так пересчитаем уровень, веса и объём на следующий цикл.</span><button class="btn small" data-open="p-test">Открыть тест</button></div>`);
-  if(c.deload) banners.push(`<div class="pban"><span><b>Разгрузочная неделя</b> до ${fmtDate(c.deloadEnd)}: подходов вдвое меньше, запас 3–4 повтора, кардио только лёгкое.${c.retest?" В конце недели — повторный тест.":""}</span>${c.retest?`<button class="btn small" data-open="p-test">Тест</button>`:""}</div>`);
-  else if(PROG.deloadSuggest || threeBad()) banners.push(`<div class="pban warnb"><span>Предлагаем разгрузку раньше срока: ${esc(PROG.deloadSuggest?PROG.deloadSuggest.reason:"три дня подряд плохое самочувствие или сон")}.</span><span class="actions"><button class="btn small" data-deload>Начать разгрузку</button>${PROG.deloadSuggest?`<button class="btn ghost small" data-nodeload>Не сейчас</button>`:""}</span></div>`);
-  if(PROG.calib && c.wi===0) banners.push(`<div class="pban"><span><b>Калибровочная неделя.</b> Подбирайте вес так, чтобы в каждом подходе оставалось 2–3 повтора в запасе. Атлос запомнит веса.</span></div>`);
-  const ckTxt = ck ? `Сегодня: сон ${ck.sleep} · самочувствие ${ck.feel} · мышцы ${ck.sore}${ck.period?" · цикл":""}${ciBad(ck)?" — предложим облегчённую тренировку":""}` : "Как вы сегодня? Три вопроса — и Атлос подстроит нагрузку.";
-  const cyc = c.deload ? "разгрузка" : `неделя ${c.pos+1} из ${c.len}, затем разгрузка`;
+  const c=cycleInfo()||{}, C=CYCLE[PROG.level]||CYCLE[1], cm=cardioWeekMin();
+  const days=WEEK.filter(d=>PROG.plan[d]).map(d=>WDS[d].toLowerCase()+(PROG.plan[d]==="C"?" (кардио)":"")).join(", ");
+  const cyc = PROG.testPending ? "начнётся после теста" : c.deload ? `разгрузочная неделя до ${fmtDate(c.deloadEnd)}` : `неделя ${c.pos+1} из ${c.len}, затем разгрузка`;
+  const tw = PROG.testPending ? "сначала тест" : `≈ ${fmtDate(addDays(PROG.start,(C.len+1)*C.every*7-1))}`;
   el.innerHTML=`<div class="pcard">
     <div class="ptop"><div style="min-width:0"><div class="eyebrow">Цель</div><div class="pgoal">${GOALS[PROG.goal]||""}${PROG.goal2?` <span class="muted">+ ${GOALS[PROG.goal2].toLowerCase()}</span>`:""}</div></div><span class="pill">${LEVELS[PROG.level]}</span></div>
-    <div class="pmeta">${SPLITN[PROG.split]} · ${PROG.S} ${plural3(PROG.S,"силовая","силовые","силовых")}${PROG.C?` + ${PROG.C} кардио`:""} в неделю · цикл ${c.no||1}: ${cyc}</div>
-    <div class="wstrip" aria-label="Неделя">${strip}</div>
-    ${nxTxt?`<div class="pnext"><span>${nxTxt}</span><button class="btn small" data-open="${nx.wid}">Открыть</button></div>`:""}
-    ${banners.join("")}
-    <div class="pci"><span>${ckTxt}</span><button class="btn ghost small" data-ci>${ck?"Изменить":"Отметить"}</button></div>
-    <div class="pcm"><div class="wp-top"><span>Кардио на этой неделе</span><span class="num"><b>${cm}</b> из 150 мин</span></div><div class="bar"><i style="width:${Math.min(100,cm/150*100)}%"></i></div><span class="muted" style="font-size:12px">Норма ВОЗ: 150–300 мин умеренной нагрузки; интенсивные минуты считаются вдвое.</span></div>
-    <details class="pdet"><summary>Подробнее о программе</summary>${planDetails()}</details>
+    <div class="kv"><span>Схема</span><b>${SPLITN[PROG.split]} · ${PROG.S} ${plural3(PROG.S,"силовая","силовые","силовых")}${PROG.C?` + ${PROG.C} кардио`:""} в неделю</b><span>Дни</span><b>${days}</b><span>Цикл</span><b>${cyc}</b><span>Повторный тест</span><b>${tw}</b></div>
+    ${stripHTML()}
+    <div class="pcm"><div class="wp-top"><span>Кардио на этой неделе</span><span class="num"><b>${cm}</b> из 150 мин</span></div><div class="bar"><i style="width:${Math.min(100,cm/150*100)}%"></i></div><span class="muted" style="font-size:12px">Норма ВОЗ: 150–300 минут умеренной нагрузки в неделю; интенсивные минуты считаются вдвое.</span></div>
+    <details class="pdet"><summary>Как это работает</summary>${howHTML()}</details>
+    <details class="pdet"${planConfirm||planAsk?" open":""}><summary>Подробнее и настройки</summary>${planDetails()}</details>
   </div>`;
 }
 function planDetails(){
@@ -2168,8 +2225,8 @@ function planDetails(){
     ${lim.length?`<p class="muted" style="margin:0">Учтены ограничения: ${lim.join(", ")} — опасные упражнения заменены. При травме окончательное решение — за врачом.</p>`:""}
     <div class="actions">
       <button class="btn ghost small" data-ob>Анкета и цели</button>
-      <button class="btn ghost small" data-open="p-test">Пройти тест</button>
-      ${cycleInfo()&&cycleInfo().deload?"":`<button class="btn ghost small" data-deload>Разгрузочная неделя</button>`}
+      <button class="btn ghost small" data-open="p-test">Пройти тест заново</button>
+      ${cycleInfo()&&cycleInfo().deload?"":planAsk==="deload"?`<span class="wtools"><span>Начать разгрузочную неделю сегодня? 7 дней: подходов вдвое меньше, веса те же. Обычно она идёт по плану или когда падают результаты.</span><button class="btn small" data-deload>Начать</button><button class="btn ghost small" data-ask-no>Отмена</button></span>`:`<button class="btn ghost small" data-deload-ask>Разгрузочная неделя</button>`}
       ${planConfirm?`<span class="wtools"><span>Тренировки программы соберутся заново, ваши правки в них заменятся. История останется.</span><button class="btn small" data-regen-yes>Пересобрать</button><button class="btn ghost small" data-regen-no>Отмена</button></span>`:`<button class="btn ghost small" data-regen>Пересобрать программу</button>`}
     </div></div>`;
 }
@@ -2177,12 +2234,14 @@ $("plan").addEventListener("click",async e=>{
   const t=e.target;
   if(t.closest("[data-ob]")) return openOb();
   if(t.closest("[data-ci]")) return openCi("day");
-  const o=t.closest("[data-open]"); if(o){ if(workouts[o.dataset.open]){ selectWorkout(o.dataset.open); $("wk").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"}); } return; }
-  if(t.closest("[data-deload]")){ PROG.deloadFrom=today(); PROG.deloadSuggest=null; await saveProg(); clearProgDrafts(); renderAll(); toast("Разгрузочная неделя началась"); return; }
+  const o=t.closest("[data-open]"); if(o){ if(workouts[o.dataset.open]) openWorkout(o.dataset.open); return; }
+  if(t.closest("[data-deload-ask]")){ planAsk="deload"; renderPlan(); return; }
+  if(t.closest("[data-ask-no]")){ planAsk=null; renderPlan(); return; }
+  if(t.closest("[data-deload]")){ planAsk=null; PROG.deloadFrom=today(); PROG.deloadSuggest=null; await saveProg(); clearProgDrafts(); renderAll(); toast("Разгрузочная неделя началась"); return; }
   if(t.closest("[data-nodeload]")){ PROG.deloadSuggest=null; await saveProg(); renderPlan(); return; }
-  if(t.closest("[data-regen]")){ planConfirm=true; renderPlan(); $("plan").querySelector(".pdet").open=true; return; }
-  if(t.closest("[data-regen-no]")){ planConfirm=false; renderPlan(); $("plan").querySelector(".pdet").open=true; return; }
-  if(t.closest("[data-regen-yes]")){ planConfirm=false; await createProgram(Object.assign({},PROFILE,{start:"keep"}),{}); toast("Программа пересобрана"); return; }
+  if(t.closest("[data-regen]")){ planConfirm=true; renderPlan(); return; }
+  if(t.closest("[data-regen-no]")){ planConfirm=false; renderPlan(); return; }
+  if(t.closest("[data-regen-yes]")){ planConfirm=false; await createProgram(Object.assign({},PROFILE,{start:"keep"}),{}); showReady(null); return; }
 });
 
 /* ---- анкета (онбординг) ---- */
@@ -2280,8 +2339,8 @@ $("ob").addEventListener("click",async e=>{
     if(OB.step<OB_STEPS.length-1){ OB.step++; if(OB_STEPS[OB.step]==="days"&&!OB.p.wdays.length) OB.p.wdays=DEF_DAYS[recDays(obLevel(),OB.p.goal)].slice(); renderOb(); $("ob-body").scrollTop=0; return; }
     const p=clone(OB.p); p.gentle=!!(p.dis.length||+p.age>=60); p.age=+p.age; p.weight=+p.weight;
     $("ob-next").disabled=true; $("ob-next").textContent="Собираю программу…";
-    try{ await createProgram(p,{archive:!!p.archive}); $("ob").hidden=true; toast(p.start==="test"?"Программа готова. Начнём с теста":"Программа готова");
-      $("prog-sec").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"}); }
+    try{ await createProgram(p,{archive:!!p.archive}); $("ob").hidden=true; wkOpen=false;
+      if(p.start==="test"){ setTab("today"); renderAll(); toast("Анкета готова. Шаг 2 — тестовая тренировка"); } else showReady(null); }
     catch(err){ $("ob-next").disabled=false; renderOb(); toast("Не удалось сохранить программу"); }
   }
 });
@@ -2305,7 +2364,7 @@ $("ci").addEventListener("click",async e=>{
   if(t.closest("#ci-save")){
     const c=Object.assign({},CI.v,{date:today()}); CHECKS[today()]=c;
     try{ if(db) await db.collection("checkins").doc(today()).set(cleanObj(c)); }catch(err){}
-    renderPlan(); renderFlags();
+    renderPlan(); renderFlags(); renderToday();
     const bad=ciBad(c), three=threeBad();
     if(CI.mode==="start" && (bad||three) && draft && !draft.mode && workouts[draft.wid] && workouts[draft.wid].prog && workouts[draft.wid].kind==="str"){
       CI.res=`<p style="margin:0">${three?"Третий день подряд плохое самочувствие или сон. ":""}Предлагаем облегчённую тренировку: на треть меньше подходов, запас +1 повтор.</p>
@@ -2371,12 +2430,12 @@ function fbRow(j){
 }
 
 /* ---- итог теста ---- */
-function testSummaryHTML(res){
+function testSummaryHTML(res,noTiles){
   const R=res.R, rows=Object.entries(R.lifts).map(([id,l])=>{ const lv=id==="squat"?R.lv.squat:id==="bench"?R.lv.bench:null;
     return `<div class="sr"><span>${esc((LIB[id]||{}).name||id)}</span><span class="num">${fmtN(l.w)}×${l.r}</span><span class="num">${fmtN(l.orm)}</span><span class="num">${R.bw?fmtN(Math.round(l.orm/R.bw*100)/100):"—"}</span><span>${lv?LEVELS[to3(lv)]:"—"}</span></div>`; }).join("");
   const tile=(k,v)=>`<div class="tile"><span class="k">${k}</span><span class="v">${v}</span></div>`;
   const prev=TESTS.filter(t=>t.date<R.date).pop();
-  return `<div class="tiles">${tile("Уровень",LEVELS[R.level])}${tile("МПК, мл/кг/мин",R.vo2!=null?fmtN(R.vo2):"—")}${tile("Отжимания",R.pushups!=null?`${R.pushups}`:"—")}${tile("Планка",R.plank?fmtT(R.plank):"—")}</div>
+  return `${noTiles?"":`<div class="tiles">${tile("Уровень",LEVELS[R.level])}${tile("МПК, мл/кг/мин",R.vo2!=null?fmtN(R.vo2):"—")}${tile("Отжимания",R.pushups!=null?`${R.pushups}`:"—")}${tile("Планка",R.plank?fmtT(R.plank):"—")}</div>`}
     <div class="tline"><span>По анкете — <b>${LEVELS[R.levelStated]}</b>, по тесту — <b>${R.levelTest?LEVELS[R.levelTest]:"не определён"}</b>. ${R.levelTest&&R.levelTest!==R.levelStated?"Берём более низкий.":""}</span>
     ${R.pullups!=null?`<span>Подтягивания: <b>${R.pullups}</b>${R.lv.pullup?` · ${STD5[R.lv.pullup]}`:""}</span>`:""}
     ${R.pushRate?`<span>Отжимания по нормам ACSM для вашего пола и возраста: <b>${R.pushRate}</b></span>`:""}
@@ -2390,9 +2449,156 @@ function testSummaryHTML(res){
 function progSummaryHTML(pr){
   if(!pr) return "";
   const ch=pr.changes.filter(c=>c.why);
-  return `${ch.length?`<div class="tline"><span class="eyebrow">Следующий раз</span>${ch.map(c=>`<span>${c.dir>0?"↑":c.dir<0?"↓":"→"} <b>${esc(c.name)}</b>: ${esc(c.why)}</span>`).join("")}</div>`:""}
+  return `${ch.length?`<div class="tline"><span class="eyebrow">Что изменится в следующий раз</span>${ch.map(c=>`<span>${c.dir>0?"↑":c.dir<0?"↓":"→"} <b>${esc(c.name)}</b>: ${esc(c.why)}</span>`).join("")}</div>`:""}
     ${pr.decline?`<div class="banner"><span>${esc(pr.decline[0].toUpperCase()+pr.decline.slice(1))} — предлагаем разгрузочную неделю раньше срока. Решение — в карточке программы.</span></div>`:""}`;
 }
+
+/* ===================== навигация: Сегодня · Программа · Журнал ===================== */
+const WDF=["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"];
+const MONG=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+const fmtLong = d => { const t=new Date(d+"T12:00:00"); return `${WDF[t.getDay()]}, ${t.getDate()} ${MONG[t.getMonth()]}`; };
+const fmtDay = d => d===today() ? "сегодня" : d===addDays(today(),1) ? "завтра, "+fmtLong(d).split(", ")[1] : fmtLong(d);
+const cap = s => s ? s[0].toUpperCase()+s.slice(1) : s;
+const fmtDM = d => { const t=new Date(d+"T12:00:00"); return `${t.getDate()} ${MONG[t.getMonth()]}`; };
+function syncTimerBar(){ const show = (TAB==="today" && !$("wk").hidden) || !!T.mode; document.body.classList.toggle("notimer",!show); }
+let TAB=load("atlos:tab")||"today", wkOpen=false, sumAfter=null, planAsk=null, booted=false;
+function setTab(t,keepScroll){ TAB=t; store("atlos:tab",t); $("app").dataset.tab=t;
+  document.querySelectorAll(".tabs [data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===t)));
+  if(!keepScroll) window.scrollTo({top:0,behavior:"auto"}); if(typeof syncTimerBar==="function"&&$("wk")) syncTimerBar(); }
+document.querySelector(".tabs").addEventListener("click",e=>{ const b=e.target.closest("[data-tab]"); if(b) setTab(b.dataset.tab); });
+setTab(TAB,true);
+function openWorkout(id){ if(!workouts[id]) return; wkOpen=true; if(!draft||draft.wid!==id) selectWorkout(id); else { renderHead(); renderToday(); } setTab("today",true);
+  requestAnimationFrame(()=>$("wk").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"})); }
+
+/* ---- что сегодня ---- */
+function todayState(){
+  if(!loaded.m||!loaded.w) return {k:"load"};
+  if(!PROFILE||!PROG) return {k:"none"};
+  const nx=progNext(); if(!nx||!workouts[nx.wid]) return {k:"none"};
+  if(nx.test) return {k:PROG.testPending?"test":"retest",wid:nx.wid,date:today()};
+  const td=today(), doneToday=sessions.some(s=>s.date===td&&workouts[s.workoutId]&&workouts[s.workoutId].prog);
+  if(nx.date===td) return {k:"train",wid:nx.wid,date:td};
+  return {k:doneToday?"done":"rest",wid:nx.wid,date:nx.date};
+}
+const started = d => !!(d && (d.startedAt || d.editing || d.items.some(it=>it.sets.some(s=>s.done))));
+function wkVisible(){
+  if(!draft||!workouts[draft.wid]) return false;
+  if(!PROG) return true;
+  if(started(draft)||wkOpen) return true;
+  const st=todayState(); return ["train","test","retest"].includes(st.k) && st.wid===draft.wid;
+}
+function bootSelect(){
+  if(booted||!loaded.w||!loaded.m||!loaded.s) return; booted=true;
+  if(PROG && !started(draft)){ const st=todayState(); if(st.wid&&workouts[st.wid]){ selW=st.wid; store("selW5",selW); draft=getDraft(st.wid); } }
+  renderAll();
+}
+
+/* ---- неделя: что сделано и что дальше по плану ---- */
+const SHORT={"p-fbA":"А","p-fbB":"Б","p-fbC":"В","p-U1":"Верх","p-L1":"Низ","p-U2":"Верх","p-L2":"Низ","p-PuA":"Толк.","p-PlA":"Тяга","p-LgA":"Ноги","p-PuB":"Толк.","p-PlB":"Тяга","p-LgB":"Ноги","p-cardio":"Кардио","p-int":"Интерв.","p-test":"Тест"};
+function weekView(){
+  const td=today(), mon=addDays(td,-2), seq=(PROG.seq||[]).filter(id=>workouts[id]), out=[];
+  let k=Math.max(0,seq.indexOf(nextStrength()));
+  for(let q=0;q<7;q++){ const d=addDays(mon,q), wd=wdOf(d), t=PROG.plan[wd], dn=sessions.filter(s=>s.date===d); let wid=null;
+    if(d>=td && t && !dn.length){ if(t==="S"&&seq.length){ wid=seq[k%seq.length]; k++; } else wid=cardioFor(d); }
+    out.push({d,wd,t,dn,wid}); }
+  return out;
+}
+function stripHTML(){
+  const td=today();
+  return `<div class="wstrip" aria-label="Эта неделя">${weekView().map(c=>{ const done=c.dn.length, lab=done?"✓":c.wid?(SHORT[c.wid]||"•"):"";
+    const tip=`${cap(WDF[c.wd])}, ${fmtDate(c.d)}${done?" — сделано: "+c.dn.map(s=>s.workoutName).join(", "):c.wid?" — "+workouts[c.wid].name:c.t?"":" — отдых"}`;
+    return `<div class="wd${c.d===td?" on":""}${done?" done":""}${c.t?" plan":""}" title="${esc(tip)}"><span>${WDS[c.wd]} ${+c.d.slice(8)}</span><b>${lab||"·"}</b></div>`; }).join("")}</div>
+    <div class="wlegend"><span>✓ сделано</span><span>А, Б… — тренировка по плану</span><span>· отдых</span></div>`;
+}
+function whyList(w){
+  if(!w) return ""; const its=(w.items||[]).filter(it=>it.why);
+  if(!its.length) return "";
+  if(its.every(it=>/^вес (по|рассчитан)/.test(it.why))) return `<p class="muted" style="margin:0;font-size:13px">Рабочие веса рассчитаны по вашему тесту.</p>`;
+  const li=its.filter(it=>!/^вес (по|рассчитан)/.test(it.why)).map(it=>{ const up=/^\+|^помощь −/.test(it.why), dn=/^−/.test(it.why);
+    return `<li><span class="ar">${up?"↑":dn?"↓":"→"}</span><span><b>${esc(exOf(it).name)}</b>: ${esc(it.why)}</span></li>`; });
+  return `<details class="chg"><summary>Что изменилось с прошлого раза · ${li.length}</summary><ul>${li.join("")}</ul></details>`;
+}
+function renderToday(){
+  const el=$("today"); if(!el) return; const td=today(), st=todayState();
+  $("h-date").textContent=cap(fmtLong(td));
+  if(st.k==="load"){ el.innerHTML=`<div class="empty">Загружаю…</div>`; return; }
+  if(st.k==="none"){ const own=wList().filter(w=>!w.prog);
+    el.innerHTML=`<div class="tcard hero"><div class="eyebrow">Начните с программы</div><h3>Атлос составит тренировки под вас</h3>
+      <ol class="road"><li><b>Анкета</b><span>здоровье, цель, опыт и дни — 2 минуты</span></li><li><b>Тестовая тренировка</b><span>60–70 минут: узнаем уровень и рабочие веса</span></li><li><b>Программа</b><span>каждый день здесь будет видно, что делать; веса растут сами</span></li></ol>
+      <div class="actions"><button class="btn" data-ob>Подобрать программу</button></div>
+      ${own.length&&draft?`<p class="muted" style="margin:0;font-size:13px">Пока можно тренироваться по своим тренировкам: ниже открыта «${esc(workouts[draft.wid].name)}», остальные — во вкладке «Программа».</p>`:""}</div>`; return; }
+  const c=cycleInfo()||{}, w=workouts[st.wid], dur=w?estMin(w.items,w.kind==="cardio"):0, ban=[];
+  if(c.deload) ban.push(`<div class="pban"><span><b>Разгрузочная неделя</b> до ${fmtDM(c.deloadEnd)} включительно: подходов вдвое меньше, веса те же, без отказа.${c.retest?" В конце недели — повторный тест.":""}</span>${c.manual?`<button class="btn ghost small" data-undeload>Отменить разгрузку</button>`:""}</div>`);
+  else if(PROG.deloadSuggest||threeBad()) ban.push(`<div class="pban warnb"><span>Советуем разгрузочную неделю раньше срока: ${esc(PROG.deloadSuggest?PROG.deloadSuggest.reason:"три дня подряд плохое самочувствие или сон")}.</span><span class="actions"><button class="btn small" data-deload>Начать разгрузку</button>${PROG.deloadSuggest?`<button class="btn ghost small" data-nodeload>Не сейчас</button>`:""}</span></div>`);
+  let h="";
+  if(st.k==="test") h=`<div class="stepper"><span class="ok">✓ Анкета</span><span class="on">2 · Тест</span><span>3 · Программа</span></div>
+     <h3>Шаг 2 — тестовая тренировка</h3>
+     <p>${w.items.length} упражнений, 60–70 минут. Идите сверху вниз и отмечайте каждый подход галочкой ✓:</p>
+     <ul class="tl"><li>подтягивания, отжимания и планка — максимум, сколько получится;</li><li>ходьба — время на 1,6 км и пульс сразу на финише;</li><li>силовые — два лёгких подхода и один зачётный на 5–10 повторов: последние повторы тяжело, но технично.</li></ul>
+     <p>В конце нажмите «Завершить тест» — Атлос рассчитает уровень, подберёт веса и покажет готовую программу.</p>
+     <div class="actions"><button class="btn" data-go>К тесту ↓</button></div>`;
+  else if(st.k==="retest") h=`<div class="eyebrow">Пора</div><h3>Повторный тест</h3><p>Цикл тренировок пройден. Тест покажет прогресс, а Атлос пересчитает уровень, веса и объём на следующий цикл. 60–70 минут.</p><div class="actions"><button class="btn" data-go>К тесту ↓</button></div>`;
+  else if(st.k==="train") h=`<div class="eyebrow">Сегодня по плану</div><h3>${esc(w.name)}</h3><div class="tmeta">${w.kind==="cardio"?"кардио":`${w.items.length} ${plural3(w.items.length,"упражнение","упражнения","упражнений")}`} · ≈ ${dur} мин${w.dt?" · "+DUP[w.dt].n:""}${c.deload?" · разгрузка":""}</div>
+     ${whyList(w)}
+     <div class="actions"><button class="btn" data-go>${draft&&draft.wid===w.id&&draft.startedAt?"Продолжить тренировку ↓":"Открыть тренировку ↓"}</button></div>`;
+  else h=`<div class="eyebrow">Сегодня</div><h3>${st.k==="done"?"Тренировка сделана ✓":"День отдыха"}</h3>
+     <p>${st.k==="done"?"Хорошая работа. ":"Мышцы растут во время восстановления. "}Следующая тренировка — <b>${fmtDay(st.date)}: ${esc(w.name)}</b> · ≈ ${dur} мин.</p>
+     ${whyList(w)}
+     <div class="actions"><button class="btn ghost" data-go>${st.k==="done"?"Посмотреть следующую":"Потренироваться сегодня"}</button></div>`;
+  const ck=CHECKS[td];
+  el.innerHTML=`<div class="tcard">${h}${ban.join("")}
+    ${["test","retest"].includes(st.k)?"":stripHTML()}
+    ${st.k==="train"?`<div class="pci"><span>${ck?`Самочувствие сегодня: сон ${ck.sleep} · общее ${ck.feel} · мышцы ${ck.sore}${ciBad(ck)?" — можно облегчить тренировку":""}`:"Перед тренировкой отметьте самочувствие — Атлос подстроит нагрузку."}</span><button class="btn ghost small" data-ci>${ck?"Изменить":"Отметить"}</button></div>`:""}
+  </div>`;
+}
+$("today").addEventListener("click",async e=>{
+  const t=e.target;
+  if(t.closest("[data-ob]")) return openOb();
+  if(t.closest("[data-ci]")) return openCi("day");
+  if(t.closest("[data-go]")){ const st=todayState(); if(started(draft)&&draft.wid!==st.wid){ openWorkout(draft.wid); toast("Сначала завершите начатую тренировку"); return; } return openWorkout(st.wid); }
+  if(t.closest("[data-undeload]")){ PROG.deloadFrom=null; await saveProg(); clearProgDrafts(); renderAll(); toast("Разгрузка отменена"); return; }
+  if(t.closest("[data-deload]")){ PROG.deloadFrom=today(); PROG.deloadSuggest=null; await saveProg(); clearProgDrafts(); renderAll(); toast("Разгрузочная неделя началась"); return; }
+  if(t.closest("[data-nodeload]")){ PROG.deloadSuggest=null; await saveProg(); renderAll(); return; }
+});
+
+/* ---- «Программа готова»: после теста и после анкеты ---- */
+function exLine(it){ const x=exOf(it), s=it.sets[0]||{}, n=it.sets.length;
+  const v = x.kind==="cardio" ? `${s.r} мин` : x.type==="time" ? `${n} × ${s.r} с` : x.ru ? `${fmtN(s.w||0)} кг, ${n} × ${s.r} с` : x.type==="w"&&s.w ? `${fmtN(s.w)} кг · ${n} × ${s.r}` : x.type==="assist"&&s.w!=null ? `помощь ${fmtN(s.w)} кг · ${n} × ${s.r}` : `${n} × ${s.r}`;
+  return `<li><span>${esc(x.name)}</span><span class="num">${v}</span></li>`; }
+function readyHTML(res){
+  const R=res&&res.R, nx=progNext(), C=CYCLE[PROG.level]||CYCLE[1], seq=(PROG.seq||[]).map(id=>workouts[id]).filter(Boolean);
+  const days=WEEK.filter(d=>PROG.plan[d]).map(d=>WDS[d].toLowerCase()+(PROG.plan[d]==="C"?" — кардио":"")).join(", ");
+  const tile=(k,v)=>`<div class="tile"><span class="k">${k}</span><span class="v">${v}</span></div>`;
+  let h="";
+  if(R) h+=`<div class="stepper"><span class="ok">✓ Анкета</span><span class="ok">✓ Тест</span><span class="on">3 · Программа</span></div>
+    <div class="tiles">${tile("Уровень",LEVELS[R.level])}${tile("МПК, мл/кг/мин",R.vo2!=null?fmtN(R.vo2):"—")}${tile("Отжимания",R.pushups!=null?R.pushups:"—")}${tile("Планка",R.plank?fmtT(R.plank):"—")}</div>
+    <p class="muted" style="margin:0;font-size:13px">По анкете — ${LEVELS[R.levelStated]}, по тесту — ${R.levelTest?LEVELS[R.levelTest]:"не определён"}${R.levelTest&&R.levelTest!==R.levelStated?": берём более низкий":""}.</p>
+    <details class="chg"><summary>Результаты теста подробно</summary>${testSummaryHTML(res,true)}</details>`;
+  h+=`<h4 class="rh">Ваша программа</h4>
+    <p style="margin:0"><b>${GOALS[PROG.goal]}${PROG.goal2?" + "+GOALS[PROG.goal2].toLowerCase():""}</b> · ${SPLITN[PROG.split].toLowerCase()} · ${PROG.S} ${plural3(PROG.S,"силовая","силовые","силовых")}${PROG.C?` + ${PROG.C} кардио`:""} в неделю: ${days}.${seq.length>1?` Тренировки ${seq.map(w=>"«"+w.name+"»").join(", ")} чередуются по кругу.`:""}</p>
+    <div class="rws">${seq.map((w,q)=>`<details class="rw"${q===0?" open":""}><summary><b>${esc(w.name)}</b><span class="muted">${w.items.length} упр. · ≈ ${estMin(w.items)} мин</span></summary><ul class="exl">${w.items.map(exLine).join("")}</ul></details>`).join("")}</div>
+    <h4 class="rh">Что делать дальше</h4>
+    <ol class="tl">
+      <li>Следующая тренировка — <b>${nx&&workouts[nx.wid]?fmtDay(nx.date)+": "+esc(workouts[nx.wid].name):"по плану"}</b>. В этот день она будет открыта во вкладке «Сегодня».</li>
+      <li>На тренировке идите сверху вниз: выполнили подход — нажмите ✓ и ответьте, как он прошёл. Таймер отдыха включится сам.</li>
+      <li>В конце нажмите «Завершить». Атлос сам поменяет веса на следующий раз и покажет, что изменилось.</li>
+      <li>Через ${C.len} ${plural3(C.len,"неделю","недели","недель")} — разгрузочная неделя${C.every===1?", после неё — повторный тест":", после каждой второй — повторный тест"}.</li>
+    </ol>
+    <p class="muted" style="margin:0;font-size:13px">Менять можно всё: веса и повторы — касанием по цифре, упражнения — кнопкой ⇄, дни и цель — во вкладке «Программа» → «Подробнее и настройки» → «Анкета и цели».</p>
+    <div class="actions"><button class="btn" data-close>Понятно</button></div>`;
+  return h;
+}
+function showReady(res){
+  $("sum-eye").textContent="Атлос"; $("sum-title").textContent=res&&res.R?"Тест пройден — программа готова":"Программа готова";
+  $("sum-body").innerHTML=readyHTML(res); $("sum-close").textContent="Понятно"; sumAfter="today";
+  $("toast").hidden=true; $("sum").hidden=false; setTimeout(()=>$("sum-close").focus(),30);
+}
+function howHTML(){ const C=CYCLE[PROG.level]||CYCLE[1], seq=(PROG.seq||[]).map(id=>workouts[id]).filter(Boolean);
+  return `<ol class="tl">
+    <li>В тренировочный день вкладка «Сегодня» открывает тренировку по плану.${seq.length>1?` ${seq.map(w=>"«"+w.name+"»").join(", ")} чередуются по кругу.`:""}</li>
+    <li>Выполнили подход — ✓ и короткая оценка. Отдых включается сам и длится столько, сколько нужно этому упражнению.</li>
+    <li>После «Завершить» Атлос меняет веса и повторы на следующий раз — изменения видны в итогах и в карточке «Сегодня».</li>
+    <li>Каждые ${C.len} ${plural3(C.len,"неделю","недели","недель")} — разгрузочная неделя, ${C.every===1?"после неё":"после каждой второй"} — повторный тест.</li></ol>`; }
 
 
 /* ===== data: backup / restore ===== */
@@ -2464,7 +2670,7 @@ renderAll();
   db = LocalDB;
   try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
   db.collection("workouts").onSnapshot(snap=>{
-    workouts={}; snap.docs.forEach(d=>{ const v=d.data(); workouts[d.id]={id:d.id,...v,items:v.items||[]}; (v.items||[]).forEach(noteCustom); });
+    workouts={}; snap.docs.forEach(d=>{ const v=clone(d.data()); workouts[d.id]={id:d.id,...v,items:v.items||[]}; (v.items||[]).forEach(noteCustom); });
     loaded.w=true;
     if(!selW||!workouts[selW]){ const nx=nextWorkout(); selW = nx || (wList()[0]||{}).id || null; }
     const before=draft?draft.wid:null;
@@ -2472,20 +2678,20 @@ renderAll();
     if(!selW) draft=null;
     renderStats(); renderWorkouts(); renderHead();
     if(!draft || draft.wid!==before) { renderItems(); renderProgress(); }
+    renderToday(); bootSelect();
   }, ()=>{ $("status").hidden=false; $("status").textContent="Связь с журналом прервалась. Обновите страницу."; });
   db.collection("meta").onSnapshot(snap=>{
-    PROFILE=null; PROG=null; snap.docs.forEach(d=>{ if(d.id==="profile") PROFILE=d.data(); if(d.id==="program") PROG=d.data(); });
-    const first=!loaded.m; loaded.m=true;
-    if(first && PROG && loaded.w){ const n=progNext(); if(n&&workouts[n.wid]&&(!draft||!draft.startedAt)){ selW=n.wid; draft=getDraft(n.wid); } }
-    renderAll();
+    PROFILE=null; PROG=null; snap.docs.forEach(d=>{ if(d.id==="profile") PROFILE=clone(d.data()); if(d.id==="program") PROG=clone(d.data()); });
+    loaded.m=true;
+    renderAll(); bootSelect();
   }, ()=>{ loaded.m=true; renderPlan(); });
-  db.collection("tests").onSnapshot(snap=>{ TESTS=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.date<b.date?-1:1); renderPlan(); }, ()=>{});
-  db.collection("checkins").onSnapshot(snap=>{ CHECKS={}; snap.docs.forEach(d=>CHECKS[d.id]=d.data()); renderPlan(); renderFlags(); }, ()=>{});
+  db.collection("tests").onSnapshot(snap=>{ TESTS=snap.docs.map(d=>({id:d.id,...clone(d.data())})).sort((a,b)=>a.date<b.date?-1:1); renderPlan(); }, ()=>{});
+  db.collection("checkins").onSnapshot(snap=>{ CHECKS={}; snap.docs.forEach(d=>CHECKS[d.id]=clone(d.data())); renderPlan(); renderToday(); renderFlags(); }, ()=>{});
   db.collection("sessions").onSnapshot(snap=>{
-    sessions=snap.docs.map(d=>({id:d.id,...d.data()})).filter(s=>Array.isArray(s.items));
+    sessions=snap.docs.map(d=>({id:d.id,...clone(d.data())})).filter(s=>Array.isArray(s.items));
     const first=!loaded.s; loaded.s=true;
     if(first && !load("selW5")){ const nx=nextWorkout(); if(nx&&workouts[nx]&&nx!==selW){ selW=nx; draft=getDraft(nx); } }
-    renderAll(); renderData();
+    renderAll(); bootSelect(); renderData();
     if(draft && draft.startedAt) keepAwake(true);
   }, ()=>{});
 })();
