@@ -562,6 +562,53 @@ body.notimer .toast{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 .exl{list-style:none;padding:0;margin:8px 0 2px;display:flex;flex-direction:column;gap:4px;font-size:13px}
 .exl li{display:flex;justify-content:space-between;gap:10px}.exl li .num{color:var(--muted);white-space:nowrap}
 #sum-body{gap:12px}
+.envrow{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.obin{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);margin-top:8px}
+/* ===== Путь: кольца, карта пути, значки, золото ===== */
+.tabs{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.wrap[data-tab="path"]>[data-pane]:not([data-pane="path"]){display:none!important}
+.rings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ring{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:12.5px;line-height:1.3}
+.ring>span{display:flex;flex-direction:column}
+.rings.sm{display:flex;gap:6px}.rings.sm .ring{font-size:0}.rings.sm .ring b{display:none}
+.rg-bg{fill:none;stroke:var(--sunk);stroke-width:7}
+.rg-fg{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dasharray .4s}
+.rg-str{stroke:var(--accent)}.rg-cardio{stroke:#2f7d9f}.rg-rec{stroke:var(--ok)}
+.rg-ok{font-size:16px;fill:var(--fg);font-weight:700}
+.coach{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.45;background:var(--sunk);border-radius:16px;padding:10px 12px}
+.cav{flex:none;width:26px;height:26px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-family:var(--display);font-size:14px}
+.gmini{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:16px;font-size:13px}
+.gmini:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.gm2{text-align:right;line-height:1.35}.gm2 b{font-size:18px}
+.path{display:flex;flex-direction:column;gap:8px;border-radius:16px;padding:12px 14px;background:var(--sunk)}
+.ptitle{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pnodes{display:flex;gap:4px;flex-wrap:wrap}
+.pn{min-width:24px;height:24px;padding:0 4px;box-sizing:border-box;border-radius:12px;display:grid;place-items:center;font-size:11.5px;font-family:var(--mono);border:1.5px solid var(--line);color:var(--muted);background:var(--surface)}
+.pn.past{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.pn.now{border-color:var(--accent);color:var(--fg);box-shadow:0 0 0 3px var(--accent-soft)}
+.path.th-sea{background:linear-gradient(135deg,#d6ecf3,#e8f4ef)}.path.th-city{background:linear-gradient(135deg,#e7e3f3,#f1ece4)}.path.th-aurora{background:linear-gradient(135deg,#d9f2e6,#e3dcf6)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .path.th-sea{background:linear-gradient(135deg,#17323a,#1b2c27)}:root:not([data-theme="light"]) .path.th-city{background:linear-gradient(135deg,#29253a,#2e2a22)}:root:not([data-theme="light"]) .path.th-aurora{background:linear-gradient(135deg,#173328,#272040)}}
+:root[data-theme="dark"] .path.th-sea{background:linear-gradient(135deg,#17323a,#1b2c27)}:root[data-theme="dark"] .path.th-city{background:linear-gradient(135deg,#29253a,#2e2a22)}:root[data-theme="dark"] .path.th-aurora{background:linear-gradient(135deg,#173328,#272040)}
+.sw{width:26px;height:26px;border-radius:8px;flex:none;display:grid;place-items:center;background:var(--sunk);font-size:14px}
+.sw.th-trail{background:var(--sunk)}.sw.th-sea{background:linear-gradient(135deg,#9fd3e3,#bfe3d3)}.sw.th-city{background:linear-gradient(135deg,#c7bde6,#e2d6c2)}.sw.th-aurora{background:linear-gradient(135deg,#a6e3c6,#c2b2ee)}
+.streak{display:flex;flex-direction:column;gap:2px}.streak .sn{font-family:var(--display);font-size:34px;line-height:1;margin-right:6px}
+.trials{display:flex;flex-direction:column;gap:6px}
+.tr{display:flex;gap:8px;font-size:13.5px;align-items:flex-start}.tr>span:first-child{width:18px;flex:none;color:var(--muted)}.tr.ok>span:first-child{color:var(--ok);font-weight:700}
+.mmap{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.mm{position:relative;overflow:hidden;border-radius:12px;padding:8px 10px;background:var(--sunk);display:flex;justify-content:space-between;gap:6px;font-size:12.5px;z-index:0}
+.mm::before{content:"";position:absolute;inset:0;width:calc(var(--f)*100%);background:var(--accent-soft);z-index:-1}
+.mm.ok::before{background:var(--ok-soft)}
+.prr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:13.5px;padding:6px 0;border-bottom:1px solid var(--line)}.prr .muted{grid-column:1/-1;font-size:12px}
+.bcat{display:flex;flex-direction:column;gap:6px}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.badge{display:flex;gap:6px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--sunk);font-size:12.5px;color:var(--muted);line-height:1.25}
+.badge.on{background:var(--accent-soft);color:var(--fg)}.badge .bi{font-size:15px}
+.chal,.chform{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:14px}
+.kv2{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 10px;align-items:center;font-size:13px}.kv2 .chips{justify-content:flex-start}
+.stepper2{display:flex;align-items:center;gap:10px}
+.shop{display:flex;flex-direction:column;gap:6px}
+.shopi{display:flex;align-items:center;gap:10px;font-size:13px}.shopi>span:nth-child(2){flex:1;min-width:0}
+.gsum{background:var(--sunk);border-radius:16px;padding:10px 12px}
 
 /* standalone app */
 :root{--display:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif;--body:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif;--mono:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif}
@@ -591,6 +638,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   </header>
   <nav class="tabs" role="tablist" aria-label="Разделы">
     <button role="tab" data-tab="today" aria-selected="true">Сегодня</button>
+    <button role="tab" data-tab="path" aria-selected="false">Путь</button>
     <button role="tab" data-tab="prog" aria-selected="false">Программа</button>
     <button role="tab" data-tab="log" aria-selected="false">Журнал</button>
   </nav>
@@ -619,6 +667,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <textarea id="w-note" rows="2" placeholder="Например: вес 92,4 кг, спал 6 ч"></textarea></label>
     <div class="actions"><button class="btn" id="finish">Завершить и сохранить</button><span class="muted" id="save-msg" style="font-size:13px"></span></div>
     <p class="stopsig">Стоп-сигналы: боль в груди, сильное головокружение, острая боль в суставе — прекратите тренировку и обратитесь к врачу.</p>
+  </section>
+
+  <section data-pane="path" aria-labelledby="h-path" style="display:flex;flex-direction:column;gap:12px">
+    <h2 id="h-path">Путь</h2>
+    <div id="path" style="display:flex;flex-direction:column;gap:12px"></div>
   </section>
 
   <section id="prog-sec" data-pane="prog" aria-labelledby="h-plan" style="display:flex;flex-direction:column;gap:12px">
@@ -1016,6 +1069,96 @@ const ANIM = (()=>{
   });
 
   D.rdl_db=Object.assign({},D.rdl,{m:"Бицепс бедра, ягодицы, разгибатели спины",front:dumbs});
+  /* ===== v14: упражнения дома, на турниках и в поездке ===== */
+  /* bl: прямое тело от стоп F до плеч; кисти в H на расстоянии arm от плеча (поиск угла наклона корпуса) */
+  const bl=(F,H,arm,leg=45.8,pull=false)=>{ const Hp=P(...H), sols=[];
+    for(let a=-40;a<=89;a+=.25){ const r=rad(a), d=P(Math.cos(r),-Math.sin(r)), S=add(P(...F),mul(d,leg+LEN.torso)), e=Math.abs(len(sub(S,Hp))-arm);
+      if(e<.8 && (pull ? S.y>=Hp.y+3 : S.y<=Hp.y-3)) sols.push({e,a,d,S}); }
+    const best=sols.sort((p,q)=>(p.e-q.e)+(Math.abs(p.S.x-Hp.x)-Math.abs(q.S.x-Hp.x))*.05)[0]||{a:20,d:P(Math.cos(rad(20)),-Math.sin(rad(20)))};
+    const hip=add(P(...F),mul(best.d,leg)); return {hip:[+hip.x.toFixed(1),+hip.y.toFixed(1)], t:+(90-best.a).toFixed(1), feet:F, hands:H}; };
+  const kneeFoot=(K,ang=38)=>[+(K[0]-23*Math.cos(rad(ang))).toFixed(1), +(K[1]-23*Math.sin(rad(ang))).toFixed(1)];
+  const blK=(K,H,arm)=>Object.assign(bl(K,H,arm,23),{feet:kneeFoot(K)});
+  const box=(x1,x2,y)=>`<rect class="prf" x="${x1}" y="${y}" width="${x2-x1}" height="${95-y}" rx="2"/>`;
+  const chair=(x1,x2,y)=>`<rect class="prf" x="${x1}" y="${y}" width="${x2-x1}" height="4" rx="2"/>`+L(P(x1+2,y+4),P(x1+2,94),"pr")+L(P(x2-2,y+4),P(x2-2,94),"pr");
+  const table=(x1,x2,y)=>`<rect class="prf" x="${x1}" y="${y}" width="${x2-x1}" height="4" rx="1"/>`+L(P(x1+3,y+4),P(x1+3,94),"pr")+L(P(x2-3,y+4),P(x2-3,94),"pr");
+  const lowbar=(x1,x2,y)=>L(P(x1,y),P(x2,y),"pr")+L(P(x2-3,y),P(x2-3,94),"pr");
+  const hibar=()=>L(P(34,9),P(86,9),"pr")+L(P(34,9),P(34,3),"pr")+L(P(86,9),P(86,3),"pr");
+  const pbars=()=>L(P(48,53),P(80,53),"pr")+L(P(76,53),P(76,94),"pr");
+  const wallR=x=>`<rect class="prf" x="${x}" y="-30" width="6" height="125" rx="1"/>`;
+  const bandF=J=>`<line class="cb" x1="${J.f[0].x.toFixed(1)}" y1="${J.f[0].y.toFixed(1)}" x2="${J.w[0].x.toFixed(1)}" y2="${J.w[0].y.toFixed(1)}"/>`;
+  const anchor=(x,y)=>J=>C(P(x,y),2.2,"prf")+`<line class="cb" x1="${x}" y1="${y}" x2="${J.w[0].x.toFixed(1)}" y2="${J.w[0].y.toFixed(1)}"/>`;
+  const kb=w=>C(add(w,P(0,5)),4.6,"wt")+L(add(w,P(-3,1)),add(w,P(3,1)),"wl");
+  const bag=w=>`<rect class="wt" x="${(w.x-5).toFixed(1)}" y="${(w.y-1).toFixed(1)}" width="10" height="13" rx="2.5"/>`;
+  const hipH={h:[5,-3]};
+  const pushA=bl([4,92],[72,94],32.5), pushB=bl([4,92],[72,94],14.5);
+  const cycd=(o,cyc)=>Object.assign({A:still,B:still,cyc},o);
+  const alt=(a,b,s)=>lerpP(a,b,Math.max(0,s));
+  Object.assign(D,{
+    push_table:{m:"Грудные, трицепс, передние дельты", A:bl([4,93],[80,58],32.5), B:bl([4,93],[80,58],14.5), lh:down, ah:P(-1,-.4), back:()=>table(70,108,58)},
+    push_knee:{m:"Грудные, трицепс, передние дельты", A:blK([30,93],[76,94],32.5), B:blK([30,93],[76,94],14.5), lh:down, ah:P(-1,-.6)},
+    push_incl:{m:"Грудные, трицепс, передние дельты", A:bl([6,93],[78,72],32.5), B:bl([6,93],[78,72],14.5), lh:down, ah:P(-1,-.5), back:()=>chair(72,100,72)},
+    push_decl:{m:"Верх груди, трицепс, передние дельты", A:bl([12,71],[80,94],32.5), B:bl([12,71],[80,94],14.5), lh:upv, ah:P(-1,-.6), back:()=>box(0,22,73)},
+    archer:{m:"Грудные, трицепс, передние дельты", A:pushA, B:Object.assign({},pushB,{hip:[pushB.hip[0]+1,pushB.hip[1]+1]}), lh:down, ah:P(-1,-.2), period:3},
+    pushclose:{m:"Трицепс, грудные", A:pushA, B:pushB, lh:down, ah:P(-1,0)},
+    pike:{m:"Дельты, трицепс, верх груди", A:{hip:[50,51],t:116,feet:[36,94],hands:[82,94]}, B:{hip:[52,57],t:136,feet:[36,94],hands:[82,94]}, lh:P(1,-.3), ah:P(-.4,-1)},
+    pike_decl:{m:"Дельты, трицепс", A:{hip:[48,36],t:156,feet:[26,72],hands:[74,94]}, B:{hip:[56,44],t:165,feet:[26,72],hands:[74,94]}, lh:P(1,-.3), ah:P(-.3,-1), back:()=>box(14,36,73)},
+    hs_hold:{m:"Дельты, трицепс, мышцы кора", A:{hip:[79,33],t:186,feet:{h:[5,-44]},hands:[74,94]}, B:{hip:[78.6,33.4],t:185,feet:{h:[5,-44]},hands:[74,94]}, lh:P(1,0), ah:P(-1,0), period:3, vb:"0 -24 120 124", back:()=>wallR(90)},
+    hspu:{m:"Дельты, трицепс", A:{hip:[79,33],t:186,feet:{h:[5,-44]},hands:[74,94]}, B:{hip:[79,48],t:186,feet:{h:[5,-44]},hands:[74,94]}, lh:P(1,0), ah:P(-1,-.4), period:3.2, vb:"0 -24 120 124", back:()=>wallR(90)},
+    tablerow:{m:"Широчайшие, ромбовидные, бицепс", A:bl([10,93],[86,58],32.5,45.8,true), B:bl([10,93],[86,58],13,45.8,true), lh:upv, ah:P(-.4,1), back:()=>table(78,118,54)},
+    aus_bent:{m:"Широчайшие, ромбовидные, бицепс", A:Object.assign(bl([36,72],[86,55],32.5,23,true),{feet:[44,93.6]}), B:Object.assign(bl([36,72],[86,55],13,23,true),{feet:[44,93.6]}), lh:P(-.3,-1), ah:P(-.4,1), back:()=>lowbar(70,100,55)},
+    aus:{m:"Широчайшие, ромбовидные, бицепс", A:bl([10,93],[86,55],32.5,45.8,true), B:bl([10,93],[86,55],13,45.8,true), lh:upv, ah:P(-.4,1), back:()=>lowbar(70,100,55)},
+    aus_feet:{m:"Широчайшие, ромбовидные, бицепс", A:bl([12,72],[86,55],32.5,45.8,true), B:bl([12,72],[86,55],13,45.8,true), lh:upv, ah:P(-.4,1), back:()=>lowbar(70,100,55)+box(0,22,74)},
+    hang:Object.assign({},D.pullup,{m:"Хват, предплечья, широчайшие", B:{hip:[60,72.4],t:0,feet:{h:[-5,40]},hands:[60,9]}, period:3}),
+    scap:Object.assign({},D.pullup,{m:"Нижние трапеции, широчайшие", B:{hip:[60,68.5],t:0,feet:{h:[-5,40]},hands:[60,9]}, period:2}),
+    negpull:Object.assign({},D.pullup,{m:"Широчайшие, бицепс", period:4.6}),
+    bandpull:Object.assign({},D.pullup,{m:"Широчайшие, бицепс", back:J=>hibar()+`<line class="cb" x1="60" y1="9" x2="${J.k[0].x.toFixed(1)}" y2="${J.k[0].y.toFixed(1)}"/>`}),
+    archerpull:Object.assign({},D.pullup,{m:"Широчайшие, бицепс, плечевая", period:3.2}),
+    pdips:Object.assign({},D.dips,{m:"Грудные, трицепс, передние дельты", back:pbars}),
+    negdips:Object.assign({},D.dips,{m:"Грудные, трицепс", back:pbars, period:4.6}),
+    dipsupport:Object.assign({},D.dips,{m:"Трицепс, плечи, мышцы кора", B:{hip:[61,50.6],t:4,feet:{h:[-12,36]},hands:[64,52]}, back:pbars, period:3}),
+    lsit_tuck:{m:"Пресс, сгибатели бедра, трицепс", A:{hip:[61,50],t:4,feet:{h:[1,44]},hands:[64,52]}, B:{hip:[60,50],t:0,feet:{h:[19,5]},hands:[64,52]}, lh:P(.3,-1), ah:P(-1,-.2), back:pbars, period:3},
+    lsit:{m:"Пресс, сгибатели бедра, трицепс", A:{hip:[61,50],t:4,feet:{h:[1,44]},hands:[64,52]}, B:{hip:[59,50],t:-3,feet:{h:[44,1]},hands:[64,52]}, lh:P(0,-1), ah:P(-1,-.2), back:pbars, period:3},
+    kneeraise:Object.assign({},D.legraise,{m:"Пресс, сгибатели бедра", B:{hip:[60,71],t:-6,feet:{h:[21,6]},hands:[60,9]}, lh:P(.3,-1)}),
+    t2b:Object.assign({},D.legraise,{m:"Пресс, широчайшие, сгибатели бедра", B:{hip:[70,50],t:-60,feet:[64,11],hands:[60,9]}, lh:P(1,.1), ah:P(1,.3), period:3}),
+    squat_bw:{m:"Квадрицепс, ягодицы", A:st([58,49],6,{s:[1,30]}), B:st([45,70],38,{s:[29,3]}), lh:front0, ah:P(-.2,1)},
+    squat_tempo:{m:"Квадрицепс, ягодицы", A:st([58,49],6,{s:[1,30]}), B:st([45,70],38,{s:[29,3]}), lh:front0, ah:P(-.2,1), period:4.4},
+    dbsquat:{m:"Квадрицепс, ягодицы", A:st([58,49],5,{s:[0,31]}), B:st([46,70],30,{s:[0,30]}), lh:front0, ah:back, front:dumbs},
+    pistol_box:{m:"Квадрицепс, ягодицы, баланс", A:{hip:[58,49],t:2,feet:[[60,94],{h:[16,34]}],hands:{s:[25,6]}}, B:{hip:[40,69],t:30,feet:[[60,94],{h:[44,1]}],hands:{s:[28,4]}}, lh:[P(1,-.3),P(1,-.2)], ah:P(-.2,1), back:()=>chair(22,42,70)},
+    pistol:{m:"Квадрицепс, ягодицы, баланс", A:{hip:[58,49],t:2,feet:[[60,94],{h:[16,34]}],hands:{s:[25,6]}}, B:{hip:[47,79],t:38,feet:[[60,94],{h:[44,-4]}],hands:{s:[29,3]}}, lh:[P(1,-.3),P(1,-.2)], ah:P(-.2,1), period:3},
+    rlunge:Object.assign({},D.lunge,{m:"Квадрицепс, ягодицы", A:{hip:[57,51],t:2,feet:[[70,94],[44,94]],hands:hipH}, B:{hip:[57,70],t:4,feet:[[70,94],[44,94]],hands:hipH}, ah:P(-1,0), front:null}),
+    bulg_bw:Object.assign({},D.bulgarian,{m:"Квадрицепс, ягодицы", A:{hip:[58,52],t:4,feet:[[74,94],[30,75]],hands:hipH}, B:{hip:[56,70],t:8,feet:[[74,94],[30,75]],hands:hipH}, ah:P(-1,0), front:null, back:()=>chair(12,42,77)}),
+    rdl1:{m:"Бицепс бедра, ягодицы, баланс", A:{hip:[58,49],t:2,feet:[[60,94],[54,94]],hands:{s:[0,31]}}, B:{hip:[57,52],t:80,feet:[[60,94],{h:[-45,-8]}],hands:{s:[1,31]}}, lh:[front0,front0], ah:back, front:J=>dumb(J.w[0])},
+    kbswing:{m:"Ягодицы, бицепс бедра, разгибатели спины", A:st([49,57],68,{s:[-5,30]}), B:st([58,49],-3,{s:[31,-1]}), lh:front0, ah:P(-.3,1), period:1.4, front:J=>kb(J.w[0])},
+    bridge:{m:"Ягодицы, бицепс бедра", A:{hip:[60,91],t:-91,feet:[82,94],hands:[58,94]}, B:{hip:[63,78],t:-112,feet:[82,94],hands:[58,94]}, lh:upv, ah:down},
+    bridge1:{m:"Ягодицы, бицепс бедра", A:{hip:[60,91],t:-91,feet:[[82,94],{h:[38,-24]}],hands:[58,94]}, B:{hip:[63,78],t:-112,feet:[[82,94],{h:[42,-17]}],hands:[58,94]}, lh:[upv,upv], ah:down},
+    nordic:{m:"Бицепс бедра", A:{hip:[40,70],t:0,feet:[17,93],hands:{s:[6,8]}}, B:{hip:[60,81],t:60,feet:[17,93],hands:{s:[18,16]}}, lh:down, ah:P(.2,1), period:4.4,
+      back:()=>L(P(6,86),P(26,86),"pr")+L(P(8,86),P(8,94),"pr")+`<rect class="prf" x="30" y="93" width="20" height="3" rx="1"/>`},
+    deadbug:{m:"Пресс, мышцы кора", A:{hip:[64,91],t:-90,feet:[{h:[22,-24]},{h:[22,-24]}],hands:[{s:[1,-31]},{s:[1,-31]}]}, B:{hip:[64,91],t:-90,feet:[{h:[44,-5]},{h:[22,-24]}],hands:[{s:[1,-31]},{s:[-31,-3]}]}, lh:[P(.2,-1),P(.2,-1)], ah:[upv,upv], period:3},
+    sideplank:{m:"Косые мышцы живота, мышцы кора", A:{hip:[50,82.9],t:77,feet:[6,93],hands:[[96,93],{h:[3,-5]}]}, B:{hip:[50,84.6],t:79,feet:[6,93],hands:[[96,93],{h:[3,-5]}]}, lh:down, ah:[P(-.4,1),upv], period:3},
+    pallof:{m:"Косые мышцы живота, мышцы кора", A:st([60,50],0,{s:[9,11]},[[68,94],[52,94]]), B:st([60,50],0,{s:[30,9]},[[68,94],[52,94]]), lh:front0, ah:down, period:3, back:anchor(6,40)},
+    dbfloor:{m:"Грудные, трицепс, передние дельты", A:{hip:[64,91],t:-90,feet:[86,94],hands:{s:[10,-13]}}, B:{hip:[64,91],t:-90,feet:[86,94],hands:{s:[2,-32]}}, lh:upv, ah:down, front:dumbs},
+    pullover:{m:"Широчайшие, грудные, трицепс", A:{hip:[64,91],t:-90,feet:[86,94],hands:{s:[-30,-6]}}, B:{hip:[64,91],t:-90,feet:[86,94],hands:{s:[2,-31]}}, lh:upv, ah:P(0,-1), period:3, front:J=>vdb(J.w[0])},
+    benchdip:{m:"Трицепс, передние дельты", A:{hip:[50,69],t:-6,feet:[88,94],hands:[45,70]}, B:{hip:[52,84],t:-6,feet:[88,94],hands:[45,70]}, lh:upv, ah:P(-1,-.4), back:()=>chair(24,46,70)},
+    packcurl:Object.assign({},D.dbcurl,{m:"Бицепс, плечевая", front:J=>bag(J.w[0])}),
+    packcarry:Object.assign({},D.farmer,{m:"Хват, трапеции, мышцы кора", front:J=>bag(J.w[0])}),
+    band_squat:{m:"Квадрицепс, ягодицы", A:st([58,49],6,{s:[6,3]}), B:st([45,70],36,{s:[6,3]}), lh:front0, ah:down, front:bandF},
+    band_gm:{m:"Бицепс бедра, ягодицы, разгибатели спины", A:st([58,49],2,{s:[5,3]}), B:st([48,55],72,{s:[5,3]}), lh:front0, ah:down, front:bandF},
+    band_press:Object.assign({},D.dbpress,{m:"Дельты, трицепс", front:bandF}),
+    band_row:{m:"Широчайшие, ромбовидные, бицепс", A:st([54,50],-2,{s:[30,7]},[[62,94],[48,94]]), B:st([54,50],-6,{s:[2,23]},[[62,94],[48,94]]), lh:front0, ah:P(-1,.3), back:J=>L(P(108,6),P(108,95),"pr")+anchor(106,54)(J)},
+    band_pulldown:{m:"Широчайшие, бицепс", A:st([58,50],4,{s:[14,-29]},[[64,94],[52,94]]), B:st([58,50],0,{s:[7,5]},[[64,94],[52,94]]), lh:front0, ah:P(-.3,1), back:J=>L(P(100,4),P(100,95),"pr")+anchor(96,4)(J)},
+    band_ext:{m:"Трицепс", A:st([60,50],2,{s:[11,7]}), B:st([60,50],2,{s:[3,31]}), lh:front0, ah:P(-.3,1), back:J=>L(P(100,4),P(100,95),"pr")+anchor(94,6)(J)},
+    band_curl:Object.assign({},D.dbcurl,{m:"Бицепс, плечевая", front:bandF}),
+    burpee:{m:"Всё тело, выносливость", A:{hip:[48,78],t:60,feet:[52,94],hands:[76,94]}, B:Object.assign({},pushA), lh:P(1,-.3), ah:P(-1,-.4), period:1.5},
+    jacks:{m:"Выносливость, икры, плечи", frontView:true, A:{hip:[60,50],t:0,feet:[[56,94],[64,94]],hands:[{s:[-6,31]},{s:[6,31]}]}, B:{hip:[60,48],t:0,feet:[[44,93],[76,93]],hands:[{s:[-23,-24]},{s:[23,-24]}]}, lh:[P(-1,0),P(1,0)], ah:[P(-1,0),P(1,0)], period:1},
+    highknees:cycd({m:"Выносливость, сгибатели бедра", lh:P(1,-.4), ah:P(-.4,1), period:1.1}, tau=>{ const th=2*Math.PI*tau, hip=P(60,50), sh=add(hip,P(0,-30));
+      return {hip, t:0, f:[0,1].map(i=>alt(P(60,94),P(77,73),Math.sin(th+i*Math.PI))), w:[0,1].map(i=>add(sh,P(8*Math.sin(th+i*Math.PI+Math.PI),24)))}; }),
+    shadow:cycd({m:"Выносливость, плечи, мышцы кора", lh:front0, ah:P(-.2,1), period:1.2}, tau=>{ const th=2*Math.PI*tau, hip=P(57,50), t=6, sh=add(hip,mul(up(t),LEN.torso));
+      return {hip, t, f:[P(68,94),P(48,94)], w:[0,1].map(i=>add(sh,alt(P(9,4),P(31,-1),Math.sin(th+i*Math.PI))))}; }),
+    stepcardio:Object.assign({},D.stepup,{m:"Выносливость, квадрицепс, ягодицы", front:null, period:2.5}),
+    ymca:Object.assign({},D.stepup,{m:"Тест выносливости", front:null, period:2.5}),
+    walk:Object.assign({},D.rockport,{m:"Выносливость"}),
+    runout:Object.assign({},D.run,{m:"Выносливость", back:null})
+  });
   D.dbpress.vb="0 -22 120 122";
   function pose(def,p,tau){
     const A=resolve(def.A), B=resolve(def.B);
@@ -1079,7 +1222,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.10.31-31bb77f";
+const APP_VERSION="2026.10.31-67d80aa";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -1181,6 +1324,70 @@ const LIB_RAW = [
   ["mob_shoulder","Растяжка плеча поперёк груди","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Задние дельты, верх спины",c:["Прямая рука поперёк груди.","Другой рукой прижмите её выше локтя к себе.","Плечо не поднимается к уху.","По 30 с на каждую руку."]}],
   ["mob_catcow","Кошка-корова","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Разгибатели спины, пресс",c:["Стоя на четвереньках, ладони под плечами.","На вдохе прогнитесь, взгляд вперёд.","На выдохе округлите спину, подбородок к груди.","Медленно, 8–10 циклов за 30–40 с."]}]
 ];
+/* ===== v14: упражнения для дома, турников и поездки (вкладки «Дом» и «Турники» научной базы) ===== */
+LIB_RAW.push(
+  ["dbsquat","Присед с гантелями в руках","Ноги","dumbbell","w","dbsquat","goblet",.6,8,{m:"Квадрицепс, ягодицы",c:["Гантели в опущенных руках по бокам.","Садитесь назад и вниз, спина прямая, пятки на полу.","Глубина — до параллели бедра с полом или ниже.","Вставайте, толкаясь всей стопой."]}],
+  ["rdl1","Румынская тяга на одной ноге","Ноги","dumbbell","w","rdl1","rdl_db",.5,8,{m:"Бицепс бедра, ягодицы, баланс",c:["Гантель в руке со стороны свободной ноги.","Наклоняйтесь, отводя свободную ногу назад по одной линии с корпусом.","Колено опорной ноги чуть согнуто, таз не разворачивается.","Сначала все повторы на одну ногу, потом на другую."]}],
+  ["kbswing","Махи гирей","Ноги","kb","w","kbswing",null,0,12,{m:"Ягодицы, бицепс бедра, разгибатели спины",c:["Стопы шире плеч, гиря на полу перед вами.","Отведите гирю между ног, сгибаясь в тазу, спина прямая.","Мощно выпрямите таз — гиря поднимается до уровня груди силой ягодиц, а не рук.","Свободное пространство вокруг, рядом нет детей и животных."]}],
+  ["dbfloor","Жим гантелей лёжа на полу","Грудь","dumbbell","w","dbfloor","dbbench",.9,10,{m:"Грудные, трицепс, передние дельты",c:["Лёжа на полу, колени согнуты, стопы на полу.","Опускайте гантели, пока локти не коснутся пола; локти примерно 45° к корпусу.","Короткая пауза — и выжмите вверх до прямых рук.","Пол ограничивает амплитуду и бережёт плечи."]}],
+  ["pullover","Пуловер с гантелью лёжа","Спина","dumbbell","w","pullover","dbbench",.45,8,{m:"Широчайшие, грудные, трицепс",c:["Гантель двумя руками над грудью, руки чуть согнуты.","Опускайте её за голову по дуге до лёгкого растяжения.","Возвращайте над грудью, не сгибая локти сильнее.","Частичная замена турника: полноценной вертикальной тяги дома без турника нет."]}],
+  ["packcurl","Сгибания рук с рюкзаком","Руки","pack","w","packcurl",null,0,6,{m:"Бицепс, плечевая",c:["Рюкзак или сумка с водой за ручку в руке.","Локоть прижат к корпусу.","Сгибайте руку без раскачки.","Опускайте медленно."]}],
+  ["packcarry","Прогулка с рюкзаком или сумками","Пресс","pack","w","packcarry",null,0,10,{ru:"сек",m:"Хват, трапеции, мышцы кора",c:["Тяжёлые сумки в опущенных руках или рюкзак.","Идите короткими шагами, корпус ровно.","Плечи опущены, пресс напряжён.","30–40 секунд ходьбы."]}],
+  ["bridge","Ягодичный мост","Ноги","bw","bw","bridge",null,0,0,{m:"Ягодицы, бицепс бедра",c:["Лёжа на спине, колени согнуты, стопы на полу.","Поднимайте таз до прямой линии плечи–колени.","Вверху сожмите ягодицы, поясница не прогибается.","Опускайтесь медленно."]}],
+  ["bridge1","Ягодичный мост на одной ноге","Ноги","bw","bw","bridge1",null,0,0,{m:"Ягодицы, бицепс бедра",c:["Лёжа на спине, одна нога согнута, вторая вытянута.","Поднимайте таз, толкаясь пяткой опорной ноги.","Таз не перекашивается.","Сначала все повторы на одну ногу, потом на другую."]}],
+  ["rlunge","Выпады назад","Ноги","bw","bw","rlunge",null,0,0,{m:"Квадрицепс, ягодицы",c:["Шаг назад такой длины, чтобы внизу оба колена были под 90°.","Корпус вертикально, вес на передней ноге.","Возвращайтесь, толкаясь пяткой передней ноги.","Для усложнения — медленное опускание 3–4 секунды."]}],
+  ["bulg_bw","Болгарский сплит-присед без веса","Ноги","bw","bw","bulg_bw",null,0,0,{m:"Квадрицепс, ягодицы",c:["Задняя нога носком на стуле, кровати или лавке.","Опора не сдвигается: стул без колёс, спинкой к стене.","Опускайтесь вертикально до 90° в переднем колене.","Сначала все повторы на одну ногу, потом на другую."]}],
+  ["squat_bw","Приседания","Ноги","bw","bw","squat_bw",null,0,0,{m:"Квадрицепс, ягодицы",c:["Стопы на ширине плеч, носки чуть врозь.","Садитесь назад и вниз, руки вперёд для баланса.","Колени по линии носков, пятки на полу.","Больше 30 повторов — переходите на более тяжёлый вариант."]}],
+  ["squat_tempo","Присед с паузой и медленным опусканием","Ноги","bw","bw","squat_tempo",null,0,0,{m:"Квадрицепс, ягодицы",c:["Опускайтесь 3–4 секунды.","Пауза внизу 1–2 секунды без расслабления.","Вставайте в обычном темпе.","Так лёгкий вариант становится тяжелее без веса."]}],
+  ["pistol_box","Присед на одной ноге к опоре","Ноги","bw","bw","pistol_box",null,0,0,{m:"Квадрицепс, ягодицы, баланс",c:["Встаньте перед стулом или лавкой, одна нога вытянута вперёд.","Садитесь на опорной ноге до касания опоры.","Не плюхайтесь — касание лёгкое, вставайте сразу.","Можно придерживаться за шведскую стенку или дверной косяк."]}],
+  ["pistol","Присед на одной ноге («пистолет»)","Ноги","bw","bw","pistol",null,0,0,{m:"Квадрицепс, ягодицы, баланс",c:["Свободная нога вытянута вперёд, руки вперёд.","Опускайтесь на опорной ноге как можно ниже, пятка на полу.","Вставайте без рывка.","Только на ровной нескользкой поверхности."]}],
+  ["nordic","«Скандинавские» сгибания ног","Ноги","bw","bw","nordic",null,0,0,{m:"Бицепс бедра",c:["Стопы зафиксированы под нижней перекладиной или шведской стенкой, колени на мягком.","Медленно опускайте прямой корпус вперёд за счёт задней поверхности бедра.","Сначала — только опускание: внизу ловите себя руками.","Поднимайтесь, помогая руками от пола."]}],
+  ["push_table","Отжимания с упором выше пояса","Грудь","bw","bw","push_table",null,0,0,{bwp:38,m:"Грудные, трицепс, передние дельты",c:["Руки на краю прочного стола или на брусьях на уровне пояса.","Тело — прямая линия от пяток до головы.","Опускайтесь грудью к опоре, локти примерно 45° к корпусу.","Самый лёгкий вариант лестницы отжиманий."]}],
+  ["push_knee","Отжимания с колен","Грудь","bw","bw","push_knee",null,0,0,{bwp:49,m:"Грудные, трицепс, передние дельты",c:["Опора на колени и ладони, ладони под плечами.","Линия от колен до головы прямая.","Опускайтесь грудью почти до пола.","Таз не задирается."]}],
+  ["push_incl","Отжимания с руками на опоре","Грудь","bw","bw","push_incl",null,0,0,{bwp:52,m:"Грудные, трицепс, передние дельты",c:["Руки на стуле, кровати или лавке; опора не сдвигается.","Тело — прямая линия.","Опускайтесь грудью к краю опоры.","Чем ниже опора, тем тяжелее."]}],
+  ["push_decl","Отжимания с ногами на опоре","Грудь","bw","bw","push_decl",null,0,0,{bwp:72,m:"Верх груди, трицепс, передние дельты",c:["Носки на стуле, кровати или лавке, ладони на полу.","Тело прямое, таз не провисает.","Опускайтесь грудью почти до пола.","Нагрузка на руки — около 70–74% веса тела."]}],
+  ["archer","Отжимания «лучник»","Грудь","bw","bw","archer",null,0,0,{bwp:92,m:"Грудные, трицепс, передние дельты",c:["Руки широко, шире плеч.","Опускайтесь к одной руке, вторая выпрямляется в сторону.","Чередуйте стороны или делайте все повторы на одну.","Шаг к отжиманиям на одной руке."]}],
+  ["pushclose","Отжимания узкой постановкой рук","Руки","bw","bw","pushclose",null,0,0,{bwp:64,m:"Трицепс, грудные",c:["Ладони под грудью, ближе плеч.","Локти идут вдоль корпуса назад.","Тело — прямая линия.","Замена обратных отжиманий при боли в плече."]}],
+  ["benchdip","Обратные отжимания от опоры","Руки","bw","bw","benchdip",null,0,0,{m:"Трицепс, передние дельты",c:["Ладони на краю стула или лавки, стул спинкой к стене.","Опускайтесь до угла в локте около 90°, не глубже.","Плечи не уходят вперёд, спина близко к опоре.","При боли в плече — замените на отжимания узкой постановкой."]}],
+  ["pike","Пайк-отжимания","Плечи","bw","bw","pike",null,0,0,{m:"Дельты, трицепс, верх груди",c:["Таз высоко, тело — перевёрнутая буква V.","Опускайте голову между ладоней, локти назад-в стороны.","Выжимайтесь до прямых рук.","Вертикальный жим без веса."]}],
+  ["pike_decl","Пайк-отжимания с ногами на опоре","Плечи","bw","bw","pike_decl",null,0,0,{m:"Дельты, трицепс",c:["Носки на лавке или стуле, таз над плечами.","Опускайте голову к полу перед ладонями.","Выжимайтесь до прямых рук.","Тяжелее обычных пайк-отжиманий."]}],
+  ["hs_hold","Стойка на руках у стены","Плечи","bw","time","hs_hold",null,0,0,{tu:"сек",m:"Дельты, трицепс, мышцы кора",c:["Ладони в 15–20 см от стены, выход в стойку махом или шагами по стене.","Руки прямые, пресс и ягодицы напряжены.","Держите время, дышите ровно.","Выход — шагом назад, без падения."]}],
+  ["hspu","Отжимания в стойке у стены","Плечи","bw","bw","hspu",null,0,0,{m:"Дельты, трицепс",c:["Стойка на руках у стены.","Опускайтесь до лёгкого касания головой мягкой опоры.","Выжимайтесь до прямых рук.","Самая тяжёлая ступень вертикального жима."]}],
+  ["tablerow","Тяга лёжа под столом или лавкой","Спина","bw","bw","tablerow",null,0,0,{m:"Широчайшие, ромбовидные, бицепс",c:["Проверьте стол: тяжёлый, на четырёх ножках, без стекла.","Лёжа под столом, возьмитесь за край, пятки на полу.","Тяните грудь к краю, тело прямое.","Сомневаетесь в столе — замените на тягу резинки."]}],
+  ["aus_bent","Австралийские подтягивания, ноги согнуты","Спина","bw","bw","aus_bent",null,0,0,{m:"Широчайшие, ромбовидные, бицепс",c:["Перекладина на уровне пояса, колени согнуты, стопы на земле.","Тело от колен до плеч — прямая линия.","Тяните грудь к перекладине, сводя лопатки.","Опускайтесь до прямых рук."]}],
+  ["aus","Австралийские подтягивания","Спина","bw","bw","aus",null,0,0,{m:"Широчайшие, ромбовидные, бицепс",c:["Низкая перекладина или брусья, ноги прямые, пятки на земле.","Тело — прямая линия.","Тяните грудь к перекладине, сводя лопатки.","Ниже перекладина — тяжелее."]}],
+  ["aus_feet","Австралийские подтягивания, ноги на опоре","Спина","bw","bw","aus_feet",null,0,0,{m:"Широчайшие, ромбовидные, бицепс",c:["Пятки на лавке, тело горизонтально.","Тяните грудь к перекладине.","Таз не провисает.","Самая тяжёлая ступень горизонтальной тяги."]}],
+  ["hang","Вис на турнике","Спина","bw","time","hang",null,0,0,{tu:"сек",m:"Хват, предплечья, широчайшие",c:["Хват сверху на ширине плеч.","Плечи активны — не висите «на связках».","Держите 30–60 секунд.","Мокрая или ледяная перекладина — висы не делаем."]}],
+  ["scap","Подтягивание лопаток в висе","Спина","bw","bw","scap",null,0,0,{m:"Нижние трапеции, широчайшие",c:["Вис на прямых руках.","Опустите плечи и сведите лопатки — тело поднимается на 3–5 см.","Руки не сгибаются.","Медленно вернитесь в вис."]}],
+  ["negpull","Негативные подтягивания","Спина","bw","bw","negpull",null,0,0,{m:"Широчайшие, бицепс",c:["Запрыгните или встаньте на опору так, чтобы подбородок был над перекладиной.","Опускайтесь 3–5 секунд до прямых рук.","Снова встаньте на опору — без подтягивания.","Первые 2 недели — не больше 2–3 подходов за тренировку."]}],
+  ["bandpull","Подтягивания с резинкой","Спина","band","bw","bandpull",null,0,0,{m:"Широчайшие, бицепс",c:["Резинка на перекладине, колено или стопа в петле.","Подтягивайтесь, как обычно, до подбородка над перекладиной.","Тоньше резинка — тяжелее.","Перед подходом осмотрите резинку на надрывы."]}],
+  ["archerpull","Подтягивания «лучник»","Спина","bw","bw","archerpull",null,0,0,{m:"Широчайшие, бицепс, плечевая",c:["Широкий хват.","Подтягивайтесь к одной руке, вторая выпрямляется вдоль перекладины.","Чередуйте стороны.","Шаг к подтягиваниям на одной руке."]}],
+  ["dipsupport","Упор на брусьях","Грудь","bw","time","dipsupport",null,0,0,{tu:"сек",m:"Трицепс, плечи, мышцы кора",c:["Упор на прямых руках, плечи опущены.","Корпус слегка наклонён вперёд.","Держите 20–30 секунд.","Первая ступень к отжиманиям на брусьях."]}],
+  ["negdips","Негативные отжимания на брусьях","Грудь","bw","bw","negdips",null,0,0,{m:"Грудные, трицепс",c:["Из упора на прямых руках.","Опускайтесь 3–5 секунд до угла в локте около 90°.","Встаньте на землю и снова выйдите в упор.","Первые 2 недели — не больше 2–3 подходов за тренировку."]}],
+  ["pdips","Отжимания на брусьях","Грудь","bw","bw","pdips",null,0,0,{m:"Грудные, трицепс, передние дельты",c:["Проверьте, что брусья не шатаются.","Опускайтесь до угла в локте около 90°.","Корпус слегка вперёд, плечи не поднимаются к ушам.","Боль в передней части плеча — исключите брусья."]}],
+  ["kneeraise","Подъём коленей в висе","Пресс","bw","bw","kneeraise",null,0,0,{m:"Пресс, сгибатели бедра",c:["Вис на перекладине, без раскачки.","Подтяните колени к груди, подкручивая таз.","Опускайте медленно.","Следующая ступень — прямые ноги до горизонтали."]}],
+  ["t2b","Носки к перекладине","Пресс","bw","bw","t2b",null,0,0,{m:"Пресс, широчайшие, сгибатели бедра",c:["Вис, плечи активны.","Поднимите прямые ноги до касания перекладины.","Без рывка и раскачки.","Опускайте медленно."]}],
+  ["lsit_tuck","Уголок на брусьях, ноги согнуты","Пресс","bw","time","lsit_tuck",null,0,0,{tu:"сек",m:"Пресс, сгибатели бедра, трицепс",c:["Упор на брусьях на прямых руках.","Подтяните колени к груди и держите.","Плечи опущены.","Держите время."]}],
+  ["lsit","Уголок на брусьях","Пресс","bw","time","lsit",null,0,0,{tu:"сек",m:"Пресс, сгибатели бедра, трицепс",c:["Упор на брусьях на прямых руках.","Поднимите прямые ноги до горизонтали.","Плечи опущены, спина прямая.","Держите время."]}],
+  ["sideplank","Боковая планка","Пресс","bw","time","sideplank",null,0,0,{tu:"сек",m:"Косые мышцы живота, мышцы кора",c:["Опора на предплечье, локоть под плечом.","Тело — прямая линия от стоп до головы.","Таз не проваливается.","Время на каждую сторону."]}],
+  ["deadbug","«Мёртвый жук»","Пресс","bw","bw","deadbug",null,0,0,{m:"Пресс, мышцы кора",c:["Лёжа на спине, руки вверх, колени над тазом.","Выпрямите противоположные руку и ногу над полом.","Поясница прижата к полу всё время.","Вернитесь и смените стороны."]}],
+  ["band_squat","Присед с резинкой","Ноги","band","band","band_squat",null,0,0,{m:"Квадрицепс, ягодицы",c:["Резинка под стопами, концы у плеч.","Садитесь до параллели или ниже.","Вставайте, преодолевая натяжение.","Перед тренировкой осмотрите резинку на надрывы."]}],
+  ["band_gm","Наклоны с резинкой","Ноги","band","band","band_gm",null,0,0,{m:"Бицепс бедра, ягодицы, разгибатели спины",c:["Резинка под стопами, концы у плеч.","Наклоняйтесь, отводя таз назад, спина прямая.","Выпрямляйтесь за счёт ягодиц.","Не растягивайте резинку на уровне лица."]}],
+  ["band_press","Жим резинки стоя","Плечи","band","band","band_press",null,0,0,{m:"Дельты, трицепс",c:["Резинка под стопами, рукояти у плеч.","Выжимайте вверх до прямых рук.","Пресс напряжён, без прогиба в пояснице.","Опускайте под контролем."]}],
+  ["band_row","Тяга резинки к поясу","Спина","band","band","band_row",null,0,0,{m:"Широчайшие, ромбовидные, бицепс",c:["Крепление в двери на уровне пояса.","Стойте с той стороны, куда дверь открывается «от себя».","Тяните к поясу, сводя лопатки.","Возвращайте медленно."]}],
+  ["band_pulldown","Тяга резинки сверху","Спина","band","band","band_pulldown",null,0,0,{m:"Широчайшие, бицепс",c:["Крепление над дверью.","Тяните рукояти к плечам, локти вниз и назад.","Корпус не раскачивается.","Лучшая замена турника дома."]}],
+  ["band_ext","Разгибания рук с резинкой","Руки","band","band","band_ext",null,0,0,{m:"Трицепс",c:["Крепление сверху, локти прижаты к корпусу.","Разгибайте руки до прямых.","Локти не уходят вперёд.","Возвращайте медленно."]}],
+  ["band_curl","Сгибания рук с резинкой","Руки","band","band","band_curl",null,0,0,{m:"Бицепс",c:["Резинка под стопами.","Локти у корпуса.","Сгибайте руки без раскачки.","Опускайте медленно."]}],
+  ["pallof","Удержание резинки против поворота корпуса","Пресс","band","band","pallof",null,0,0,{m:"Косые мышцы живота, мышцы кора",c:["Резинка закреплена сбоку на уровне груди.","Выжмите руки вперёд от груди.","Корпус не поворачивается к креплению.","Пауза 2 секунды и вернитесь."]}],
+  ["burpee","Бёрпи","Кардио","none","time","burpee",null,0,0,{tu:"сек",m:"Всё тело, выносливость",c:["Присед, ладони на пол.","Отпрыгните ногами в упор лёжа.","Верните ноги и выпрыгните вверх.","Колени болят или соседи снизу — замените на ходьбу на месте."]}],
+  ["jacks","Прыжки «ноги вместе — ноги врозь»","Кардио","none","time","jacks",null,0,0,{tu:"сек",m:"Выносливость, икры, плечи",c:["Прыжком ноги врозь, руки вверх.","Прыжком ноги вместе, руки вниз.","Мягкое приземление на носки.","Без прыжков — шаг в сторону вместо прыжка."]}],
+  ["highknees","Ходьба на месте с высоким подниманием колен","Кардио","none","time","highknees",null,0,0,{m:"Выносливость",c:["Поднимайте колени до уровня таза.","Руки работают в противофазе.","Без прыжков — подходит при лишнем весе и больных коленях.","Темп — по пульсовой зоне."]}],
+  ["shadow","«Бой с тенью»","Кардио","none","time","shadow",null,0,0,{m:"Выносливость, плечи, мышцы кора",c:["Стойка: ноги на ширине плеч, одна впереди.","Чередуйте прямые удары руками, не выпрямляя локоть до щелчка.","Двигайтесь на носках.","Темп — по пульсовой зоне."]}],
+  ["stepcardio","Зашагивания на ступеньку","Кардио","none","time","stepcardio",null,0,0,{m:"Выносливость, квадрицепс, ягодицы",c:["Устойчивая ступенька или платформа.","Вверх-вверх-вниз-вниз в ровном темпе.","Меняйте ведущую ногу каждую минуту.","Темп — по пульсовой зоне."]}],
+  ["walk","Быстрая ходьба на улице","Кардио","none","time","walk",null,0,0,{m:"Выносливость",c:["Темп, в котором можно говорить фразами.","Шаг короткий и частый.","Руки согнуты и работают.","Основной объём кардио — зоны 1–2."]}],
+  ["runout","Бег на улице","Кардио","none","time","runout",null,0,0,{m:"Выносливость",c:["Начинайте с 5 минут быстрой ходьбы.","Темп разговорный: говорите фразами.","Шаг короткий, приземление под центром тяжести.","В холод — разминка длиннее, 10 минут."]}],
+  ["ymca","Ступенчатый тест YMCA, 3 мин","Кардио","none","hr","ymca",null,0,0,{m:"Тест выносливости",c:["Ступень 30 см: скамья или прочная платформа.","Метроном 96 ударов: вверх-вверх-вниз-вниз, 3 минуты.","Сразу сядьте и в течение 5 секунд начните считать пульс — целую минуту.","Запишите число ударов за минуту."]}]
+);
 const LIB={}; LIB_RAW.forEach(([id,name,g,eq,type,anim,ref,ratio,base,extra])=>LIB[id]=Object.assign({id,name,g,eq,type,anim,ref,ratio,base},extra||{}));
 /* у каждого упражнения — своя анимация техники */
 ["goblet","frontsquat","rdl","rdl_db","hipthrust","seatcalf","superman","chestpress","dbbench","nbench","ohp","shpress","dbpress_s","reardelt","shrug","french","tricepdb","facepull","stepup","dbrow","csrow","bulgarian","assistpull","crossover","cablecurl","farmer","run","cooper","inclinewalk","rockport","bike","elliptical","rower","mob_hams","mob_glutes","mob_quads","mob_chest","mob_shoulder","mob_catcow"].forEach(id=>{ if(LIB[id]) LIB[id].anim=id; });
@@ -1189,10 +1396,10 @@ const MUS={chest:"Грудь",lats:"Широчайшие",upper:"Верх спи
 const MUS_ORDER=["chest","lats","upper","lower","delts","biceps","triceps","abs","glutes","quads","hams","calves"];
 const MUS_HINT={chest:"грудные мышцы",lats:"широчайшие мышцы спины",upper:"трапеции, ромбовидные, задние дельты",lower:"разгибатели спины",delts:"дельтовидные мышцы",biceps:"бицепс и плечевая мышца",triceps:"трёхглавая мышца плеча",abs:"прямая и косые мышцы живота",glutes:"ягодичные мышцы",quads:"передняя поверхность бедра",hams:"задняя поверхность бедра",calves:"икроножные и камбаловидные"};
 const KINDS=[["str","Силовые"],["cardio","Кардио"],["mob","Растяжка"]];
-const EQN={barbell:"штанга",dumbbell:"гантели",bench:"скамья",cable:"блок",machine:"тренажёр",bar:"турник",rope:"скакалка",cardio:"кардиотренажёр"};
+const EQN={barbell:"штанга",dumbbell:"гантели",bench:"скамья",cable:"блок",machine:"тренажёр",bar:"турник",rope:"скакалка",cardio:"кардиотренажёр",kb:"гиря",band:"резинка",box:"опора: стул, лавка",table:"прочный стол",wall:"стена",dipbars:"брусья",lowbar:"низкая перекладина",wallbars:"шведская стенка",monkey:"рукоход",abbench:"скамья для пресса",pack:"рюкзак с весом",plate:"блин"};
 const EQC=[["machine","Тренажёры"],["free","Свободный вес"],["bw","Свой вес"]];
 /* тренажёры = силовые тренажёры, блоки, кардиотренажёры; свободный вес = штанга, гантели; свой вес = без оборудования, турник, скамья, скакалка */
-const eqCat = x => { const n=x.need||[]; if(n.some(e=>e==="machine"||e==="cable"||e==="cardio")) return "machine"; if(n.some(e=>e==="barbell"||e==="dumbbell")) return "free"; if(!n.length && x.type==="w" && String(x.id).startsWith("c-")) return "free"; return "bw"; };
+const eqCat = x => { const n=(x.need||[]).flatMap(e=>String(e).split("|")); if(n.some(e=>e==="machine"||e==="cable"||e==="cardio")) return "machine"; if(n.some(e=>e==="barbell"||e==="dumbbell"||e==="kb"||e==="band"||e==="pack")) return "free"; if(!n.length && x.type==="w" && String(x.id).startsWith("c-")) return "free"; return "bw"; };
 const PATN={squat:"присед",hinge:"тяга бёдрами",lunge:"выпад",hpush:"жим от себя",vpush:"жим вверх",hpull:"тяга к себе",vpull:"тяга сверху",iso:"изолирующее",core:"мышцы кора",cardio:"кардио",mob:"растяжка",carry:"перенос груза"};
 /* id: [main muscles, secondary muscles, equipment needed, movement pattern, type] */
 const META={hyper:[["lower","glutes"],["hams"],["machine"],"hinge"],bbrow:[["lats","upper"],["biceps","lower"],["barbell"],"hpull"],latpull:[["lats"],["biceps","upper"],["cable"],"vpull"],widelat:[["lats"],["upper","biceps"],["cable"],"vpull"],seatrow:[["upper","lats"],["biceps"],["cable"],"hpull"],pullup:[["lats"],["biceps","upper"],["bar"],"vpull"],dbrow:[["lats"],["upper","biceps"],["dumbbell","bench"],"hpull"],deadlift:[["glutes","hams","lower"],["upper","quads"],["barbell"],"hinge"],rdl:[["hams","glutes"],["lower"],["barbell"],"hinge"],facepull:[["delts","upper"],[],["cable"],"hpull"],superman:[["lower"],["glutes"],[],"hinge"],
@@ -1208,13 +1415,34 @@ shpress:[["delts"],["triceps"],["machine"],"vpush"],dbpress_s:[["delts"],["trice
 rdl_db:[["hams","glutes"],["lower"],["dumbbell"],"hinge"],csrow:[["lats","upper"],["biceps"],["dumbbell","bench"],"hpull"],stepup:[["quads","glutes"],["hams"],["dumbbell","bench"],"lunge"],
 farmer:[["upper","abs"],[],["dumbbell"],"carry"],elliptical:[[],["quads"],["cardio"],"cardio","cardio"],rower:[[],["lats"],["cardio"],"cardio","cardio"],inclinewalk:[[],["glutes","calves"],["cardio"],"cardio","cardio"],
 rockport:[[],[],[],"cardio","test"],cooper:[[],[],[],"cardio","test"]};
+Object.assign(META,{
+ bulgarian:[["quads","glutes"],["hams"],["dumbbell|kb","box"],"lunge"],stepup:[["quads","glutes"],["hams"],["dumbbell|kb","box"],"lunge"],dbrow:[["lats"],["upper","biceps"],["dumbbell|kb","box"],"hpull"],
+ dbpress_s:[["delts"],["triceps"],["dumbbell","box"],"vpush"],goblet:[["quads","glutes"],["abs"],["dumbbell|kb"],"squat"],rdl_db:[["hams","glutes"],["lower"],["dumbbell|kb"],"hinge"],
+ lunge:[["quads","glutes"],["hams"],["dumbbell|kb"],"lunge"],farmer:[["upper","abs"],[],["dumbbell|kb"],"carry"],tricepdb:[["triceps"],[],["dumbbell|kb"],"iso"],
+ dbsquat:[["quads","glutes"],["hams"],["dumbbell|kb"],"squat"],rdl1:[["hams","glutes"],["lower"],["dumbbell|kb"],"hinge"],kbswing:[["glutes","hams"],["lower"],["kb"],"hinge"],
+ dbfloor:[["chest"],["triceps","delts"],["dumbbell|kb"],"hpush"],pullover:[["lats"],["chest","triceps"],["dumbbell|kb"],"vpull"],packcurl:[["biceps"],[],["pack"],"iso"],packcarry:[["upper","abs"],[],["pack"],"carry"],
+ bridge:[["glutes"],["hams"],[],"hinge"],bridge1:[["glutes"],["hams"],[],"hinge"],rlunge:[["quads","glutes"],["hams"],[],"lunge"],bulg_bw:[["quads","glutes"],["hams"],["box"],"lunge"],
+ squat_bw:[["quads","glutes"],[],[],"squat"],squat_tempo:[["quads","glutes"],[],[],"squat"],pistol_box:[["quads","glutes"],["hams"],["box"],"squat"],pistol:[["quads","glutes"],["hams","abs"],[],"squat"],
+ nordic:[["hams"],["glutes"],["lowbar|wallbars"],"hinge"],push_table:[["chest"],["triceps","delts"],["table|dipbars|lowbar"],"hpush"],push_knee:[["chest"],["triceps","delts"],[],"hpush"],
+ push_incl:[["chest"],["triceps","delts"],["box"],"hpush"],push_decl:[["chest"],["triceps","delts"],["box"],"hpush"],archer:[["chest"],["triceps","delts","abs"],[],"hpush"],
+ pushclose:[["triceps"],["chest","delts"],[],"hpush"],benchdip:[["triceps"],["delts","chest"],["box"],"hpush"],pike:[["delts"],["triceps","upper"],[],"vpush"],pike_decl:[["delts"],["triceps","upper"],["box"],"vpush"],
+ hs_hold:[["delts"],["triceps","abs"],["wall"],"vpush"],hspu:[["delts"],["triceps"],["wall"],"vpush"],tablerow:[["lats","upper"],["biceps"],["table|box"],"hpull"],
+ aus_bent:[["lats","upper"],["biceps"],["lowbar|dipbars"],"hpull"],aus:[["lats","upper"],["biceps"],["lowbar|dipbars"],"hpull"],aus_feet:[["lats","upper"],["biceps"],["lowbar|dipbars","box"],"hpull"],
+ hang:[["lats"],["upper"],["bar"],"vpull"],scap:[["upper","lats"],[],["bar"],"vpull"],negpull:[["lats"],["biceps","upper"],["bar"],"vpull"],bandpull:[["lats"],["biceps","upper"],["bar","band"],"vpull"],archerpull:[["lats"],["biceps","upper"],["bar"],"vpull"],
+ dipsupport:[["triceps"],["chest","delts","abs"],["dipbars"],"hpush"],negdips:[["chest","triceps"],["delts"],["dipbars"],"hpush"],pdips:[["chest","triceps"],["delts"],["dipbars"],"hpush"],
+ kneeraise:[["abs"],[],["bar"],"core"],t2b:[["abs"],["lats"],["bar"],"core"],lsit_tuck:[["abs"],["triceps"],["dipbars"],"core"],lsit:[["abs"],["triceps"],["dipbars"],"core"],sideplank:[["abs"],["lower"],[],"core"],deadbug:[["abs"],[],[],"core"],
+ band_squat:[["quads","glutes"],[],["band"],"squat"],band_gm:[["hams","glutes"],["lower"],["band"],"hinge"],band_press:[["delts"],["triceps"],["band"],"vpush"],band_row:[["lats","upper"],["biceps"],["band"],"hpull"],
+ band_pulldown:[["lats"],["biceps"],["band"],"vpull"],band_ext:[["triceps"],[],["band"],"iso"],band_curl:[["biceps"],[],["band"],"iso"],pallof:[["abs"],[],["band"],"core"],
+ burpee:[[],["quads","chest"],[],"cardio","cardio"],jacks:[[],["calves"],[],"cardio","cardio"],highknees:[[],[],[],"cardio","cardio"],shadow:[[],["delts"],[],"cardio","cardio"],stepcardio:[[],["quads","glutes"],["box"],"cardio","cardio"],
+ walk:[[],[],[],"cardio","cardio"],runout:[[],[],[],"cardio","cardio"],ymca:[[],[],["box"],"cardio","test"]});
 const CDEF={kind:"str",mus:[],sec:[],need:[],pat:null};
 Object.entries(META).forEach(([id,[m,sc,need,pat,kind]])=>{ const x=LIB[id]; if(!x) return; Object.assign(x,{mus:m,sec:sc,need,pat,kind:kind||"str"}); x.g = kind==="cardio"?"Кардио" : (MUS[m[0]]||x.g); });
 Object.values(LIB).forEach(x=>{ if(!x.kind) Object.assign(x,CDEF,{}); });
 const musLine = x => x.kind==="cardio" ? "выносливость" : (x.mus&&x.mus.length ? x.mus.map(k=>MUS[k].toLowerCase()).join(", ") : "своё упражнение") + (x.sec&&x.sec.length ? " · вспом.: "+x.sec.map(k=>MUS[k].toLowerCase()).join(", ") : "");
-const needLine = x => x.need&&x.need.length ? x.need.map(e=>EQN[e]).join(", ") : (x.kind==="cardio"||x.kind==="mob"||x.type==="bw"||x.type==="time" ? "без оборудования" : "любое");
+const needLine = x => x.need&&x.need.length ? x.need.map(e=>String(e).split("|").map(t=>EQN[t]||t).join(" или ")).join(", ") : (x.kind==="cardio"||x.kind==="mob"||x.type==="bw"||x.type==="time" ? "без оборудования" : "любое");
 let libEqf=load("atlos:eqf")||"all", favs=new Set(load("atlos:favs")||[]);
 const LVL={frontsquat:3,chestpress:1,nbench:1,shpress:1,dbpress_s:1,assistpull:1,rdl_db:1,csrow:1,stepup:1,farmer:1,elliptical:1,rower:1,inclinewalk:1,hipthrust:2,seatcalf:1,cablecurl:1,superman:1,mob_hams:1,mob_glutes:1,mob_quads:1,mob_chest:1,mob_shoulder:1,mob_catcow:1,hyper:1,latpull:1,widelat:1,seatrow:1,pecdeck:1,legpress:1,legext:1,legcurl:1,calf:1,lateral:1,curl:1,dbcurl:1,hammer:1,tricep:1,crunch:1,abs:1,plank:1,rope:1,run:1,bike:1,pushup:1,dips:1,goblet:1,facepull:1,dbbench:1,cableup:1,dbpress:2,reardelt:2,crossover:2,bbrow:2,bench:2,closegrip:2,incline:2,squat:2,lunge:2,dbrow:2,uprow:2,french:2,tricepdb:2,shrug:2,ohp:2,bulgarian:2,rdl:2,legraise:2,deadlift:3,pullup:3,bulgarian:3,legraise:3};
+Object.assign(LVL,{push_table:1,push_knee:1,push_incl:1,push_decl:2,archer:3,pushclose:2,benchdip:1,pike:2,pike_decl:2,hs_hold:3,hspu:3,tablerow:1,aus_bent:1,aus:1,aus_feet:2,hang:1,scap:1,negpull:1,bandpull:1,archerpull:3,dipsupport:1,negdips:1,pdips:2,kneeraise:1,t2b:3,lsit_tuck:2,lsit:3,sideplank:1,deadbug:1,bridge:1,bridge1:1,rlunge:1,bulg_bw:1,squat_bw:1,squat_tempo:1,pistol_box:2,pistol:3,nordic:3,dbsquat:1,rdl1:2,kbswing:2,dbfloor:1,pullover:1,packcurl:1,packcarry:1,band_squat:1,band_gm:1,band_press:1,band_row:1,band_pulldown:1,band_ext:1,band_curl:1,pallof:1,burpee:2,jacks:1,highknees:1,shadow:1,stepcardio:1,walk:1,runout:1,ymca:1});
 const LVLN=["","новичок","средний","опытный"];
 function lvlOf(x){ return LVL[x.id]||2; }
 const lvlDots = n => "●".repeat(n)+"○".repeat(3-n);
@@ -1236,11 +1464,11 @@ function store(k,v){ try{ v==null?localStorage.removeItem(k):localStorage.setIte
 function load(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function unitOf(x){ return x.type==="time" ? (x.tu||"мин") : x.type==="walk" ? "время" : x.type==="dist" ? "метры" : (x.ru||"повт"); }
-function wLabel(x){ return x.type==="bw" ? "+кг" : x.type==="assist" ? "помощь" : x.type==="time" ? "" : "кг"; }
+function unitOf(x){ return x.type==="time" ? (x.tu||"мин") : x.type==="walk" ? "время" : x.type==="dist" ? "метры" : x.type==="hr" ? "уд/мин" : (x.ru||"повт"); }
+function wLabel(x){ return x.type==="bw" ? "+кг" : x.type==="assist" ? "помощь" : x.type==="band" ? "ур." : x.type==="time" ? "" : "кг"; }
 function fmtW(x,w){ if(w==null||w===""||(+w===0 && x.type!=="assist")) return x.type==="bw"?"—":"—"; return (x.type==="bw"?"+":"")+fmtN(w); }
-function stepOf(x){ return x.eq==="dumbbell"?1 : x.id==="legpress"?5 : 2.5; }
-function maxOf(x){ return {legpress:400,calf:300}[x.id] || ({barbell:250,dumbbell:60,cable:150,machine:200,plate:60,bw:60}[x.eq]) || (x.type==="assist"?120:150); }
+function stepOf(x){ return x.type==="band"||x.eq==="dumbbell"||x.eq==="kb"?1 : x.id==="legpress"?5 : 2.5; }
+function maxOf(x){ if(x.type==="band") return 5; return {legpress:400,calf:300}[x.id] || ({barbell:250,dumbbell:60,cable:150,machine:200,plate:60,bw:60}[x.eq]) || (x.type==="assist"?120:150); }
 function roundStep(v,st){ return Math.max(st, Math.round(v/st)*st); }
 
 /* ===== state ===== */
@@ -1292,7 +1520,7 @@ function defaultSets(x){
 /* ===== draft (current workout in progress) ===== */
 function fromTemplate(w){
   (w.items||[]).forEach(noteCustom);
-  const d={wid:w.id, date:today(), note:"", items:(w.items||[]).map(it=>Object.assign({}, it.name?{name:it.name,type:it.type}:{}, it.rx?{rx:clone(it.rx)}:{}, it.why?{why:it.why}:{}, it.miss?{miss:it.miss}:{}, {ex:it.ex, note:"", sets:(it.sets||[]).map(s=>({w:s.w??null,r:s.r??null,done:false}))}))};
+  const d={wid:w.id, date:today(), note:"", items:(w.items||[]).map(it=>Object.assign({}, it.name?{name:it.name,type:it.type}:{}, it.rx?{rx:clone(it.rx)}:{}, it.why?{why:it.why}:{}, it.miss?{miss:it.miss}:{}, it.lad?{lad:it.lad}:{}, it.ladNew?{ladNew:it.ladNew,ladPrev:it.ladPrev}:{}, {ex:it.ex, note:"", sets:(it.sets||[]).map(s=>({w:s.w??null,r:s.r??null,done:false}))}))};
   if(w.prog && w.kind!=="test" && typeof deloadOn==="function" && PROG && deloadOn(today())) applyMode(d,"deload");
   return d;
 }
@@ -1302,7 +1530,7 @@ function getDraft(wid){ const d=load("dr5-"+wid); const w=workouts[wid];
     const fresh=!d.startedAt && !d.editing && !d.items.some(it=>it.sets.some(s=>s.done));
     if(!(w && w.prog && fresh && PROG && ((d.mode==="deload")!==deloadOn(today()) || (d.mode==="light" && d.date!==today())))) return d; }
   return w?fromTemplate(w):null; }
-function tplFromDraft(){ return draft.items.map(it=>{ const o={ex:it.ex, sets:it.sets.map(s=>({w:s.w??null,r:s.r??null}))}; if(it.name){o.name=it.name;o.type=it.type||"w";} if(it.rx) o.rx=it.rx; if(it.why) o.why=it.why; if(it.miss) o.miss=it.miss; return o; }); }
+function tplFromDraft(){ return draft.items.map(it=>{ const o={ex:it.ex, sets:it.sets.map(s=>({w:s.w??null,r:s.r??null}))}; if(it.name){o.name=it.name;o.type=it.type||"w";} if(it.rx) o.rx=it.rx; if(it.why) o.why=it.why; if(it.miss) o.miss=it.miss; if(it.lad) o.lad=it.lad; if(it.ladNew){ o.ladNew=it.ladNew; o.ladPrev=it.ladPrev; } return o; }); }
 
 let tplTimer=null, tplBusy=false, tplDirty=false, tplHold=false;
 function scheduleTpl(){ saveDraft(); if(!draft||draft.editing||draft.mode) return; if(workouts[draft.wid]) workouts[draft.wid].items=tplFromDraft(); clearTimeout(tplTimer); tplTimer=setTimeout(flushTpl,700); }
@@ -1357,13 +1585,13 @@ function renderHead(){
   $("w-confirm").innerHTML += w.archived ? ` <button class="btn ghost small" id="w-unarch">Вернуть из архива</button>` : "";
   renderWprog(); renderFlags(); syncTimerBar();
 }
-function prevText(x,s){ if(!s) return "—"; if(x.type==="walk") return s.r!=null?fmtMS(s.r)+(s.w?" · "+Math.round(s.w):""):"—"; if(x.type==="dist") return s.r!=null?`${s.r} м`:"—"; if(x.type==="time") return s.r!=null?`${fmtN(s.r)} ${x.tu||"мин"}`:"—"; const w=s.w!=null&&!(+s.w===0&&x.type!=="assist")?fmtW(x,s.w):""; return (w?w+"×":"")+(s.r??"—"); }
+function prevText(x,s){ if(!s) return "—"; if(x.type==="walk") return s.r!=null?fmtMS(s.r)+(s.w?" · "+Math.round(s.w):""):"—"; if(x.type==="dist") return s.r!=null?`${s.r} м`:"—"; if(x.type==="hr") return s.r!=null?`${s.r} уд/мин`:"—"; if(x.type==="time") return s.r!=null?`${fmtN(s.r)} ${x.tu||"мин"}`:"—"; const w=s.w!=null&&!(+s.w===0&&x.type!=="assist")?fmtW(x,s.w):""; return (w?w+"×":"")+(s.r??"—"); }
 function cardHTML(i){
   const it=draft.items[i], x=exOf(it), anim=x.anim&&ANIM.has(x.anim)?x.anim:null;
   const pv=lastSetsOf(it.ex, draft.editing), prev=pv?pv.sets:[];
-  const time=x.type==="time", walk=x.type==="walk", dist=x.type==="dist", one=it.sets.length<=1, done=it.sets.length&&it.sets.every(s=>s.done);
+  const time=x.type==="time", walk=x.type==="walk", dist=x.type==="dist"||x.type==="hr", one=it.sets.length<=1, done=it.sets.length&&it.sets.every(s=>s.done);
   const watch=time && it.rx && it.rx.test==="max";
-  const fbOn=["w","bw","assist"].includes(x.type) && !(it.rx&&it.rx.test) && !x.ru;
+  const fbOn=["w","bw","assist","band"].includes(x.type) && !(it.rx&&it.rx.test) && !x.ru;
   let pend=-1, pt=-1; if(fbOn) it.sets.forEach((s,j)=>{ if(s.done&&s.fb==null&&s.rir==null&&(+s.t||0)>=pt){ pt=+s.t||0; pend=j; } });
   const rows=it.sets.map((s,j)=>{ const run=isRunning(i,j);
     const pvTxt = s.done&&fbOn&&(s.fb||s.rir!=null) ? `<button class="pv fbv" data-fbedit aria-label="Оценка подхода ${j+1}: ${esc(fbText(s))}. Изменить">${esc(fbText(s))}</button>` : `<span class="pv num">${esc(prevText(x,prev[j]))}</span>`;
@@ -1409,7 +1637,7 @@ function fmtT(sec){ sec=Math.max(0,Math.round(sec)); const h=Math.floor(sec/3600
 function fmtTon(kg){ kg=+kg||0; return kg>=1000 ? `${fmtN(+(kg/1000).toFixed(2))} т` : `${fmtN(Math.round(kg))} кг`; }
 function exStats(it){
   const x=exOf(it), dn=it.sets.filter(s=>s.done); let ton=0,reps=0,work=0;
-  dn.forEach(s=>{ if(["w","bw","assist"].includes(x.type)&&!x.ru) reps+=+s.r||0; if(x.type==="w"&&!x.ru) ton+=(+s.w||0)*(+s.r||0); if(x.type==="time") work+=(+s.wt||workSec(x,s)); });
+  dn.forEach(s=>{ if(["w","bw","assist","band"].includes(x.type)&&!x.ru) reps+=+s.r||0; if(x.type==="w"&&!x.ru) ton+=(+s.w||0)*(+s.r||0); if(x.type==="time") work+=(+s.wt||workSec(x,s)); });
   const ts=dn.map(s=>+s.t).filter(Boolean).sort((a,b)=>a-b), ints=[];
   for(let k=1;k<ts.length;k++) ints.push((ts[k]-ts[k-1])/1000);
   return {x,done:dn.length,total:it.sets.length,ton,reps,work,ts,ints,span:ts.length>1?(ts[ts.length-1]-ts[0])/1000:null};
@@ -1467,7 +1695,7 @@ function renderProgress(){
 }
 function fmtSets(x,sets){
   const dn=sets.filter(s=>s.done); if(!dn.length) return '<span class="muted">не сделано</span>';
-  const one=s=> x.type==="walk" ? `${fmtMS(s.r)}${s.w?" · пульс "+Math.round(s.w):""}` : x.type==="dist" ? `${s.r} м` : x.ru ? `${fmtN(s.w||0)} кг × ${s.r} с` : x.type==="time" ? `${fmtN(s.r)} ${x.tu||"мин"}` : ((s.w!=null&&!(+s.w===0&&x.type!=="assist"))?fmtW(x,s.w)+"×":"")+(s.r??"");
+  const one=s=> x.type==="walk" ? `${fmtMS(s.r)}${s.w?" · пульс "+Math.round(s.w):""}` : x.type==="dist" ? `${s.r} м` : x.type==="hr" ? `${s.r} уд/мин` : x.ru ? `${fmtN(s.w||0)} кг × ${s.r} с` : x.type==="time" ? `${fmtN(s.r)} ${x.tu||"мин"}` : ((s.w!=null&&!(+s.w===0&&x.type!=="assist"))?fmtW(x,s.w)+"×":"")+(s.r??"");
   const g=[]; dn.forEach(s=>{ const t=one(s), l=g[g.length-1]; if(l&&l.t===t) l.c++; else g.push({t,c:1}); });
   return g.map(z=>z.c>1?`${esc(z.t)} <span class="muted">(${z.c})</span>`:esc(z.t)).join(", ");
 }
@@ -1488,7 +1716,7 @@ function renderHistory(){
     </details>`;
   }).join("");
 }
-function renderAll(){ renderToday(); renderPlan(); renderStats(); renderWorkouts(); renderHead(); renderItems(); renderProgress(); renderHistory(); }
+function renderAll(){ renderToday(); if(typeof renderPath==="function") renderPath(); renderPlan(); renderStats(); renderWorkouts(); renderHead(); renderItems(); renderProgress(); renderHistory(); }
 
 function selectWorkout(id){
   if(!workouts[id]) return; selW=id; store("selW5",id); confirmW=false; draft=getDraft(id); saveDraft();
@@ -1522,7 +1750,7 @@ const pk={i:0,j:0,next:false,wW:null,wR:null};
 function rangeVals(a,b,st){ const o=[]; for(let v=a; v<=b+1e-9; v=+(v+st).toFixed(2)) o.push(v); return o; }
 function openPicker(i,j){
   pk.i=i; pk.j=j; const it=draft.items[i], x=exOf(it), s=it.sets[j], time=x.type==="time";
-  if(x.type==="walk"||x.type==="dist") return openPicker2(i,j,it,x,s);
+  if(x.type==="walk"||x.type==="dist"||x.type==="hr") return openPicker2(i,j,it,x,s);
   $("pk-title").textContent=x.name; $("pk-sub").textContent=`Подход ${j+1} из ${it.sets.length}`;
   $("pk-prev").disabled=j===0; $("pk-nextset").disabled=false; $("pk-nextset").textContent = j<it.sets.length-1 ? "След. подход ›" : "+ Новый подход";
   const host=$("pk-wheels"); host.innerHTML="";
@@ -1531,14 +1759,14 @@ function openPicker(i,j){
   pk.wW = time ? null : Wheel(box(wLabel(x)), rangeVals(0,maxOf(x),x.type==="bw"?2.5:st), v=> v===0 ? (x.type==="assist"?"0":"—") : (x.type==="bw"?"+":"")+fmtN(v), v=>commit("w",v), "Вес");
   const rv = time ? (x.tu==="сек" ? rangeVals(10,600,10) : rangeVals(1,120,1)) : rangeVals(1,100,1);
   pk.wR = Wheel(box(unitOf(x)), rv, v=>fmtN(v), v=>commit("r",v), time?"Время":"Повторы");
-  $("pk-chips").innerHTML = (time?[]: [-5,-st,st,5].filter((v,k,a)=>a.indexOf(v)===k).map(d=>`<button class="chip" data-dw="${d}">${d>0?"+":"−"}${fmtN(Math.abs(d))} кг</button>`)).join("")
+  $("pk-chips").innerHTML = (time?[]: (x.type==="band"?[-1,1]:[-5,-st,st,5]).filter((v,k,a)=>a.indexOf(v)===k).map(d=>`<button class="chip" data-dw="${d}">${d>0?"+":"−"}${fmtN(Math.abs(d))} ${x.type==="band"?"ур.":"кг"}</button>`)).join("")
      + `<button class="chip" data-dr="-1">−1 ${time?"":"повт"}</button><button class="chip" data-dr="1">+1 ${time?"":"повт"}</button>`;
   $("pk-next").checked=pk.next; $("toast").hidden=true;
   $("picker").hidden=false;
   requestAnimationFrame(()=>{ if(pk.wW) pk.wW.set(s.w==null?0:+s.w,false); pk.wR.set(s.r==null?(time?5:10):+s.r,false); (pk.wW||pk.wR).el.focus(); });
 }
 function openPicker2(i,j,it,x,s){
-  $("pk-title").textContent=x.name; $("pk-sub").textContent=x.type==="walk"?"Время на 1,6 км и пульс сразу на финише":"Дистанция за 12 минут";
+  $("pk-title").textContent=x.name; $("pk-sub").textContent=x.type==="walk"?"Время на 1,6 км и пульс сразу на финише":x.type==="hr"?"Пульс за целую минуту сразу после теста":"Дистанция за 12 минут";
   $("pk-prev").disabled=true; $("pk-nextset").disabled=true;
   const host=$("pk-wheels"); host.innerHTML=""; pk.wW=null; pk.wR=null;
   const box=(lbl)=>{ const b=document.createElement("div"); b.className="wcol"; b.innerHTML=`<div class="wlbl">${lbl}</div><div class="wbox"></div>`; host.appendChild(b); return b.querySelector(".wbox"); };
@@ -1549,6 +1777,9 @@ function openPicker2(i,j,it,x,s){
     const b=Wheel(box("сек"),rangeVals(0,55,5),v=>pad2(v),v=>{ss=v;upd();},"Секунды");
     const c=Wheel(box("пульс"),rangeVals(60,210,1),v=>String(v),v=>commit("w",v),"Пульс");
     requestAnimationFrame(()=>{ a.set(mm,false); b.set(ss,false); c.set(s.w?Math.round(+s.w):130,false); a.el.focus(); });
+  } else if(x.type==="hr"){
+    const a=Wheel(box("уд/мин"),rangeVals(50,200,1),v=>String(v),v=>commit("r",v),"Пульс");
+    requestAnimationFrame(()=>{ a.set(s.r?+s.r:110,false); a.el.focus(); });
   } else {
     const a=Wheel(box("метры"),rangeVals(800,4500,50),v=>String(v),v=>commit("r",v),"Дистанция");
     requestAnimationFrame(()=>{ a.set(s.r?+s.r:2200,false); a.el.focus(); });
@@ -1666,7 +1897,7 @@ $("lib").addEventListener("click",e=>{
   if(a){ if(libRepl!=null) replaceExercise(libRepl,a.dataset.addex); else addExercise(a.dataset.addex); }
   else if(c){ const name=$("lib-q").value.trim(); const id="c-"+Date.now().toString(36); CUSTOM[id]=Object.assign({},CDEF,{id,name,g:"Своё",eq:"barbell",type:"w",anim:null}); addExercise(id,name); }
 });
-function progRx(x){ const w=draft&&workouts[draft.wid]; if(!PROG||!w||!w.prog||w.kind==="test"||!x||String(x.id).startsWith("c-")) return null; const r=makeRx(x,PROG.goal,w.dt); if(PROFILE&&PROFILE.gentle&&r.rir!=null&&r.tier!=="iso") r.rir=Math.max(r.rir,3); return r; }
+function progRx(x){ const w=draft&&workouts[draft.wid]; if(!PROG||!w||!w.prog||w.kind==="test"||!x||String(x.id).startsWith("c-")) return null; const r=makeRxL(x,Object.assign(progCtx(),{dt:w.dt})); if(PROFILE&&PROFILE.gentle&&r.rir!=null&&r.tier!=="iso") r.rir=Math.max(r.rir,3); return r; }
 function replaceExercise(i,id){
   const old=draft.items[i], ox=exOf(old), x=LIB[id]||CUSTOM[id], d=defaultSets(x), n=old.sets.length;
   const sets=Array.from({length:n},(_,k)=>{ const src=d.sets[Math.min(k,d.sets.length-1)]||{w:null,r:10}; const keepR = x.type===ox.type && old.sets[k] && old.sets[k].r!=null; return {w:src.w??null, r: keepR?old.sets[k].r:(src.r??null), done:false}; });
@@ -1727,7 +1958,7 @@ $("items").addEventListener("click",e=>{
     if(s.done){ s.t=Date.now(); markStart(); } else { delete s.t; delete s.wt; }
     if(isRunning(i,j)){ clearInterval(T.tick); T.mode=null; T.ref=null; idleClock(); }
     saveDraft(); rerenderCard(i);
-    if(s.done){ if(isDone(it)) exerciseDone(it); if(draft.items.some(q=>q.sets.some(z=>!z.done))) startRest(i); }
+    if(s.done){ if(isDone(it)) exerciseDone(it); if(draft.items.some(q=>q.sets.some(z=>!z.done))){ const drop=it.sets.some(z=>!z.done)&&repsDropped(it,j); startRest(i,drop?60:0); } }
     return; }
   if(e.target.closest(".rmset")){ if(it.sets.length<=1) return; if(T.mode==="work"&&T.ref&&T.ref.i===i) stopTimer(); it.sets.splice(j,1); scheduleTpl(); rerenderCard(i); return; }
   if(e.target.closest("[data-addset]")){ const l=it.sets[it.sets.length-1]||{w:null,r:10}; it.sets.push({w:l.w,r:l.r,done:false}); scheduleTpl(); rerenderCard(i); return; }
@@ -1743,7 +1974,7 @@ $("finish").addEventListener("click",async()=>{
   if(!draft) return; if(!draft.items.some(it=>it.sets.some(s=>s.done))){ $("save-msg").textContent="Отметьте галочкой хотя бы один выполненный подход."; return; }
   if(!db){ $("save-msg").textContent="Журнал недоступен в этом просмотре."; return; }
   const w=workouts[draft.wid], S=wStats(draft);
-  if(w && w.kind==="test" && !draft.editing){ const miss=draft.items.filter(it=>!it.sets.some(s=>s.done)).map(it=>exOf(it).name);
+  if(w && w.kind==="test" && !draft.editing){ const miss=draft.items.filter(it=>!(it.rx&&it.rx.opt)&&!it.sets.some(s=>s.done)).map(it=>exOf(it).name);
     if(miss.length && draft.missOk!==miss.join("|")){ draft.missOk=miss.join("|"); $("save-msg").innerHTML=`Не отмечено: <b>${esc(miss.join(", "))}</b>. Отметьте ✓ или нажмите «Завершить тест» ещё раз, чтобы сохранить без них.`; return; } }
   let id=`${draft.date}-${draft.wid}`; if(!draft.editing && w && w.kind!=="test" && sessions.some(x=>x.id===id)) id+=`-${Date.now().toString(36)}`;
   const rnd=v=>v==null?null:Math.round(v);
@@ -1753,6 +1984,9 @@ $("finish").addEventListener("click",async()=>{
     items:draft.items.map(it=>{ const o={ex:it.ex, note:(it.note||"").trim(), sets:it.sets.map(s=>{ const z={w:s.w??null,r:s.r??null,done:!!s.done}; if(s.done&&s.t) z.t=s.t; if(s.done&&s.wt) z.wt=s.wt; if(s.done&&s.fb) z.fb=s.fb; if(s.done&&s.rir!=null) z.rir=s.rir; return z; })}; if(it.name){o.name=it.name;o.type=it.type||"w";} if(it.rx) o.rx=it.rx; return o; })};
   if(draft.mode) body.mode=draft.mode; if(w&&w.kind) body.kind=w.kind;
   const prev=sSorted().filter(x=>x.workoutId===draft.wid && x.id!==id && x.id!==draft.editing && x.date<=draft.date).pop();
+  body.items.forEach(o=>{ const tp=w&&w.prog?(w.items||[]).find(t=>t.ex===o.ex):null; if(tp) o.planN=(tp.sets||[]).length; });
+  body.loc=locOf(); if(draft.env&&draft.env.mode==="travel") body.env="travel";
+  const g0=PROG&&typeof gameState==="function"?gameState():null;
   $("finish").disabled=true; $("save-msg").textContent="Сохраняю…";
   try{
     await db.collection("sessions").doc(id).set(body);
@@ -1764,6 +1998,8 @@ $("finish").addEventListener("click",async()=>{
     if(isProg && w.kind==="test"){ const res=await finishTest(draft,body.date); showReady(res); }
     else if(isProg && !draft.mode){ const pr=await applyProgression(draft,workouts[draft.wid],body.date); showSummary(S,body,prev,{prog:pr,next:true}); }
     else showSummary(S, body, prev, draft.mode?{note:draft.mode==="deload"?"Разгрузочная тренировка: веса программы не меняются.":"Облегчённая тренировка: веса программы не меняются.",next:true}:null);
+    if(g0){ _gk=null; await syncTrials(gameState()); _gk=null; const gh=gameDiffHTML(g0,gameState(),id); if(gh) $("sum-body").insertAdjacentHTML("afterbegin",gh); }
+    if(isProg && calibDue() && !draft.mode){ PROG.calibAt=body.date; saveProg(); }
     wkOpen=false;
     if(isProg){ store("dr5-"+draft.wid,null); draft=fromTemplate(workouts[draft.wid]); tplHold=false; saveDraft();
       const n=progNext(); if(n&&workouts[n.wid]&&n.wid!==draft.wid){ selW=n.wid; store("selW5",selW); draft=getDraft(n.wid); } }
@@ -1815,8 +2051,11 @@ function stopTimer(){ clearInterval(T.tick); const was=T.mode, ref=T.ref; T.mode
   if(was==="work"&&ref) rerenderCard(ref.i); }
 let lastRestItem=null;
 function restFor(i){ const it=draft&&i!=null&&draft.items[i]; return it&&it.rx&&it.rx.rest ? it.rx.rest : restSec; }
-function startRest(i){ lastRestItem=i??null; const it=i!=null&&draft&&draft.items[i]; const sec=restFor(i);
-  runTimer(sec,"rest", it&&it.rx&&it.rx.rest ? `Отдых ${fmtRest(sec)} · ${exOf(it).name}` : "Отдых между подходами"); markRest(sec); }
+function startRest(i,plus){ lastRestItem=i??null; const it=i!=null&&draft&&draft.items[i]; const sec=restFor(i)+(plus||0);
+  runTimer(sec,"rest", plus ? `Отдых ${fmtRest(sec)}: +1 мин, чтобы следующий подход не просел` : it&&it.rx&&it.rx.rest ? `Отдых ${fmtRest(sec)} · ${exOf(it).name}` : "Отдых между подходами"); markRest(sec); }
+function repsDropped(it,j){ const x=exOf(it), r=it.rx; if(!r||!r.lo||r.test||!["w","bw","assist","band"].includes(x.type)) return false;
+  const s=it.sets[j], prev=it.sets.slice(0,j).filter(z=>z.done).pop(); if(!s||!s.done) return false;
+  return (prev && +prev.r-(+s.r)>=2) || (+s.r<r.lo && s.fb==="hard"); }
 function startWork(i,j){
   const it=draft.items[i], x=exOf(it), s=it.sets[j];
   if(it.rx&&it.rx.test==="max"){ markStart(); ensureAudio(); clearInterval(T.tick); clearTimeout(T.idle); Object.assign(T,{mode:"watch",start:Date.now(),ref:{i,j,ex:it.ex},end:0,total:0}); $("clock-lbl").textContent=`${x.name} · секундомер`; $("t-plus").hidden=true; T.tick=setInterval(tickTimer,250); tickTimer(); rerenderCard(i); return; }
@@ -1887,7 +2126,7 @@ const DEF_DAYS={2:[1,4],3:[1,3,5],4:[1,2,4,5],5:[1,2,3,5,6],6:[1,2,3,4,5,6]};
 const CYCLE={1:{len:8,every:1},2:{len:5,every:2},3:{len:4,every:2}};
 const SPLITN={fb2:"Всё тело",fb3:"Всё тело, 3 варианта",ul:"Верх / низ",ppl:"Тяни-толкай-ноги",pplul:"Тяни-толкай-ноги + верх/низ"};
 const ZONES=[null,{lo:50,hi:60,t:"говорите свободно",u:"разминка, восстановление"},{lo:60,hi:70,t:"говорите фразами",u:"основа выносливости и похудения"},{lo:70,hi:80,t:"короткие фразы с трудом",u:"темповая работа"},{lo:80,hi:90,t:"отдельные слова",u:"интервалы"},{lo:90,hi:100,t:"говорить не можете",u:"короткие интервалы"}];
-const VOLT={mass:[[8,10],[10,20],[10,20]],strength:[[6,12],[6,12],[6,12]],loss:[[8,12],[8,12],[8,12]],endurance:[[8,12],[8,12],[8,12]],func:[[8,12],[8,12],[8,12]]};
+const VOLT={mass:[[10,12],[10,20],[10,20]],strength:[[6,12],[6,12],[6,12]],loss:[[10,12],[10,12],[10,12]],endurance:[[8,12],[8,12],[8,12]],func:[[8,12],[8,12],[8,12]]};
 let PROFILE=null, PROG=null, TESTS=[], CHECKS={};
 loaded.m=false;
 const cleanObj = o => JSON.parse(JSON.stringify(o));
@@ -1919,7 +2158,7 @@ function progStep(x,w){
 const minW = x => x.eq==="barbell"?20 : x.eq==="dumbbell"?2 : (x.eq==="machine"||x.eq==="cable")?5 : 0;
 const roundDown = (v,st) => +(Math.floor(v/st+1e-9)*st).toFixed(2);
 const roundUp = (v,st) => +(Math.ceil(v/st-1e-9)*st).toFixed(2);
-const fitW = (x,v) => Math.max(minW(x), roundDown(v, progStep(x,v)));
+const fitW = (x,v) => { const av=typeof availW==="function"?availW(x):null; if(av){ const le=av.filter(w=>w<=v+1e-9); return le.length?le[le.length-1]:av[0]; } return Math.max(minW(x), roundDown(v, progStep(x,v))); };
 
 /* ---- 1ПМ: формулы Эпли и Бжицки, история, тест, оценка по связанному упражнению ---- */
 const epley=(w,r)=>w*(1+r/30), brzycki=(w,r)=>r<37?w*36/(37-r):w*36;
@@ -1945,16 +2184,23 @@ function assistW(x){ const l=lastSetsOf(x.id); if(l){ const ws=l.sets.filter(s=>
 
 /* ---- параметры нагрузки по цели (разд. 4, 6, 7) ---- */
 const RANGES={strength:{heavy:[4,6],multi:[6,10],iso:[8,12]},mass:{heavy:[6,10],multi:[8,12],iso:[12,15]},loss:{heavy:[6,10],multi:[8,12],iso:[12,15]},endurance:{heavy:[15,20],multi:[15,20],iso:[15,25]},func:{heavy:[8,12],multi:[8,15],iso:[10,15]}};
-const RESTS={strength:{heavy:240,multi:180,iso:90},mass:{heavy:180,multi:150,iso:90},loss:{heavy:150,multi:120,iso:75},endurance:{heavy:60,multi:60,iso:45},func:{heavy:90,multi:75,iso:60}};
+/* отдых по типу упражнения и уровню (разд. 6): тяжёлые базовые — новичку 2 мин, среднему и продвинутому 2–3, на силу 3–4;
+   другие многосуставные — 1,5–2 мин; изолирующие — 1–1,5 мин; круговые и выносливость — 30–60 с */
+function restOf(tier,goal,level){ const L=level||1;
+  if(goal==="endurance") return tier==="iso"?45:60;
+  if(goal==="func") return tier==="heavy"?90:tier==="multi"?75:60;
+  if(tier==="iso") return goal==="strength"?90:75;
+  if(tier==="multi") return goal==="strength"?120:105;
+  return goal==="strength" ? (L===1?120:210) : L===1?120:150; }
 const DUP={H:{r:[4,6],rir:2,rest:180,n:"тяжёлый день"},M:{r:[8,10],rir:2,rest:150,n:"средний день"},L:{r:[12,15],rir:2,rest:105,n:"лёгкий день"}};
-function makeRx(x,goal,dt){
+function makeRx(x,goal,dt,level){
   const tier=tierOf(x);
   if(x.kind==="cardio") return {tier:"cardio",zone:2};
   if(x.kind==="mob") return {tier:"mob",rest:30};
   if(x.type==="time") return {tier:"iso",rest:60};
   const G=RANGES[goal]?goal:"mass";
-  let [lo,hi]=RANGES[G][tier]||[8,12], rest=RESTS[G][tier]||120, rir=tier==="iso"?1:2;
-  if(dt && DUP[dt] && tier!=="iso" && ["mass","strength","loss"].includes(G)){ [lo,hi]=DUP[dt].r; rir=DUP[dt].rir; rest=DUP[dt].rest; }
+  let [lo,hi]=RANGES[G][tier]||[8,12], rest=restOf(tier,G,level||(PROG&&PROG.level)||1), rir=tier==="iso"?1:2;
+  if(dt && DUP[dt] && tier!=="iso" && ["mass","strength","loss"].includes(G)){ [lo,hi]=DUP[dt].r; rir=DUP[dt].rir; rest=G==="strength"&&dt==="H"?210:DUP[dt].rest; }
   if(x.ru){ lo=30; hi=40; }
   const rx={lo,hi,rir,rest,tier}; if(dt) rx.dt=dt; return rx;
 }
@@ -2021,21 +2267,23 @@ function pickEx(slot,ctx,used){
   if(!id) id=(SAFE[slot.p]||[]).find(id=>LIB[id]&&allowedFor(id,ctx.lim)&&!used.has(id));
   return id||null;
 }
-function cardioEx(ctx){ return ctx.goal==="mass"||ctx.goal==="strength" ? "bike" : ctx.goal==="loss" ? (ctx.level===1?"inclinewalk":"elliptical") : ctx.goal==="endurance" ? (ctx.runner?"run":"bike") : "rower"; }
-function cardioItem(ctx,min,label,zone){ return {ex:cardioEx(ctx), rx:{tier:"cardio",zone:zone||2,label}, sets:[{w:null,r:min}]}; }
+function cardioItem(ctx,min,label,zone){ const it={ex:cardioEx(ctx), rx:{tier:"cardio",zone:zone||2,label}, sets:[{w:null,r:min}]};
+  if(/после силовой/.test(label||"") && (ctx.goal==="strength"||ctx.goal==="func")) it.rx.note="лучше в отдельный день или через 3+ часа после силовой: так не страдает взрывная сила";
+  return it; }
 function makeItem(id,ctx,o){
-  const x=LIB[id]; let rx=makeRx(x,ctx.goal,ctx.dt);
+  const x=LIB[id]; let rx=makeRx(x,ctx.goal,ctx.dt,ctx.level);
   if(x.type==="time"){ const v=ctx.level===1?30:ctx.level===2?45:60; return {ex:id, rx:{tier:"iso",rest:60}, sets:[{w:null,r:v},{w:null,r:v}]}; }
   if(o.first && ctx.goal2==="strength" && rx.tier!=="iso") Object.assign(rx,{lo:4,hi:6,rir:2,rest:210});
   if(ctx.gentle && rx.tier!=="iso") rx.rir=Math.max(rx.rir,3);
-  const n = o.n || (ctx.level>1 && o.first && rx.tier!=="iso" ? 4 : ctx.level>1 && rx.tier==="iso" ? 2 : 3);
+  const n = Math.min(ctx.goal==="strength"?3:9, o.n || (ctx.level>1 && o.first && rx.tier!=="iso" ? 4 : ctx.level>1 && rx.tier==="iso" ? 2 : 3));
   const tgt=Math.round((rx.lo+rx.hi)/2);
   let w=null; if(x.type==="w") w=workW(x,rx).w; else if(x.type==="assist") w=assistW(x);
   const it={ex:id, rx, sets:Array.from({length:n},()=>({w, r:tgt}))};
-  if(id==="legpress" && (ctx.lim||[]).includes("knee")) it.rx.note="неполная амплитуда: до 90° в колене";
+  if(id==="legpress" && (ctx.lim||[]).includes("knee")) it.rx.note="временно неполная амплитуда: до 90° в колене; полная даёт больше силы — вернитесь к ней, когда колено позволит";
   return it;
 }
 function buildTpl(key,ctx){
+  if(ctx.loc&&ctx.loc!=="gym") return buildTplL(key,ctx);
   const used=new Set(), items=[]; let isoN=0;
   const hyp=["mass","loss","strength"].includes(ctx.goal) || ctx.goal2==="mass";
   SLOTS[key].forEach(sl=>{
@@ -2048,10 +2296,6 @@ function buildTpl(key,ctx){
   return items;
 }
 function cardioTpl(ctx){ const min=(ctx.level===1?25:ctx.level===2?35:40)+(ctx.goal==="endurance"?10:0); return [cardioItem(ctx,min,"Ровный темп",2)]; }
-function intervalTpl(ctx){ const ex=cardioEx(ctx);
-  return [{ex,rx:{tier:"cardio",zone:1,label:"Разогрев"},sets:[{w:null,r:10}]},
-          {ex,rx:{tier:"cardio",zone:4,rest:180,label:"4 × 4 мин, между ними 3 мин легко"},sets:[1,2,3,4].map(()=>({w:null,r:4}))},
-          {ex,rx:{tier:"cardio",zone:1,label:"Заминка"},sets:[{w:null,r:5}]}]; }
 function weekPlan(wdays,S){
   const pos=d=>(d+6)%7, days=wdays.slice().sort((a,b)=>pos(a)-pos(b)), D=days.length, out=[];
   const comb=(k,st,acc)=>{ if(acc.length===k){ out.push(acc.slice()); return; } for(let q=st;q<D;q++){ acc.push(q); comb(k,q+1,acc); acc.pop(); } };
@@ -2062,9 +2306,9 @@ function weekPlan(wdays,S){
 }
 function buildProgram(p,opt){
   const level=(opt&&opt.level)||statedLevel(p), D=(p.wdays||[]).length||3;
-  const {S,C}=composition(level,p.goal,D), split=splitFor(level,S);
-  const dts = level>1 && ["mass","strength","loss"].includes(p.goal) ? DTS[split][p.goal==="strength"?"s":"m"] : null;
-  const ctx={level,goal:p.goal,goal2:p.goal2||"",C,lim:p.lim||[],gentle:!!p.gentle||+p.age>=60,pullOK:pullOK(),runner:!!p.runner,split};
+  const loc=locOf(p), env=envFor(p), {S,C}=composition(level,p.goal,D); let split=splitFor(level,S); if(loc!=="gym"&&(split==="ppl"||split==="pplul")) split="ul";
+  const dts = loc==="gym" && level>1 && ["mass","strength","loss"].includes(p.goal) ? DTS[split][p.goal==="strength"?"s":"m"] : null;
+  const ctx={level,goal:p.goal,goal2:p.goal2||"",C,lim:p.lim||[],gentle:!!p.gentle||+p.age>=60,pullOK:pullOK(),runner:!!p.runner,split,loc,env,cardio:p.cardio||"",steps:opt&&opt.steps,stepsW:opt&&opt.stepsW};
   const keys=SPLIT_T[split], W={};
   // недостающие кардио-сессии (похудение — 2–3, выносливость — 3–4, доп. цель — 2 в неделю) — после силовых
   const tgtC = p.goal==="endurance"?3 : p.goal==="loss"?2 : (p.goal2==="loss"||p.goal2==="endurance")?2 : 0, need=Math.max(0,tgtC-C);
@@ -2075,11 +2319,13 @@ function buildProgram(p,opt){
   let nInt=0; if(level>1){ if(p.goal==="endurance") nInt=C>=4?2:C>=2?1:0; else if(p.goal2==="endurance"||p.goal==="loss") nInt=C>=2?1:0; }
   const cdays=Object.keys(plan).map(Number).filter(d=>plan[d]==="C"), intDays=cdays.filter(d=>plan[(d+1)%7]!=="S").slice(0,nInt);
   if(C>0) W["p-cardio"]={name:"Кардио · зона 2",order:keys.length+1,prog:true,kind:"cardio",items:cardioTpl(ctx)};
-  if(intDays.length) W["p-int"]={name:"Интервалы 4×4",order:keys.length+2,prog:true,kind:"cardio",items:intervalTpl(ctx)};
-  const prog={v:1, level, levelStated:statedLevel(p), split, S, C, seq:keys.map(k=>"p-"+k), plan, intDays, start:today(), goal:p.goal, goal2:p.goal2||"", createdAt:new Date().toISOString()};
+  if(intDays.length) W["p-int"]={name:loc==="gym"?"Интервалы 4×4":loc==="bars"?"Интервалы 6×400 м":"Интервалы 30/30",order:keys.length+2,prog:true,kind:"cardio",items:intervalTpl(ctx)};
+  const prog={v:2, level, levelStated:statedLevel(p), split, S, C, seq:keys.map(k=>"p-"+k), plan, intDays, start:today(), goal:p.goal, goal2:p.goal2||"", loc, createdAt:new Date().toISOString()};
+  const st=(opt&&opt.steps)||(PROG&&PROG.loc===loc&&PROG.steps); if(loc!=="gym"&&st) prog.steps=st; const sw=(opt&&opt.stepsW)||(PROG&&PROG.loc===loc&&PROG.stepsW); if(loc!=="gym"&&sw) prog.stepsW=sw;
   return {prog,W};
 }
 function buildTestTpl(p){
+  if(locOf(p)!=="gym") return buildTestTplL(p);
   const bw=+p.weight||75, f=p.sex==="f";
   const lift=(id,k,note)=>{ const x=LIB[id], o=oneRM(id), orm=o?o.v:bw*k, tw=fitW(x,loadFor(orm,8));
     return {ex:id, rx:{test:"1rm",note:note||"2 подводящих подхода, затем зачётный на 5–10 повторов. Остановитесь, когда ломается техника или заметно падает скорость."}, sets:[{w:fitW(x,tw*.5),r:8},{w:fitW(x,tw*.75),r:4},{w:tw,r:8}]}; };
@@ -2131,7 +2377,7 @@ function estMin(items,cardioOnly){
   for(const it of items||[]){ const x=exOf(it), n=(it.sets||[]).length; if(!n) continue;
     const rest=(it.rx&&it.rx.rest!=null?it.rx.rest:(x.kind==="cardio"?0:restSec))/60;
     if(x.kind==="cardio"||x.type==="time"){ t+=it.sets.reduce((a,s)=>a+(x.tu==="сек"?(+s.r||30)/60:(+s.r||0)),0)+rest*(n-1); }
-    else if(x.type==="walk") t+=15; else if(x.type==="dist") t+=14;
+    else if(x.type==="walk") t+=15; else if(x.type==="dist") t+=14; else if(x.type==="hr") t+=5;
     else t+=n*((tierOf(x)==="iso"?.75:1)+rest); }
   return Math.round(t);
 }
@@ -2175,6 +2421,15 @@ function evalTest(items,p){
   if(R.pullups!=null) R.lv.pullup=std5("pullup",sex,bw,R.pullups);
   const l3=Object.values(R.lv).map(to3).sort((a,b)=>a-b);
   if(l3.length===3) R.levelTest=l3[1]; else if(l3.length) R.levelTest=l3[0];
+  if(locOf(p)!=="gym"){ R.loc=locOf(p); delete R.levelTest;
+    ["goblet","rdl_db","dbpress"].forEach(id=>{ const l=R.lifts[id]; if(l&&l.r>12){ R.reps=R.reps||{}; R.reps[id]={w:l.w,r:l.r}; delete R.lifts[id]; } });
+    const mx=id=>{ const it=got(id); return it?Math.max(0,...it.sets.filter(s=>s.done).map(s=>+s.r||0)):null; };
+    if(R.pushups==null){ const k=mx("push_knee"); if(k!=null){ R.pushups=k; R.pushVar="push_knee"; } } else R.pushVar="pushup";
+    [["aus","aus"],["hang","hang"],["dips","pdips"],["support","dipsupport"],["bulg","bulg_bw"],["knee","kneeraise"]].forEach(([k,id])=>{ const v=mx(id); if(v!=null) R[k]=v; });
+    const y=got("ymca"); if(y){ const s=y.sets.find(z=>z.done&&+z.r>0); if(s){ R.ymca=+s.r; R.ymcaRate=ymcaRate(sex,age,+s.r); } }
+    const L=[]; if(R.pushups!=null){ const k=push7(sex,age,R.pushups); R.pushRate=PUSH7N[k]; L.push(push7Level(k)); }
+    if(R.pullups!=null) L.push(to3(std5("pullup",sex,bw,R.pullups)));
+    if(L.length) R.levelTest=Math.min(...L); }
   return R;
 }
 
@@ -2186,6 +2441,7 @@ const fbNovice = () => !PROG || PROG.level===1;
 function progressItem(it,tpl){
   const x=exOf(it), rx=it.rx; if(!rx||rx.test) return null;
   const done=it.sets.filter(s=>s.done); if(!done.length) return null;
+  if(rx.loc && rx.loc!=="gym" && x.kind!=="cardio") return progressLoc(it,tpl,x,rx,done);
   const n=it.sets.length, sets=(w,r)=>tpl.sets.map(()=>({w,r}));
   if(x.kind==="cardio"){ if(rx.zone<=2 && n===1 && done.length===1 && /Ровный/.test(rx.label||"")){ const cur=+tpl.sets[0].r||0; if(cur<45) return {sets:[{w:null,r:Math.min(45,cur+5)}], why:"+5 мин в зоне 2"}; } return null; }
   if(x.type==="time"){ if(done.length===n) return {sets:tpl.sets.map(s=>({w:null,r:(+s.r||30)+5})), why:"+5 с: все подходы выполнены"}; return null; }
@@ -2225,15 +2481,23 @@ function declining(ex,date,now){
   return prev.length===2 && now<prev[0]*0.99 && prev[0]<prev[1]*0.99;
 }
 async function applyProgression(d,w,date){
-  const tpl=w.items||[], out=[], newItems=clone(tpl); let decline=null;
-  d.items.forEach((it,i)=>{ const t=newItems[i]; if(!t||t.ex!==it.ex) return; const x=exOf(it);
+  const tpl=w.items||[], out=[], newItems=clone(tpl), taken=new Set(); let decline=null, stepCh=false;
+  d.items.forEach((it,i)=>{ if(it.sub) return; let k=(newItems[i]&&newItems[i].ex===it.ex&&!taken.has(i))?i:newItems.findIndex((t,q)=>!taken.has(q)&&t.ex===it.ex); if(k<0) return; taken.add(k);
+    const t=newItems[k], x=exOf(it);
     const r=progressItem(it,t);
-    if(r){ t.sets=r.sets; t.why=r.why; if(r.miss!=null){ if(r.miss) t.miss=r.miss; else delete t.miss; } out.push({name:x.name, why:r.why, dir:r.dir||0}); }
+    if(r){ t.sets=r.sets; t.why=r.why; if(r.miss!=null){ if(r.miss) t.miss=r.miss; else delete t.miss; }
+      if(r.ex && LIB[r.ex]){ const y=LIB[r.ex]; t.ex=r.ex; t.rx=makeRxL(y,progCtx()); const lad=t.lad||ladOf(r.ex); if(lad){ t.lad=lad; PROG.steps=Object.assign({},PROG.steps||{},{[lad]:r.ex}); stepCh=true; } }
+      if(r.tempo) t.rx=Object.assign({},t.rx,{tempo:true,note:"медленное опускание 3–4 с, пауза 1–2 с внизу"});
+      if(r.ladNew){ t.ladNew=true; t.ladPrev=r.ladPrev; } else { delete t.ladNew; delete t.ladPrev; }
+      if(r.heavyW && t.rx && t.rx.tier==="heavy") t.rx.rest=210;
+      if(x.type==="bw" && r.sets[0] && +r.sets[0].w>0 && PROG){ PROG.stepsW=Object.assign({},PROG.stepsW||{},{[t.ex]:+r.sets[0].w}); stepCh=true; }
+      out.push({name:x.name, why:r.why, dir:r.dir||0}); }
     if(x.type==="w" && it.rx && it.rx.tier!=="iso"){ const now=Math.max(0,...it.sets.filter(z=>z.done).map(z=>e1rm(+z.w,+z.r))); if(now && !decline && declining(it.ex,date,now)) decline=`результат в «${x.name}» падает две тренировки подряд`; }
   });
   workouts[w.id].items=newItems;
   try{ await db.collection("workouts").doc(w.id).update({items:cleanObj(newItems),updatedAt:new Date().toISOString()}); }catch(e){ toast("Не удалось сохранить новые веса"); }
-  if(decline && PROG && !deloadOn(today())){ PROG.deloadSuggest={date:today(),reason:decline}; saveProg(); }
+  if(decline && PROG && !deloadOn(today())){ PROG.deloadSuggest={date:today(),reason:decline}; stepCh=true; }
+  if(stepCh) saveProg();
   return {changes:out, decline};
 }
 
@@ -2271,16 +2535,18 @@ async function finishTest(d,date){
   try{ await db.collection("tests").doc(date).set(cleanObj(R)); }catch(e){}
   TESTS=TESTS.filter(t=>t.id!==date).concat([{id:date,...R}]).sort((a,b)=>a.date<b.date?-1:1);
   const orm={}; Object.entries(R.lifts).forEach(([id,l])=>orm[id]=l.orm);
-  const prevLevel=PROG.level;
+  const prevLevel=PROG.level, out=locOf(PROFILE)!=="gym";
   Object.assign(PROG,{orm:Object.assign({},PROG.orm||{},orm), testDate:date, testPending:false, calib:false, start:date, deloadFrom:null, deloadSuggest:null});
   if(R.hrmaxUp) PROG.hrmax=R.hrmaxUp;
+  if(out){ const st=stepsFromTest(R,PROFILE); PROG.steps=Object.assign({},PROG.steps||{},st.S); PROG.stepsW=Object.assign({},PROG.stepsW||{},st.W); R.steps=st.S;
+    if(R.reps){ PROG.wstart=Object.assign({},PROG.wstart||{}); Object.entries(R.reps).forEach(([id,v])=>{ PROG.wstart[id]=v.w; if(id==="goblet") PROG.wstart.dbsquat=v.w; }); } }
   const changes=[];
-  if(R.level!==prevLevel){
-    const {prog,W}=buildProgram(PROFILE,{level:R.level});
-    ["orm","testDate","start","hrmax"].forEach(k=>{ if(PROG[k]!=null) prog[k]=PROG[k]; });
+  if(R.level!==prevLevel || out){
+    const {prog,W}=buildProgram(PROFILE,{level:R.level,steps:PROG.steps,stepsW:PROG.stepsW});
+    ["orm","testDate","start","hrmax","steps","stepsW","calibAt","wstart"].forEach(k=>{ if(PROG[k]!=null) prog[k]=PROG[k]; });
     W["p-test"]=workouts["p-test"]?{name:"Тестовая тренировка",order:0,prog:true,kind:"test",items:workouts["p-test"].items}:buildTestTpl(PROFILE);
     await writeProgram(PROFILE,prog,W,{});
-    changes.push(`Программа пересобрана под уровень «${LEVELS[R.level]}»: ${SPLITN[prog.split]}.`);
+    changes.push(out ? `Программа собрана по результатам теста: уровень «${LEVELS[R.level]}», ${SPLITN[prog.split].toLowerCase()}; стартовые ступени упражнений подобраны так, чтобы выходило 8–15 повторов с запасом 2.` : `Программа пересобрана под уровень «${LEVELS[R.level]}»: ${SPLITN[prog.split]}.`);
   } else {
     for(const id of PROG.seq||[]){ const w=workouts[id]; if(!w) continue; let ch=false;
       (w.items||[]).forEach(it=>{ const x=exOf(it); if(!it.rx||it.rx.test||x.type!=="w"||!it.rx.lo) return; const ww=workW(x,it.rx); if(ww.w){ it.sets.forEach(s=>s.w=ww.w); it.why="вес рассчитан по тесту"; ch=true; } });
@@ -2349,6 +2615,7 @@ function planDetails(){
     <h4>Пульсовые зоны <span class="muted">· макс. пульс ${hr||"—"} (208 − 0,7 × возраст)</span></h4><div class="vt">${zones}</div>
     <h4>Восстановление</h4>
     <ul class="rec"><li>Сон — 7–9 часов.</li><li>${prot}, на 3–5 приёмов пищи. Добавки не обязательны, если белка хватает из еды.</li><li>Меньше сидеть в течение дня${PROG.goal==="loss"||PROG.goal2==="loss"?"; добавьте ежедневную ходьбу":""}.</li></ul>
+    ${locTipsHTML()}
     <h4>Последний тест</h4>${test}
     ${lim.length?`<p class="muted" style="margin:0">Учтены ограничения: ${lim.join(", ")} — опасные упражнения заменены. При травме окончательное решение — за врачом.</p>`:""}
     <div class="actions">
@@ -2372,14 +2639,661 @@ $("plan").addEventListener("click",async e=>{
   if(t.closest("[data-regen-yes]")){ planConfirm=false; await createProgram(Object.assign({},PROFILE,{start:"keep"}),{}); showReady(null); return; }
 });
 
+/* ===================== Места тренировок: зал · дом · турники · в поездке =====================
+   Вкладки «Дом» и «Турники» научной базы: инвентарь (разд. 1), тест уровня (3), параметры по целям (4),
+   лестницы прогрессии (5), упражнения по паттернам (6), замены и режим «в поездке» (7), кардио (8). */
+const LOCS={gym:"Зал",home:"Дом",bars:"Турники",travel:"В поездке"};
+const LOC_HINT={gym:"тренажёры, штанги, гантели",home:"гантели, свой вес, мебель",bars:"турник и брусья на улице"};
+const GYM_ENV=["barbell","dumbbell","kb","bench","box","cable","machine","bar","cardio","rope","band","dipbars","lowbar","abbench","wall","pack","plate"];
+const needOK=(x,env)=>(x.need||[]).every(n=>String(n).split("|").some(t=>env.has(t)));
+const locOf = p => { p=p||PROFILE; return (p&&p.loc)||"gym"; };
+const numList = s => String(s||"").split(/[^0-9.,]+/).map(v=>+v.replace(",",".")).filter(v=>v>0&&v<=100).sort((a,b)=>a-b);
+function dbWeights(p,kind){ p=p||PROFILE||{}; const v=p.inv||{};
+  if(kind==="kb") return v.kb?[...new Set(numList(v.kbList))]:[];
+  if(v.db==="fixed") return [...new Set(numList(v.dbList))];
+  if(v.db==="adj"){ const mx=+String(v.dbMax||"").replace(",",".")||0, out=[]; for(let w=2;w<=mx+1e-9;w+=w<10?1:2) out.push(w); return out; }
+  return []; }
+function envFor(p,mode){ p=p||PROFILE||{}; const loc=mode==="travel"?"travel":locOf(p), s=new Set();
+  if(loc==="gym") GYM_ENV.forEach(t=>s.add(t));
+  else if(loc==="travel") ["box","table","wall","pack"].forEach(t=>s.add(t));
+  else if(loc==="home"){ const v=p.inv||{}; ["box","table","wall","pack"].forEach(t=>s.add(t)); if(dbWeights(p).length) s.add("dumbbell"); if(dbWeights(p,"kb").length) s.add("kb"); if(v.band) s.add("band"); if(v.doorbar) s.add("bar"); if(v.rope) s.add("rope"); }
+  else { const v=p.park||{}; s.add("bar"); if(v.dips!==false) s.add("dipbars"); if(v.box!==false) s.add("box"); ["lowbar","wallbars","monkey","abbench","band","pack","wall"].forEach(t=>{ if(v[t]) s.add(t); }); }
+  return s; }
+/* веса, которые реально есть дома (гантели и гири) */
+function availW(x){ if(locOf()!=="home"||!x||!(x.eq==="dumbbell"||x.eq==="kb")) return null;
+  const a=x.eq==="kb"?dbWeights(null,"kb"):[...new Set(dbWeights().concat((x.need||[]).some(n=>String(n).includes("kb"))?dbWeights(null,"kb"):[]))].sort((p,q)=>p-q);
+  return a.length?a:null; }
+const nextW = (x,w) => { const a=availW(x); if(!a) return null; const n=a.find(v=>v>(+w||0)+1e-9); return n==null?null:n; };
+
+/* ---- лестницы прогрессии (Дом, разд. 5; Турники, разд. 5) ---- */
+const LADDERS={
+  push:["push_table","push_knee","push_incl","pushup","push_decl","archer"],
+  pull:["hang","scap","negpull","bandpull","pullup","archerpull"],
+  dips:["dipsupport","negdips","pdips"],
+  aus:["aus_bent","aus","aus_feet"],
+  pike:["pike","pike_decl","hs_hold","hspu"],
+  sq:["squat_bw","squat_tempo","pistol_box","pistol"],
+  lg:["rlunge","bulg_bw","pistol_box","pistol"],
+  post:["bridge","bridge1","nordic"],
+  hang:["kneeraise","legraise","t2b"],
+  lsit:["lsit_tuck","lsit"]
+};
+const LSTEP={push:["push_incl","pushup","push_decl"],pull:["negpull","pullup","pullup"],dips:["negdips","pdips","pdips"],aus:["aus_bent","aus","aus_feet"],pike:["pike","pike_decl","pike_decl"],
+  sq:["squat_tempo","pistol_box","pistol"],lg:["bulg_bw","bulg_bw","pistol_box"],post:["bridge1","bridge1","nordic"],hang:["kneeraise","legraise","t2b"],lsit:["lsit_tuck","lsit_tuck","lsit"]};
+const ladOf = id => Object.keys(LADDERS).find(k=>LADDERS[k].includes(id))||null;
+/* после времени — следующая ступень (вис 60 с → лопатки, упор 30 с → негативы…) */
+const TIME_NEXT={hang:60,dipsupport:30,lsit_tuck:20,hs_hold:45};
+/* «вариант тяжелее» для гантелей, когда тяжелее гантели нет (Дом, разд. 5) */
+const HARDER={goblet:"bulgarian",dbsquat:"bulgarian",lunge:"bulgarian",stepup:"lunge",rdl_db:"rdl1",dbfloor:"push_decl",dbpress_s:"dbpress",dbpress:"pike_decl",band_squat:"bulgarian",band_gm:"rdl1",band_pulldown:"pullup",band_row:"tablerow",squat_bw:"squat_tempo"};
+const WEIGHTABLE=new Set(["pullup","pdips","bulg_bw","squat_tempo","pushup","push_decl","rlunge","pistol_box"]);
+
+function ladStep(lad,ctx,env){
+  const L=LADDERS[lad]; let id=(ctx.steps&&ctx.steps[lad]) || (PROG&&PROG.steps&&PROG.steps[lad]) || LSTEP[lad][Math.min(3,ctx.level||1)-1];
+  let k=Math.max(0,L.indexOf(id)); if(ctx.gentle && !(ctx.steps&&ctx.steps[lad])) k=Math.max(0,k-1);
+  const ok=i=>LIB[L[i]]&&needOK(LIB[L[i]],env)&&allowedFor(L[i],ctx.lim);
+  for(let d=0;d<L.length;d++){ if(k-d>=0&&ok(k-d)) return L[k-d]; }
+  for(let i=k+1;i<L.length;i++) if(ok(i)) return L[i];
+  return null; }
+function nextStep(lad,id,env,dir=1){ const L=LADDERS[lad]||[]; if(L.indexOf(id)<0) return null; for(let i=L.indexOf(id)+dir;i>=0&&i<L.length;i+=dir){ const y=LIB[L[i]]; if(y&&needOK(y,env)&&allowedFor(L[i],(PROFILE||{}).lim)) return L[i]; } return null; }
+
+/* ---- роли в тренировке: паттерн → варианты по месту (Дом, разд. 6; Турники, разд. 6) ---- */
+const ROLE={
+  squat:{home:["goblet","dbsquat","band_squat","@sq"],bars:["@sq"],travel:["@sq"]},
+  hinge:{home:["rdl_db","kbswing","band_gm","@post"],bars:["@post"],travel:["@post"]},
+  hinge2:{home:["rdl1","kbswing","band_gm","@post"],bars:["@post"],travel:["@post"]},
+  lunge:{home:["stepup","lunge","bulgarian","@lg"],bars:["@lg"],travel:["@lg"]},
+  hpush:{home:["dbfloor","@push"],bars:["@push"],travel:["@push"]},
+  push:{home:["@push"],bars:["@push"],travel:["@push"]},
+  dips:{home:["benchdip","pushclose"],bars:["@dips","pushclose"],travel:["benchdip","pushclose"]},
+  vpush:{home:["dbpress_s","dbpress","band_press","@pike"],bars:["@pike"],travel:["@pike"]},
+  hpull:{home:["dbrow","band_row","tablerow"],bars:["@aus","tablerow"],travel:["tablerow"]},
+  vpull:{home:["@pull","band_pulldown","pullover"],bars:["@pull"],travel:[]},
+  hams:{home:["bridge1","rdl1","@post"],bars:["@post","bridge1"],travel:["bridge1"]},
+  biceps:{home:["dbcurl","band_curl","packcurl"],bars:[],travel:["packcurl"]},
+  biceps2:{home:["hammer","band_curl","packcurl"],bars:[],travel:["packcurl"]},
+  triceps:{home:["tricepdb","band_ext","pushclose","benchdip"],bars:["benchdip","pushclose"],travel:["benchdip","pushclose"]},
+  delts:{home:["lateral"],bars:[],travel:[]},
+  core:{home:["plank","deadbug","sideplank","crunch"],bars:["@hang","plank","deadbug"],travel:["plank","sideplank","deadbug"]},
+  core2:{home:["deadbug","sideplank","pallof","crunch"],bars:["@lsit","sideplank","deadbug"],travel:["sideplank","deadbug","plank"]}
+};
+const ISO_ROLES=new Set(["biceps","biceps2","triceps","delts"]);
+/* шаблоны: та же логика сплитов, что в зале (основная база, разд. 5) */
+const LTPL={
+  home:{fbA:["squat","hpush","vpull","hinge","biceps","core"],fbB:["hinge2","push","hpull","lunge","vpush","triceps","core2"],fbC:["lunge","hpush","vpull","hams","delts","biceps2","core"],
+        U1:["hpush","hpull","vpush","vpull","biceps","triceps"],L1:["squat","hinge","lunge","core"],U2:["push","vpull","hpull","delts","biceps2","triceps"],L2:["hinge2","lunge","squat","hams","core2"]},
+  bars:{fbA:["vpull","dips","lunge","hpull","vpush","core"],fbB:["push","vpull","squat","hams","triceps","core2"],fbC:["vpull","dips","lunge","hpull","push","core"],
+        U1:["vpull","dips","hpull","vpush","core"],L1:["lunge","squat","hams","core2"],U2:["vpull","push","hpull","dips","core"],L2:["lunge","hams","squat","core2"]},
+  travel:{fbA:["lunge","push","hpull","hams","vpush","triceps","core"]}
+};
+function pickRole(role,ctx,used){
+  const env=ctx.env, list=(ROLE[role]&&ROLE[role][ctx.loc])||[];
+  for(const c of list){
+    if(c[0]==="@"){ const lad=c.slice(1), id=ladStep(lad,ctx,env); if(id&&!used.has(id)) return {id,lad};
+      if(id&&used.has(id)){ const n=nextStep(lad,id,env,1)||nextStep(lad,id,env,-1); if(n&&!used.has(n)) return {id:n,lad}; } continue; }
+    const x=LIB[c]; if(x&&needOK(x,env)&&allowedFor(c,ctx.lim)&&!used.has(c)) return {id:c,lad:ladOf(c)}; }
+  return null; }
+
+/* ---- параметры по цели вне зала (Дом, разд. 4; Турники, разд. 4) ---- */
+const LRANGE={home:{mass:[8,20],loss:[12,20],endurance:[15,30],func:[8,15],strength:[4,8]},bars:{mass:[6,15],loss:[8,20],endurance:[15,30],func:[6,15],strength:[3,6]}};
+LRANGE.travel=LRANGE.home;
+const BARS_HEAVY=new Set(["pullup","negpull","bandpull","archerpull","pdips","negdips","hspu"]);
+const NEG={negpull:[3,6],negdips:[3,6],scap:[8,12],archerpull:[3,8],hspu:[3,8]};
+const TIME0={hang:20,dipsupport:15,hs_hold:20,lsit_tuck:10,lsit:10,sideplank:30};
+function makeRxL(x,ctx){
+  const loc=ctx.loc||"gym";
+  if(loc==="gym") return makeRx(x,ctx.goal,ctx.dt,ctx.level);
+  if(x.kind==="cardio") return {tier:"cardio",zone:2};
+  if(x.kind==="mob") return {tier:"mob",rest:30};
+  if(x.type==="time") return {tier:"iso",rest:loc==="bars"?75:60,loc};
+  const G=LRANGE[loc][ctx.goal]?ctx.goal:"mass"; let [lo,hi]=LRANGE[loc][G];
+  if(NEG[x.id]) [lo,hi]=NEG[x.id];
+  const tier = loc==="bars" ? (BARS_HEAVY.has(x.id)?"heavy":(x.pat==="core"||x.pat==="iso")?"iso":"multi") : tierOf(x);
+  const tgt=(lo+hi)/2; let rir = NEG[x.id] ? 1 : G==="strength" ? 1 : (G==="endurance"||G==="func") ? 2 : tgt>15 ? 1 : 2;
+  if(ctx.gentle) rir=Math.max(rir,2);
+  let rest = loc==="bars" ? (tier==="heavy"?150:tier==="multi"?105:75) : restOf(tier,G,ctx.level);
+  if(tgt>=20 && G!=="endurance") rest=Math.max(rest,105);
+  if(G==="endurance") rest=Math.min(rest,60);
+  return {lo,hi,rir,rest,tier,loc}; }
+function tgtOf(x,rx,lad){ if(!rx||!rx.lo) return 10; return lad ? Math.min(rx.hi, rx.lo+2) : Math.round((rx.lo+rx.hi)/2); }
+function makeItemL(id,ctx,o){
+  const x=LIB[id], rx=makeRxL(x,ctx), lad=o.lad||null;
+  if(x.type==="time"){ const v=TIME0[id]||(ctx.level===1?30:ctx.level===2?45:60); return Object.assign({ex:id, rx, sets:[{w:null,r:v},{w:null,r:v},{w:null,r:v}].slice(0,lad?3:2)}, lad?{lad}:{}); }
+  const n = ctx.goal==="strength" ? 3 : (ctx.level>1 && o.first && rx.tier!=="iso") ? 4 : (ctx.level>1 && rx.tier==="iso") ? 2 : 3;
+  const tgt=tgtOf(x,rx,lad); let w=null;
+  if(x.type==="w"){ const ws=(ctx.wstart||(PROG&&PROG.wstart)||{})[id], ww=workW(x,rx).w; w = ws ? fitW(x,ws) : ww!=null ? ww : fitW(x, x.base||8); }
+  if(x.type==="band") w=2;
+  if(x.type==="bw" && PROG && PROG.stepsW && PROG.stepsW[id]) w=PROG.stepsW[id];
+  if(x.type==="bw" && ctx.stepsW && ctx.stepsW[id]) w=ctx.stepsW[id];
+  const it={ex:id, rx, sets:Array.from({length:n},()=>({w, r:tgt}))}; if(lad) it.lad=lad;
+  if(w>0 && rx.tier==="heavy") it.rx.rest=210;
+  if(["benchdip"].includes(id)) it.rx.note="до угла в локте около 90°, стул спинкой к стене";
+  if(["negpull","negdips"].includes(id)) it.rx.note="опускание 3–5 с; первые 2 недели — не больше 2–3 подходов";
+  if(id==="tablerow") it.rx.note="стол тяжёлый, на четырёх ножках, без стекла";
+  return it; }
+function buildTplL(key,ctx){
+  const used=new Set(), items=[], hyp=["mass","loss","strength"].includes(ctx.goal)||ctx.goal2==="mass";
+  const T=LTPL[ctx.loc]||LTPL.home, roles=T[key]||T.fbA; let noV=false;
+  let isoN=0;
+  roles.forEach(r=>{ if(ISO_ROLES.has(r)){ if(!hyp) return; if(ctx.goal==="strength"&&ctx.goal2!=="mass"&&isoN>=1) return; }
+    const pk=pickRole(r,ctx,used); if(!pk){ if(r==="vpull") noV=true; return; }
+    used.add(pk.id); if(ISO_ROLES.has(r)) isoN++; items.push(makeItemL(pk.id,ctx,{first:items.length===0,lad:pk.lad})); });
+  if(noV){ const h=items.find(it=>LIB[it.ex].pat==="hpull"); if(h){ h.sets.push(Object.assign({},h.sets[0])); h.rx.note="без турника и резинки полноценной вертикальной тяги нет — сюда добавлен подход"; } }
+  if((ctx.goal==="func"||ctx.goal2==="func")){ const c=["farmer","packcarry"].find(id=>LIB[id]&&needOK(LIB[id],ctx.env)); if(c) items.splice(Math.max(0,items.length-1),0,makeItemL(c,ctx,{})); }
+  if(ctx.finish) items.push(cardioItem(ctx,15,"Кардио после силовой"));
+  return items; }
+
+/* ---- кардио по месту и выбору человека (основная база, разд. 9: вид кардио выбирает пользователь) ---- */
+const CARDIO_OPT={gym:["bike","run","inclinewalk","elliptical","rower"],home:["walk","runout","stepcardio","highknees","shadow","rope"],bars:["walk","runout","rope"],travel:["walk","runout","highknees","shadow"]};
+function cardioDefault(ctx){ const loc=ctx.loc||"gym";
+  if(loc==="gym") return ctx.goal==="mass"||ctx.goal==="strength" ? "bike" : ctx.goal==="loss" ? (ctx.level===1?"inclinewalk":"elliptical") : ctx.goal==="endurance" ? (ctx.runner?"run":"bike") : "rower";
+  return ctx.runner ? "runout" : "walk"; }
+function cardioEx(ctx){ const loc=ctx.loc||"gym", env=ctx.env||envFor(null,loc==="travel"?"travel":null), c=ctx.cardio;
+  if(c && CARDIO_OPT[loc==="travel"?"travel":loc].includes(c) && LIB[c] && needOK(LIB[c],env)) return c; return cardioDefault(ctx); }
+const noJump = ctx => (ctx.lim||[]).includes("knee") || (PROFILE&&+PROFILE.weight>=100) || ctx.level===1;
+function intervalTpl(ctx){ const loc=ctx.loc||"gym";
+  if(loc==="home"||loc==="travel"){ const ex = noJump(ctx) ? "highknees" : (ctx.env&&ctx.env.has("rope")) ? "rope" : "jacks", sec=LIB[ex].tu==="сек", r=sec?30:.5;
+    return [{ex:"highknees",rx:{tier:"cardio",zone:1,label:"Разогрев"},sets:[{w:null,r:5}]},
+            {ex,rx:{tier:"cardio",zone:4,rest:30,label:"10 × (30 с работы, 30 с отдыха) — зоны 4–5"},sets:Array.from({length:10},()=>({w:null,r}))},
+            {ex:"highknees",rx:{tier:"cardio",zone:1,label:"Заминка"},sets:[{w:null,r:5}]}]; }
+  if(loc==="bars") return [{ex:"walk",rx:{tier:"cardio",zone:1,label:"Разогрев"},sets:[{w:null,r:10}]},
+            {ex:"runout",rx:{tier:"cardio",zone:4,rest:120,label:"6 отрезков по 400 м (≈ 2 мин) в зонах 4–5, между ними 2 мин ходьбы"},sets:Array.from({length:6},()=>({w:null,r:2}))},
+            {ex:"walk",rx:{tier:"cardio",zone:1,label:"Заминка"},sets:[{w:null,r:5}]}];
+  const ex=cardioEx(ctx);
+  return [{ex,rx:{tier:"cardio",zone:1,label:"Разогрев"},sets:[{w:null,r:10}]},
+          {ex,rx:{tier:"cardio",zone:4,pct:[90,95],rest:180,label:"4 × 4 мин на 90–95% макс. пульса, между ними 3 мин легко (около 70%)"},sets:[1,2,3,4].map(()=>({w:null,r:4}))},
+          {ex,rx:{tier:"cardio",zone:1,label:"Заминка"},sets:[{w:null,r:5}]}]; }
+
+/* ---- тест уровня вне зала (Дом, разд. 3; Турники, разд. 3) ---- */
+function buildTestTplL(p){
+  const loc=locOf(p), env=envFor(p), f=p.sex==="f", T=(ex,test,note,o)=>({ex,rx:Object.assign({test,note},o||{}),sets:[{w:null,r:null}]});
+  const push = f ? T("push_knee","max","С колен, на максимум, без пауз — по ним устроены нормы для женщин. Если отжимаетесь классически, замените (⇄) на отжимания от пола: результат засчитаем как есть.")
+                 : T("pushup","max","Классические, на максимум, без пауз.");
+  const walkNote = "1,6 км максимально быстрым шагом по GPS телефона"+(loc==="bars"?" (на стадионе — 4 круга по 400 м и ещё 9 м)":"")+". Сразу на финише запишите время и пульс. Можно в отдельный день — в пределах 2–3 дней от силового теста.";
+  const cardio = p.runner ? T("cooper","cooper","12 минут бега на пределе. Запишите дистанцию в метрах.") : T("rockport","walk",walkNote);
+  const items=[];
+  if(loc==="bars"){
+    items.push(T("pullup","max","Максимум подтягиваний в одном подходе. Если ни одного — запишите 0 и сделайте два следующих упражнения."));
+    items.push(T("aus","max","Только если подтягиваний 0: австралийские подтягивания на максимум.",{opt:true}));
+    items.push(T("hang","max","Только если подтягиваний 0: вис на прямых руках на время.",{opt:true}));
+    items.push(push, cardio);
+    items.push(T("pdips","max","Отжимания на брусьях на максимум, до угла в локте около 90°. Если ни одного — запишите 0 и сделайте упор."));
+    items.push(T("dipsupport","max","Только если отжиманий на брусьях 0: упор на прямых руках на время.",{opt:true}));
+    items.push(T("bulg_bw","max","Нога на лавке, на максимум на каждую ногу. Запишите меньший результат."));
+    items.push(T("kneeraise","max","Подъёмы коленей в висе на максимум, без раскачки."));
+  } else {
+    if(env.has("bar")) items.push(T("pullup","max","Максимум подтягиваний на дверном турнике. Если ни одного — запишите 0."));
+    items.push(push, cardio);
+    items.push(T("ymca","ymca","Если выйти на улицу нельзя — вместо ходьбы: ступень 30 см, кнопка «Метроном 96», 3 минуты; затем пульс целую минуту. Если ходьба сделана — пропустите.",{opt:true}));
+    const hw=Math.max(0,...dbWeights(p),...dbWeights(p,"kb"));
+    if(hw>0){ const L=(id,n)=>({ex:id,rx:{test:"maxw",note:n},sets:[{w:hw,r:null}]});
+      items.push(L("goblet",`С самой тяжёлой гантелью или гирей (${fmtN(hw)} кг) — на максимум повторов, до поломки техники.`));
+      items.push(L("rdl_db","Самые тяжёлые гантели — на максимум повторов, спина прямая."));
+      items.push(L("dbpress","Самые тяжёлые гантели — на максимум повторов. Если вышло больше 12, результат идёт только в сравнение с собой.")); }
+    else items.push(T("bulg_bw","max","Нога на стуле или кровати, на максимум на каждую ногу. Запишите меньший результат."));
+  }
+  items.push(T("plank","max","Запустите секундомер и держите, пока корпус не начнёт провисать. Сравниваем только с вашими прошлыми результатами."));
+  return {name:"Тестовая тренировка", order:0, prog:true, kind:"test", loc, items}; }
+
+/* ---- нормы: отжимания по возрасту и полу (7 категорий), ступенчатый тест ---- */
+const PUSH7N=["отлично","хорошо","выше среднего","средне","ниже среднего","плохо","очень плохо"];
+const PUSH7={m:[[19,[57,47,35,19,11,4]],[29,[48,39,30,17,10,4]],[39,[42,34,25,13,8,2]],[49,[35,28,21,11,6,1]],[59,[32,25,18,9,5,1]],[200,[31,24,17,6,3,1]]],
+             f:[[19,[36,27,21,11,6,2]],[29,[37,30,23,12,7,2]],[39,[38,30,22,10,5,1]],[49,[32,25,18,8,4,1]],[59,[26,21,15,7,3,1]],[200,[24,19,13,5,2,1]]]};
+function push7(sex,age,n){ const row=(PUSH7[sex==="f"?"f":"m"].find(([a])=>age<=a))[1]; const k=row.findIndex(v=>n>=v); return k<0?6:k; }
+const push7Level = k => k===0?3 : k<=3?2 : 1;
+const YMCA={m:[[25,[78,89,99,105,116,128]],[35,[80,89,99,107,117,128]],[45,[82,96,103,112,119,130]],[55,[86,97,105,116,122,132]],[65,[85,97,103,112,120,129]],[200,[87,96,103,113,120,130]]],
+            f:[[25,[84,98,108,117,126,140]],[35,[87,99,111,119,126,138]],[45,[89,102,110,118,128,140]],[55,[93,104,115,120,129,135]],[65,[94,104,112,118,128,139]],[200,[89,102,115,122,128,134]]]};
+function ymcaRate(sex,age,hr){ const row=(YMCA[sex==="f"?"f":"m"].find(([a])=>age<=a))[1]; const k=row.findIndex(v=>hr<=v); return PUSH7N[k<0?6:k]; }
+
+/* стартовые ступени по тесту: вариант, где выходит 8–15 повторов с запасом 2 (Турники, разд. 3) */
+function stepsFromTest(R,p){
+  const S={}, W={}, env=envFor(p), need={strength:6,endurance:17}[p.goal]||10;
+  if(R.pushups!=null){ const f0=(LIB[R.pushVar||"pushup"]||{}).bwp||64, L1=(f0/100)*(R.pushups>0?1+R.pushups/30:.9);
+    const L=LADDERS.push.filter(id=>needOK(LIB[id],env)); let pick=L[0]; L.forEach(id=>{ const pr=30*(L1/((LIB[id].bwp||64)/100)-1); if(pr>=need) pick=id; }); S.push=pick; }
+  if(R.pullups!=null){ const N=R.pullups, str=p.goal==="strength";
+    if(N>=20){ if(env.has("pack")){ S.pull="pullup"; W.pullup=Math.min(10,Math.max(2.5,Math.floor((+p.weight||75)*((1+N/30)/(1+10/30)-1)/2.5)*2.5)); } else S.pull=needOK(LIB.archerpull,env)?"archerpull":"pullup"; }
+    else if(N>=(str?6:10)) S.pull="pullup";
+    else if(N>=1) S.pull=env.has("band")?"bandpull":"negpull";
+    else S.pull = (R.aus||0)>=10 ? "negpull" : (R.hang||0)>=30 ? "scap" : "hang";
+    S.aus = R.aus!=null ? (R.aus>=20?"aus_feet":R.aus>=10?"aus":"aus_bent") : N>=8?"aus_feet":N>=1?"aus":"aus_bent"; }
+  if(R.dips!=null) S.dips = R.dips>=10 ? "pdips" : R.dips>=1 ? "negdips" : (R.support||0)>=20 ? "negdips" : "dipsupport";
+  if(R.bulg!=null){ S.lg = R.bulg>=25 ? "pistol_box" : R.bulg>=8 ? "bulg_bw" : "rlunge"; S.sq = R.bulg>=25 ? "pistol" : "squat_tempo"; }
+  if(R.knee!=null) S.hang = R.knee>=25 ? "t2b" : R.knee>=12 ? "legraise" : "kneeraise";
+  if(S.push) S.pike = LADDERS.push.indexOf(S.push)>=3 ? "pike_decl" : "pike";
+  const lvl=R.level||1; Object.keys(S).forEach(k=>{ let id=S[k]; const L=LADDERS[k]; while(L&&lvlOf(LIB[id])>lvl+1&&L.indexOf(id)>0) id=L[L.indexOf(id)-1]; S[k]=id; });
+  return {S,W}; }
+
+/* ---- замены на сегодня: тот же паттерн → то же оборудование → другое → вес тела (Дом, разд. 7) ---- */
+function subFor(x,env,used,lim){
+  const ok=y=>y&&y.kind==="str"&&y.id!==x.id&&!used.has(y.id)&&needOK(y,env)&&allowedFor(y.id,lim)&&!["hang","scap","dipsupport"].includes(y.id);
+  const m0=(x.mus||[])[0], ov=y=>(y.mus||[]).some(m=>(x.mus||[]).includes(m)), cands=Object.values(LIB).filter(y=>ok(y)&&y.pat===x.pat&&ov(y));
+  const pool = cands.length||x.pat==="vpull" ? cands : Object.values(LIB).filter(y=>ok(y)&&(y.mus||[])[0]===m0&&y.pat!=="cardio");
+  if(!pool.length) return null;
+  const cat=eqCat(x), lv=lvlOf(x), lad=y=>{ const k=ladOf(y.id); return k&&PROG&&PROG.steps&&PROG.steps[k]===y.id?-2:0; };
+  pool.sort((a,b)=>((eqCat(a)===cat?0:eqCat(a)==="bw"?2:1)-(eqCat(b)===cat?0:eqCat(b)==="bw"?2:1)) || (lad(a)-lad(b)) || (Math.abs(lvlOf(a)-lv)-Math.abs(lvlOf(b)-lv)));
+  return pool[0].id; }
+function applyEnv(d,mode,off){
+  const env=envFor(PROFILE,mode); (off||[]).forEach(t=>env.delete(t));
+  d.env={mode:mode||"plan",off:off||[]};
+  const loc = mode==="travel" ? "travel" : locOf(), lim=(PROFILE||{}).lim||[], used=new Set(d.items.map(it=>it.ex)), out=[], dropped=[]; let lostV=false;
+  const ctx={loc:loc==="travel"?"home":loc, goal:PROG?PROG.goal:"mass", level:PROG?PROG.level:1, gentle:!!(PROFILE&&PROFILE.gentle), env, lim, cardio:PROFILE&&PROFILE.cardio, runner:PROFILE&&PROFILE.runner};
+  d.items.forEach(it=>{ const x=exOf(it);
+    if(x.kind==="mob"||needOK(x,env)){ out.push(it); return; }
+    if(x.kind==="cardio"){ const c=cardioEx(Object.assign({},ctx,{loc})); it.sub={from:x.id}; it.ex=c; out.push(it); return; }
+    const s=subFor(x,env,used,lim); if(!s){ if(x.pat==="vpull") lostV=true; else dropped.push(x.name); return; }
+    used.add(s); const y=LIB[s], rx=makeRxL(y,ctx), harder=lvlOf(y)>=lvlOf(x), n=it.sets.length;
+    rx.note=`замена на сегодня вместо «${x.name}»`+(eqCat(x)!=="bw"&&eqCat(y)==="bw"?" · держите запас 1–2: больше повторов или медленное опускание 3–4 с; подходов столько же":"");
+    const w = y.type==="w" ? (workW(y,rx).w ?? fitW(y,y.base||8)) : y.type==="band" ? 2 : null;
+    out.push({ex:s, rx, note:"", sub:{from:x.id}, sets:Array.from({length:n},()=>({w, r:y.type==="time"?(TIME0[s]||30):tgtOf(y,rx,ladOf(s)), done:false}))}); });
+  if(lostV){ const h=out.find(it=>exOf(it).pat==="hpull"), note="сегодня без турника: полноценной замены вертикальной тяги нет — добавлен подход сюда";
+    if(h){ h.sets.push(Object.assign({},h.sets[0],{done:false})); h.rx=Object.assign({},h.rx,{note}); }
+    else { const id=["band_row","tablerow","aus","dbrow"].find(i=>LIB[i]&&needOK(LIB[i],env)&&!used.has(i));
+      if(id){ const y=LIB[id], rx=Object.assign(makeRxL(y,ctx),{note:"сегодня без турника полноценной замены вертикальной тяги нет — вместо неё тяга к поясу"}); out.splice(Math.min(out.length,2),0,{ex:id,rx,note:"",sub:{from:"vpull"},sets:Array.from({length:3},()=>({w:y.type==="band"?2:null,r:tgtOf(y,rx),done:false}))}); }
+      else dropped.push("вертикальная тяга"); } }
+  d.items=out; d.dropped=dropped; return d; }
+const OFFN={dipbars:"Брусья заняты",wet:"Мокрая перекладина",nodb:"Нет гантелей"};
+const offTags = k => k==="wet" ? ["bar","dipbars","lowbar","monkey"] : k==="nodb" ? ["dumbbell","kb"] : [k];
+
+/* ---- прогрессия вне зала: лестница, следующий вес из своих, темп, подход (Дом, разд. 5; Турники, разд. 5) ---- */
+function progressLoc(it,tpl,x,rx,done){
+  const n=it.sets.length, env=envFor(PROFILE), lad0=tpl.lad||it.lad, lad=lad0&&LADDERS[lad0]&&LADDERS[lad0].includes(it.ex)?lad0:ladOf(it.ex), sets=(w,r)=>tpl.sets.map(()=>({w,r})), nm=id=>LIB[id].name;
+  if(x.type==="time"){ if(done.length<n) return null; const cur=Math.min(...done.map(s=>+s.r||0)), lim=TIME_NEXT[it.ex];
+    if(lad && lim && cur>=lim){ const nx=nextStep(lad,it.ex,env); if(nx){ const y=LIB[nx];
+      return {ex:nx, sets:sets(null, y.type==="time"?(TIME0[nx]||20):(rx.loc==="bars"?6:8)), why:`новая ступень: «${y.name}» — ${nm(it.ex).toLowerCase()} ${lim} с освоен`, dir:1, ladNew:true, ladPrev:it.ex}; } }
+    return {sets:tpl.sets.map(s=>({w:null,r:(+s.r||30)+5})), why:"+5 с: все подходы выполнены"}; }
+  if(!rx.lo) return null;
+  const reps=done.map(s=>+s.r||0), lo=rx.lo, hi=rx.hi, minR=Math.min(...reps), maxR=Math.max(...reps), tgt=+tpl.sets[0].r||lo;
+  const hard=done.some(s=>s.fb==="hard"||(s.rir!=null&&+s.rir<=0)), allTop=done.length===n&&minR>=hi, w0=+(tpl.sets[0].w)||0, back=rx.loc==="bars"?5:6;
+  if(tpl.ladNew && tpl.ladPrev && LIB[tpl.ladPrev] && minR<back) return {ex:tpl.ladPrev, sets:sets(null,lo), tempo:true, why:`назад на «${nm(tpl.ladPrev)}» с медленным опусканием 3–4 с: на новой ступени меньше ${back} повт.`, dir:-1};
+  const tempo=()=> !(tpl.rx&&tpl.rx.tempo) ? {sets:sets(tpl.sets[0].w??null,lo), tempo:true, why:"медленное опускание 3–4 с и пауза 1–2 с внизу — так вариант тяжелее"}
+    : n<4 ? {sets:tpl.sets.concat([Object.assign({},tpl.sets[0])]).map(s=>({w:s.w??null,r:lo})), why:"+1 подход: тяжелее варианта здесь нет"}
+    : {sets:sets(tpl.sets[0].w??null,hi), why:"держим: вершина лестницы — подумайте о весе в рюкзаке"};
+  const more=w=>{ const nt=Math.min(hi,Math.max(tgt,minR)+1); return {sets:sets(w,nt), why:nt>tgt?`цель ${nt} повт.`:"повторы те же"}; };
+  if(x.type==="bw"){
+    if(allTop){ const nx=lad?nextStep(lad,it.ex,env):null;
+      if(nx) return {ex:nx, sets:sets(null,rx.loc==="bars"?6:8), why:`новая ступень: «${nm(nx)}» — все подходы до ${hi} повт.`, dir:1, ladNew:true, ladPrev:it.ex};
+      if(env.has("pack") && WEIGHTABLE.has(it.ex)) return {sets:sets(w0+2.5,lo), why:"+2,5 кг в рюкзаке или на поясе", dir:1, heavyW:true};
+      return tempo(); }
+    return more(tpl.sets[0].w??null); }
+  if(x.type==="band"){
+    if(allTop&&!hard){ if(w0<5) return {sets:sets(Math.max(1,w0)+1,lo), why:"резинка на уровень сильнее", dir:1};
+      const h=HARDER[it.ex]; if(h&&LIB[h]&&needOK(LIB[h],env)) return {ex:h,sets:sets(null,lo),why:`вариант тяжелее: «${nm(h)}»`,dir:1,ladNew:true,ladPrev:it.ex}; return tempo(); }
+    return more(w0||2); }
+  if(x.type==="w"){ const cap=30;
+    if(allTop&&!hard){ const nw=nextW(x,w0);
+      if(nw!=null){ if((nw-w0)/Math.max(w0,1)>.1 && maxR<hi+2) return {sets:sets(w0,Math.min(cap,maxR+1)), why:`вес тот же, цель ${Math.min(cap,maxR+1)} повт.: шаг до ${fmtN(nw)} кг больше 10%`};
+        return {sets:sets(nw,lo), why:`+${fmtN(nw-w0)} кг: следующий вес из ваших`, dir:1}; }
+      if(maxR<cap){ const nt=Math.min(cap,maxR+2); return {sets:sets(w0,nt), why:`тяжелее гантели нет: цель ${nt} повт. (до 30)`}; }
+      const h=HARDER[it.ex]; if(h&&LIB[h]&&needOK(LIB[h],env)) return {ex:h,sets:sets(LIB[h].type==="w"?w0:null,lo),why:`больше 30 повторов: вариант тяжелее — «${nm(h)}»`,dir:1,ladNew:true,ladPrev:it.ex};
+      return tempo(); }
+    if(hard && minR<lo){ const miss=(tpl.miss||0)+1;
+      if(miss>=2){ const a=availW(x)||[], lw=[...a].reverse().find(v=>v<w0); return {sets:sets(lw!=null?lw:w0,lo), why:lw!=null?`−${fmtN(w0-lw)} кг: второй раз подряд меньше ${lo} повт. на пределе`:"повторы с нижней границы", miss:0, dir:-1}; }
+      return {sets:sets(w0,tgt), why:"вес тот же: подход был на пределе", miss}; }
+    const top=maxR>=hi?Math.min(cap,maxR+1):hi, nt=Math.min(top,Math.max(tgt,minR)+1); return {sets:sets(w0,nt), why:nt>tgt?`вес тот же, цель ${nt} повт.`:"вес и повторы те же", miss:0}; }
+  return null; }
+const progCtx = () => ({loc:locOf(), goal:PROG?PROG.goal:"mass", goal2:PROG?PROG.goal2:"", level:PROG?PROG.level:1, gentle:!!(PROFILE&&PROFILE.gentle), env:envFor(), lim:(PROFILE||{}).lim||[], cardio:PROFILE&&PROFILE.cardio, runner:PROFILE&&PROFILE.runner});
+/* калибровка запаса: раз в 2–3 недели последний подход — до отказа (Дом, разд. 2; Турники, разд. 2) */
+function calibDue(){ if(!PROG||locOf()==="gym"||(PROFILE&&PROFILE.gentle)||PROG.testPending) return false; const last=PROG.calibAt||PROG.start; return !!last && daysBetween(last,today())>=14; }
+
+/* ---- анкета: место тренировок и инвентарь (Дом, разд. 1; Турники, разд. 1) ---- */
+function setPath(o,path,v){ const k=path.split("."); let c=o; for(let i=0;i<k.length-1;i++){ if(!c[k[i]]||typeof c[k[i]]!=="object") c[k[i]]={}; c=c[k[i]]; } c[k[k.length-1]]=v; }
+function getPath(o,path){ return path.split(".").reduce((c,k)=>c==null?c:c[k],o); }
+function invText(p){ p=p||PROFILE||{}; const loc=locOf(p);
+  if(loc==="gym") return "зал";
+  if(loc==="home"){ const a=[], d=dbWeights(p), k=dbWeights(p,"kb"), v=p.inv||{};
+    if(d.length) a.push(`гантели ${v.db==="adj"?"до "+fmtN(d[d.length-1]):d.map(fmtN).join(", ")} кг`); if(k.length) a.push(`гиря ${k.map(fmtN).join(", ")} кг`);
+    if(v.band) a.push("резинки"); if(v.doorbar) a.push("дверной турник"); if(v.rope) a.push("скакалка"); return "дом"+(a.length?": "+a.join(", "):": свой вес и мебель"); }
+  const v=p.park||{}, a=["турник"]; if(v.dips!==false) a.push("брусья"); if(v.box!==false) a.push("лавка");
+  [["lowbar","низкая перекладина"],["wallbars","шведская стенка"],["monkey","рукоход"],["abbench","скамья для пресса"],["wall","стена"],["band","резинка"],["pack","вес в рюкзаке"]].forEach(([k,l])=>{ if(v[k]) a.push(l); });
+  return "площадка: "+a.join(", "); }
+function placeHTML(p){
+  const inv=p.inv||{}, pk=p.park||{};
+  let h=`<div class="obq"><div class="obl">Где вы тренируетесь чаще всего</div><div class="obgrid">${["gym","home","bars"].map(k=>card("data-set-loc",k,p.loc===k,LOCS[k],LOC_HINT[k])).join("")}</div>
+    <p class="hint">Программа строится под это место. В поездке перед тренировкой нажмите «В поездке» — упражнения заменятся на один день, программа не изменится.</p></div>`;
+  if(p.loc==="home") h+=`<div class="obq"><div class="obl">Гантели</div><div class="chips l">${chip("data-set-db","none",!inv.db||inv.db==="none","Нет")}${chip("data-set-db","fixed",inv.db==="fixed","Фиксированные")}${chip("data-set-db","adj",inv.db==="adj","Разборные")}</div>
+      ${inv.db==="fixed"?`<label class="obin">Веса гантелей, кг<input data-in="inv.dbList" inputmode="decimal" placeholder="например: 5, 8, 12" value="${esc(inv.dbList||"")}"></label>`:""}
+      ${inv.db==="adj"?`<label class="obin">Максимальный вес одной гантели, кг<input data-in="inv.dbMax" inputmode="decimal" placeholder="например: 20" value="${esc(inv.dbMax||"")}"></label>`:""}</div>
+    <div class="obq"><div class="obl">Ещё есть</div>
+      <label class="chk2"><input type="checkbox" data-chk="inv.kb"${inv.kb?" checked":""}> Гиря</label>
+      ${inv.kb?`<label class="obin">Веса гирь, кг<input data-in="inv.kbList" inputmode="decimal" placeholder="например: 8, 16" value="${esc(inv.kbList||"")}"></label>`:""}
+      <label class="chk2"><input type="checkbox" data-chk="inv.band"${inv.band?" checked":""}> Резинки и крепление для двери</label>
+      <label class="chk2"><input type="checkbox" data-chk="inv.doorbar"${inv.doorbar?" checked":""}> Дверной турник</label>
+      <label class="chk2"><input type="checkbox" data-chk="inv.rope"${inv.rope?" checked":""}> Скакалка</label>
+      <p class="hint">Стул, кровать, стол и стену учитываем всегда. Если будете докупать — сначала разборные гантели и дверной турник: гантели снимают потолок по весу, турник даёт вертикальную тягу, которую дома больше нечем заменить.</p></div>`;
+  if(p.loc==="bars") h+=`<div class="obq"><div class="obl">Что есть на площадке <span class="muted">· турник есть всегда</span></div>
+      ${[["dips","Брусья",pk.dips!==false],["box","Лавка, парапет или ступени",pk.box!==false],["lowbar","Низкая перекладина на уровне пояса",pk.lowbar],["wallbars","Шведская стенка",pk.wallbars],["monkey","Рукоход",pk.monkey],["abbench","Скамья для пресса",pk.abbench],["wall","Стена рядом",pk.wall],["band","Своя резинка для помощи",pk.band],["pack","Рюкзак или пояс с весом",pk.pack]].map(([k,l,on])=>`<label class="chk2"><input type="checkbox" data-chk="park.${k}"${on?" checked":""}> ${l}</label>`).join("")}</div>`;
+  if(p.loc&&p.loc!=="gym"&&p.goal==="strength") h+=`<div class="pban warnb"><span><b>Сила вне зала — честно:</b> максимальная сила растёт заметно лучше от тяжёлых весов. Программа возьмёт самые тяжёлые варианты — на одну конечность, с медленным темпом${p.loc==="bars"?", с весом на поясе":""} — но лучше добавить 1–2 тренировки в неделю в зале${p.loc==="home"?" или докупить разборные гантели или утяжелительный жилет":""}.</span></div>`;
+  if(p.loc==="bars"&&(p.goal==="mass"||p.goal==="strength")) h+=`<p class="hint">Ноги — слабое место площадки: без внешнего веса упражнения на них быстро становятся лёгкими. Будут упражнения на одну ногу и медленный темп. Если есть возможность — 1 тренировка ног в неделю в зале или дома с гантелями.</p>`;
+  return h; }
+function placeValid(p){ if(!LOCS[p.loc]||p.loc==="travel") return false;
+  if(p.loc==="home"){ const v=p.inv||{}; if(v.db==="fixed"&&!numList(v.dbList).length) return false; if(v.db==="adj"&&!(+String(v.dbMax||"").replace(",",".")>0)) return false; if(v.kb&&!numList(v.kbList).length) return false; }
+  return true; }
+function cardioHTML(p){ const loc=p.loc||"gym", env=envFor(p), opts=CARDIO_OPT[loc].filter(id=>LIB[id]&&needOK(LIB[id],env));
+  return `<div class="obq"><div class="obl">Кардио, которое вам удобно</div><div class="chips l">${chip("data-set-cardio","",!p.cardio,"Подберите сами")}${opts.map(id=>chip("data-set-cardio",id,p.cardio===id,LIB[id].name)).join("")}</div>
+    <p class="hint">Вид кардио выбираете вы: бег и велотренажёр одинаково полезны и не мешают росту мышц.</p></div>`; }
+
+/* ===================== Путь: игровая модель (вкладка «Мотивация и игра») и золото (вкладка «Челленджи и золото») =====================
+   Всё, что можно посчитать из журнала, считается заново: опыт, серия, кольца, рекорды, значки, золото.
+   Хранится только то, что выбрал человек: заморозки, траты, челленджи, сезонное событие, просмотренные итоги (meta/game). */
+let GAME={};
+const XPV={session:100,set:5,checkin:10,deload:300,retest:300,pr:50,trial:100};
+const RANKN=["Старт","Первый шаг","Разгон","Ритм","Темп","Опора","Устойчивость","Выдержка","Закалка","Характер","Перевал","Высота","Гребень","Вершина","Мастер пути"];
+const rankName = k => k<RANKN.length ? RANKN[k] : `Мастер пути ${k-RANKN.length+2}`;
+function rankOf(xp){ let need=400, acc=0, k=0; while(xp>=acc+need){ acc+=need; k++; need=Math.round(need*1.1); } return {k, name:rankName(k), cur:xp-acc, need, next:rankName(k+1)}; }
+const GOLD={firstTest:50,week:10,cycle:50,pr:5,season:50,winBonus:.2,freeze:30,maxStake:100,maxActive:2};
+const THEMES=[["trail","Тропа",0],["sea","Море",60],["city","Город",100],["aurora","Северное сияние",200]];
+const MONN=["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+async function saveGame(){ if(!db) return; try{ await db.collection("meta").doc("game").set(cleanObj(GAME)); }catch(e){ toast("Не удалось сохранить"); } }
+
+/* тренировка записана в реальном времени: с таймером или отметками подходов, сохранена не позже чем через сутки (разд. 6 «Челленджи») */
+const sessReal = s => !!(s.startedAt || (s.items||[]).some(it=>(it.sets||[]).some(z=>z.done&&z.t))) && (!s.savedAt || daysBetween(s.date,s.savedAt.slice(0,10))<=1);
+const doneSets = it => (it.sets||[]).filter(z=>z.done);
+const planNeed = n => n<=2 ? n : n-1;
+const planDays = () => PROG&&PROG.plan ? Object.keys(PROG.plan).length : 3;
+
+let _gk=null, _gs=null;
+function gameKey(){ return [sessions.length, sessions.reduce((a,s)=>a+(s.savedAt||s.date).length+(s.items||[]).length,0), TESTS.length, Object.keys(CHECKS).length, JSON.stringify(GAME).length, PROG?PROG.start+PROG.level+(PROG.deloadFrom||""):"", today()].join("|"); }
+function gameState(){ const k=gameKey(); if(k===_gk&&_gs) return _gs; _gk=k; _gs=computeGame(); return _gs; }
+
+function computeGame(){
+  const td=today(), ss=sSorted(), byDay={}; ss.forEach(s=>{ (byDay[s.date]=byDay[s.date]||[]).push(s); });
+  const days=Object.keys(byDay).sort(), first=days[0]||null, mon0=mondayOf(td), progStart=PROG?(PROG.createdAt||"").slice(0,10)||PROG.start:null;
+  const freezes=GAME.freezes||{};
+  /* ---- недели и серия ---- */
+  const weeks=[]; let streak=0, best=0, run=0;
+  if(first){ for(let m=mondayOf(first); m<=mon0; m=addDays(m,7)){
+    const inW=days.filter(d=>d>=m&&d<=addDays(m,6)), n=inW.length, need=(PROG&&progStart&&m>=mondayOf(progStart))?planNeed(planDays()):2;
+    const ci=PROG&&PROG.start&&m>=mondayOf(PROG.start)?cycleInfo(m):null, dl=inW.some(d=>byDay[d].some(s=>s.mode==="deload")) || !!(ci&&ci.deload&&!ci.manual);
+    const fz=freezes[m]||null, cur=m===mon0, ok=n>=need||dl;
+    const st = ok ? (dl&&n<need?"deload":"done") : fz ? "frozen" : cur ? "live" : "miss";
+    weeks.push({m,n,need,st,dl,cur,fz});
+    if(st==="done"||st==="deload"){ run++; best=Math.max(best,run); } else if(st==="miss"){ run=0; } }
+    streak=run; }
+  const curW=weeks.find(w=>w.cur)||{m:mon0,n:0,need:planNeed(planDays()),st:"live"};
+  /* ---- рекорды: расчётный 1ПМ, повторы со своим весом, время, МПК ---- */
+  const bestBy={}, prs=[], firsts={};
+  ss.forEach(s=>{ (s.items||[]).forEach(it=>{ const x=exOf(it); if(x.kind!=="str"||(it.rx&&it.rx.test&&it.rx.test!=="1rm"&&it.rx.test!=="maxw"&&it.rx.test!=="max")) return; const ds=doneSets(it); if(!ds.length) return;
+    let v=0, kind="";
+    if(x.type==="w"&&!x.ru){ ds.forEach(z=>{ if(+z.w>0&&+z.r>0&&+z.r<=12) v=Math.max(v,e1rm(+z.w,+z.r)); }); kind="1ПМ"; }
+    else if(x.type==="bw"){ ds.forEach(z=>{ if(!(+z.w>0)) v=Math.max(v,+z.r||0); }); kind="повт."; }
+    else if(x.type==="time"&&x.kind==="str"){ ds.forEach(z=>v=Math.max(v,+z.r||0)); kind=x.tu||"с"; }
+    if(x.type==="bw"&&!firsts[it.ex]&&ds.some(z=>+z.r>=1)) firsts[it.ex]=s.date;
+    if(!(v>0)) return; const b=bestBy[it.ex];
+    if(b && v>b.v*1.001){ const flag = kind==="1ПМ" && v>b.v*1.1 && daysBetween(b.date,s.date)<=7; prs.push({date:s.date, ex:it.ex, name:x.name, kind, v:Math.round(v*10)/10, prev:Math.round(b.v*10)/10, flag, sid:s.id}); }
+    if(!b||v>b.v) bestBy[it.ex]={v,date:s.date}; }); });
+  for(let i=1;i<TESTS.length;i++){ const a=TESTS[i-1], c=TESTS[i]; if(a.vo2!=null&&c.vo2!=null&&c.vo2>a.vo2) prs.push({date:c.date, ex:"vo2", name:"МПК", kind:"мл/кг/мин", v:c.vo2, prev:a.vo2}); }
+  /* ---- опыт ---- */
+  let xp=0; const xpBy={};
+  const addXP=(d,v,why)=>{ xp+=v; (xpBy[d]=xpBy[d]||[]).push([v,why]); };
+  const testSess=ss.filter(s=>s.kind==="test"||(workouts[s.workoutId]&&workouts[s.workoutId].kind==="test"));
+  days.forEach(d=>{ const list=byDay[d], s0=list[0]; addXP(d,XPV.session,"тренировка");
+    let sets=0; list.forEach(s=>(s.items||[]).forEach(it=>{ const x=exOf(it); if(x.kind==="mob") return; sets+=Math.min(doneSets(it).length, it.planN||it.sets.length, 6); }));
+    addXP(d,sets*XPV.set,"подходы");
+    if(CHECKS[d]) addXP(d,XPV.checkin,"самочувствие"); });
+  testSess.slice(1).forEach(s=>addXP(s.date,XPV.retest,"повторный тест"));
+  weeks.filter(w=>!w.cur&&w.dl&&w.n>0).forEach(w=>addXP(addDays(w.m,6),XPV.deload,"разгрузочная неделя"));
+  prs.forEach(p=>addXP(p.date,XPV.pr,"рекорд"));
+  /* ---- кольца недели ---- */
+  const inCur=ss.filter(s=>s.date>=curW.m&&s.date<=addDays(curW.m,6));
+  const strDone=new Set(inCur.filter(s=>(s.items||[]).some(it=>exOf(it).kind==="str"&&doneSets(it).length)).map(s=>s.date)).size;
+  const strGoal=PROG?(PROG.S||3):3, cm=cardioWeekMin(), ckN=[0,1,2,3,4,5,6].filter(k=>CHECKS[addDays(curW.m,k)]).length;
+  const rings=[{k:"str",n:"Силовые",v:strDone,g:strGoal,u:""},{k:"cardio",n:"Кардио",v:cm,g:150,u:"мин"},{k:"rec",n:"Восстановление",v:ckN,g:5,u:"дн."}];
+  /* ---- испытания: недельные (кольца) и главы ---- */
+  const trials=weekTrials(curW,rings);
+  const pastRing=w=>{ const sw=ss.filter(s=>s.date>=w.m&&s.date<=addDays(w.m,6)), sd=new Set(sw.filter(s=>(s.items||[]).some(it=>exOf(it).kind==="str"&&doneSets(it).length)).map(s=>s.date)).size, ck=[0,1,2,3,4,5,6].filter(k=>CHECKS[addDays(w.m,k)]).length; return {str:sd>=strGoal, rec:ck>=5}; };
+  weeks.filter(w=>!w.cur).forEach(w=>{ const r=pastRing(w); if(r.str) addXP(addDays(w.m,6),XPV.trial,"испытание недели"); if(r.rec) addXP(addDays(w.m,6),XPV.trial,"испытание недели"); });
+  const chapter=chapterTrials(bestBy,firsts);
+  Object.values(GAME.trialsDone||{}).forEach(d=>addXP(d,XPV.trial,"испытание главы"));
+  /* ---- значки ---- */
+  const nS=days.length, counted=weeks.filter(w=>w.st==="done"||w.st==="deload").length, tri=weeks.some(w=>{ if(w.cur) return rings.every(r=>r.v>=r.g); return false; });
+  const lvUp=TESTS.some((t,i)=>i>0&&(t.level||0)>(TESTS[i-1].level||0)), vo2Up=prs.some(p=>p.ex==="vo2");
+  const run20=ss.some(s=>(s.items||[]).some(it=>["run","runout","cooper"].includes(it.ex)&&doneSets(it).some(z=>+z.r>=20)));
+  const gaps=days.some((d,i)=>i>0&&daysBetween(days[i-1],d)>=14), locs=ss.some(s=>s.env==="travel"||s.loc&&s.loc!=="gym");
+  const exN=new Set(ss.flatMap(s=>(s.items||[]).filter(it=>doneSets(it).length).map(it=>it.ex))).size;
+  const ringRec=weeks.some(w=>!w.cur&&pastRing(w).rec) || (rings[2].v>=5);
+  const B=[
+    ["reg","first_week","Первая неделя","неделя засчитана по плану",counted>=1],["reg","w10","10 тренировок","",nS>=10],["reg","w50","50 тренировок","",nS>=50],["reg","w100","100 тренировок","",nS>=100],
+    ["reg","s4","Серия 4 недели","",best>=4],["reg","s12","Серия 12 недель","",best>=12],["reg","s26","Серия 26 недель","",best>=26],["reg","cycle1","Первый цикл","тренировки, разгрузка, повторный тест",testSess.length>=2],
+    ["str","pr1","Первый рекорд","",prs.length>=1],["str","pr10","10 рекордов","",prs.length>=10],["str","lvl","Новый уровень подготовки","по повторному тесту",lvUp],
+    ["end","vo2","МПК вырос","по повторному тесту",vo2Up],["end","run20","20 минут бега без остановки","",run20],
+    ["skill","pull1","Первое подтягивание","",!!firsts.pullup],["skill","dip1","Первое отжимание на брусьях","",!!firsts.pdips],["skill","pistol","«Пистолет»","",!!firsts.pistol],
+    ["rec","ringrec","Кольцо восстановления","самочувствие 5 дней за неделю",ringRec],["rec","deload","Разгрузка выполнена","отдых — часть плана",weeks.some(w=>!w.cur&&w.dl&&w.n>0)],
+    ["exp","explore","Вне зала","тренировка дома, на турниках или в поездке",locs],["exp","ex10","10 разных упражнений","",exN>=10],
+    ["sur","comeback","Возвращение","тренировка после перерыва — новый старт",gaps,true],["sur","triple","Три кольца","все кольца недели закрыты",tri,true]];
+  const kept=GAME.badges||{}, badges=B.map(([cat,id,n,h,ok,hidden])=>({cat,id,n,h,ok:!!ok||!!kept[id],hidden:!!hidden}));
+  /* ---- путь: глава = цикл ---- */
+  const path=pathInfo();
+  /* ---- золото ---- */
+  const gl=[]; const addG=(d,v,why)=>gl.push({d,v,why});
+  if(testSess.length) addG(testSess[0].date,GOLD.firstTest,"подарок после первого теста");
+  weeks.filter(w=>!w.cur&&(w.st==="done"||w.st==="deload")).forEach(w=>addG(addDays(w.m,6),GOLD.week,w.st==="deload"?"разгрузочная неделя":"неделя по плану"));
+  testSess.slice(1).forEach(s=>addG(s.date,GOLD.cycle,"цикл завершён"));
+  prs.filter(p=>!p.flag).forEach(p=>addG(p.date,GOLD.pr,`рекорд: ${p.name}`));
+  const ch=(GAME.challenges||[]).map(c=>Object.assign({},c,evalChallenge(c,weeks,ss)));
+  ch.forEach(c=>{ if(c.res==="won") addG(c.endD,c.stake+Math.ceil(c.stake*GOLD.winBonus),"челлендж выполнен: ставка и бонус"); });
+  const season=seasonInfo(ss); Object.entries(GAME.season||{}).forEach(([mk,v])=>{ if(v&&v.joined){ const si=seasonInfo(ss,mk); if(si.done) addG(si.doneD,GOLD.season,`сезон: ${si.title}`); } });
+  const earned=gl.reduce((a,g)=>a+g.v,0), spent=(GAME.spends||[]).reduce((a,s)=>a+(+s.v||0),0);
+  const locked=ch.filter(c=>["active","pending","won-early","won","lost"].includes(c.res)).reduce((a,c)=>a+c.stake,0);
+  const fund=ch.filter(c=>c.res==="lost").reduce((a,c)=>a+c.stake,0)+(GAME.spends||[]).filter(s=>s.kind==="fund").reduce((a,s)=>a+(+s.v||0),0);
+  const gold=earned-spent-locked;
+  return {xp, rank:rankOf(xp), xpBy, weeks, streak, best, curW, prs, bestBy, firsts, rings, trials, chapter, badges, path, gold, gl, ch, fund, season, days:nS}; }
+
+/* ---- недельные испытания: кольца силовых и восстановления, кардио — если цель его требует ---- */
+function weekTrials(w,rings){ const t=[{id:"str",n:"Закройте кольцо силовых",ok:rings[0].v>=rings[0].g,p:`${rings[0].v} из ${rings[0].g}`},{id:"rec",n:"Отметьте самочувствие 5 дней",ok:rings[2].v>=5,p:`${rings[2].v} из 5`}];
+  if(PROG&&(["loss","endurance"].includes(PROG.goal)||["loss","endurance"].includes(PROG.goal2))) t.push({id:"cardio",n:"150 минут кардио",ok:rings[1].v>=150,p:`${rings[1].v} из 150`,noXP:true});
+  return t; }
+/* ---- испытания главы: новичку — навыки, опытному — результат (разд. 4 «Мотивация») ---- */
+function chapterTrials(bestBy,firsts){ if(!PROG||PROG.testPending) return [];
+  const c=cycleInfo()||{no:1}, no=c.no||1, env=envFor(), out=[], L=PROG.level, since=PROG.start;
+  const bestSince=(ex,kind)=>{ let v=0; sessions.forEach(s=>{ if(s.date<since) return; (s.items||[]).forEach(it=>{ if(it.ex!==ex) return; doneSets(it).forEach(z=>{ v=Math.max(v, kind==="r"?(+z.r||0):e1rm(+z.w,+z.r)); }); }); }); return v; };
+  const tk=id=>`c${no}-${since}-${id}`;
+  if(L===1){
+    if(env.has("bar")) out.push({id:"pull1",n:"Первое подтягивание",ok:bestSince("pullup","r")>=1,p:"подтягивания в любой тренировке главы"});
+    out.push({id:"push10",n:"10 отжиманий подряд",ok:Math.max(bestSince("pushup","r"),bestSince("push_decl","r"))>=10,p:"классические, в одном подходе"});
+    out.push({id:"plank60",n:"Планка 60 секунд",ok:bestSince("plank","r")>=60,p:"в одном подходе"});
+    out.push({id:"fb",n:"Неделя с оценкой каждого подхода",ok:fbWeekOK(),p:"кнопки «легко / нормально / на пределе» после каждого рабочего подхода"});
+  } else {
+    const main = locOf()==="gym" ? [["squat","Присед"],["bench","Жим лёжа"],["rdl","Румынская тяга"]] : [];
+    main.forEach(([id,n])=>{ const o=PROG.orm&&PROG.orm[id]; if(!o) return; const tgt=Math.round((o+(id==="bench"?2.5:5))*2)/2; out.push({id:"r_"+id,n:`${n}: расчётный 1ПМ ${fmtN(tgt)} кг`,ok:bestSince(id,"w")>=tgt,p:`сейчас ${fmtN(Math.round(bestSince(id,"w")*2)/2||o)} кг`}); });
+    if(locOf()!=="gym"&&PROG.steps) ["pull","push","dips"].forEach(k=>{ const s=PROG.steps[k]; if(!s) return; const nx=nextStep(k,s,env); if(nx) out.push({id:"l_"+k,n:`Новая ступень: «${LIB[nx].name}»`,ok:false,p:`сейчас: ${LIB[s].name.toLowerCase()}`}); });
+    out.splice(3);
+  }
+  const done=GAME.trialsDone||{}; out.forEach(t=>{ t.key=tk(t.id); if(done[t.key]) t.ok=true; });
+  return out.slice(0,4); }
+function fbWeekOK(){ const m=mondayOf(today()); let any=false, all=true; sessions.forEach(s=>{ if(s.date<addDays(m,-7)) return; (s.items||[]).forEach(it=>{ const x=exOf(it); if(!["w","bw","assist","band"].includes(x.type)||(it.rx&&it.rx.test)) return; doneSets(it).forEach(z=>{ any=true; if(!z.fb&&z.rir==null) all=false; }); }); }); return any&&all; }
+let _syncing=false;
+async function syncTrials(g){ if(!db||_syncing) return; const done=Object.assign({},GAME.trialsDone||{}), bd=Object.assign({},GAME.badges||{}); let ch=false;
+  (g.chapter||[]).forEach(t=>{ if(t.ok&&t.key&&!done[t.key]){ done[t.key]=today(); ch=true; } });
+  (g.badges||[]).forEach(b=>{ if(b.ok&&!bd[b.id]){ bd[b.id]=today(); ch=true; } });
+  if(ch){ _syncing=true; GAME.trialsDone=done; GAME.badges=bd; await saveGame(); _syncing=false; } }
+
+/* ---- карта пути: недели — ступени, разгрузка — привал, тест — перевал; старт после теста ≈ 10% ---- */
+function pathInfo(){ if(!PROG) return null; const C=CYCLE[PROG.level]||CYCLE[1];
+  if(PROG.testPending) return {pending:true, ch:1, pct:0, next:{n:"Тестовая тренировка",d:today()}};
+  const c=cycleInfo()||{}, per=(C.len+1)*7, d0=addDays(PROG.start,(Math.floor((c.wi||0)/(C.len+1)))*(C.len+1)*7), el=Math.min(per,daysBetween(d0,today())+1);
+  const pct=Math.min(1,.1+.9*el/per), nodes=[]; for(let k=0;k<C.len;k++) nodes.push({t:"w",n:`Неделя ${k+1}`}); nodes.push({t:"rest",n:"Привал: разгрузка"}); nodes.push({t:"test",n:c.retest||C.every===1?"Перевал: тест":"Перевал"});
+  const pos=Math.min(nodes.length-1,Math.floor(el/7)), endW=addDays(mondayOf(today()),6), dlD=addDays(d0,C.len*7);
+  const next = c.deload ? {n:c.retest?"Повторный тест":"Новая неделя после разгрузки",d:addDays(c.deloadEnd,1)} : pos<C.len-1 ? {n:"Конец недели",d:endW} : {n:"Разгрузочная неделя",d:dlD};
+  const ch=Math.max(1,TESTS.length)+Math.floor((c.wi||0)/(C.len+1));
+  return {pct,nodes,pos,next,ch,deload:!!c.deload,retestDue:!!c.retest}; }
+
+/* ---- челлендж-обязательство: ставка только на регулярность (разд. 5, 7 «Челленджи») ---- */
+function evalChallenge(c,weeks,ss){ const end=addDays(c.start,c.weeks*7-1), td=today();
+  if(c.status==="refunded"||c.status==="cancelled") return {res:"void",endD:end};
+  if(td<c.start) return {res:"pending",endD:end,prog:0};
+  const ws=weeks.filter(w=>w.m>=c.start&&w.m<=end), real=ss.filter(s=>s.date>=c.start&&s.date<=end&&sessReal(s));
+  const realDays=new Set(real.map(s=>s.date));
+  let prog, ok;
+  if(c.type==="count"){ prog=realDays.size; ok=prog>=c.n; }
+  else { prog=ws.filter(w=>{ if(w.dl) return true; const n=[...realDays].filter(d=>d>=w.m&&d<=addDays(w.m,6)).length; return n>=w.need; }).length; ok=prog>=c.n; }
+  if(td>end) return {res:ok?"won":"lost",endD:end,prog};
+  return {res:ok?"won-early":"active",endD:end,prog}; }
+function challengeSuggest(){ const g=gameState(), m=mondayOf(today()), last=g.weeks.filter(w=>!w.cur).slice(-2);
+  const okW=last.filter(w=>w.st==="done"||w.st==="deload").length, avg=last.length?last.reduce((a,w)=>a+w.n,0)/last.length:2;
+  const C=CYCLE[(PROG&&PROG.level)||1], ci=cycleInfo()||{pos:0}, left=Math.max(2,Math.min(8,C.len-(ci.pos||0)));
+  const start = wdOf(today())===1 ? today() : addDays(m,7);
+  return {start, weeks:left, n: okW===2?left:okW===1?Math.ceil(left*.75):Math.ceil(left/2), k:Math.max(1,Math.round(avg*left)), avg}; }
+function challengeOpen(){ const g=gameState(); if(!PROG) return "Сначала программа и тест."; if(!TESTS.length) return "Челленджи открываются после первого теста.";
+  if(!g.days||daysBetween(sSorted()[0].date,today())<14) return "Челленджи открываются после 2 недель тренировок: так цель будет по вашей реальной регулярности.";
+  return ""; }
+function healthWarn(stake){ const ch=(GAME.challenges||[]).filter(c=>c.status!=="cancelled").sort((a,b)=>a.created<b.created?-1:1), g=gameState(), w=[];
+  const ev=ch.map(c=>Object.assign({},c,evalChallenge(c,g.weeks,sessions)));
+  const lastLost=ev.filter(c=>c.res==="lost").pop(); if(lastLost && daysBetween(lastLost.endD,today())<7) w.push("новая ставка сразу после проигрыша");
+  if(stake>=GOLD.maxStake && ev.slice(-1).some(c=>c.stake>=GOLD.maxStake)) w.push("максимальные ставки подряд");
+  const st=ev.slice(-3).map(c=>c.stake); if(st.length>=2 && stake>st[st.length-1] && st[st.length-1]>(st[st.length-2]||0) && g.weeks.slice(-3).filter(x=>x.st==="miss").length>=1) w.push("ставки растут, а выполнение плана падает");
+  return w; }
+
+/* ---- сезонное событие месяца: вход бесплатный, приз из фонда системы ---- */
+function seasonInfo(ss,mk){ const d=mk?mk+"-01":today().slice(0,8)+"01", y=+d.slice(0,4), mo=+d.slice(5,7), endD=addDays(`${mo===12?y+1:y}-${pad2(mo===12?1:mo+1)}-01`,-1);
+  const key=d.slice(0,7), tgt=planDays()>=3?12:8, real=new Set((ss||sessions).filter(s=>s.date>=d&&s.date<=endD&&sessReal(s)).map(s=>s.date));
+  const sorted=[...real].sort(), done=sorted.length>=tgt; return {key, title:`${cap(MONN[mo-1])}: ${tgt} тренировок за месяц`, tgt, n:real.size, done, doneD:done?sorted[tgt-1]:null, endD, joined:!!(GAME.season&&GAME.season[key]&&GAME.season[key].joined)}; }
+
+/* ---- голос тренера: объясняет зачем, хвалит за конкретное, не стыдит (разд. 5 «Мотивация») ---- */
+function coachLine(st){ if(!PROG) return ""; const g=gameState(), c=cycleInfo()||{}, w=st&&st.wid&&workouts[st.wid];
+  const lastW=g.weeks.filter(x=>!x.cur).slice(-1)[0];
+  const ps=PROG.createdAt?PROG.createdAt.slice(0,10):PROG.start;
+  if(lastW&&lastW.st==="miss"&&[1,2].includes(wdOf(today()))&&lastW.m>=mondayOf(ps)) return "Неделя выпала — бывает. Новая уже началась, план готов: начнём с ближайшей тренировки.";
+  if(st&&(st.k==="test"||st.k==="retest")) return st.k==="test"?"Тест — первый шаг пути: по нему Атлос подберёт веса и покажет, откуда вы стартуете.":"Цикл пройден. Тест покажет, сколько вы прибавили, — и откроет новую главу.";
+  if(c.deload) return "Разгрузка — часть плана: усталость уходит, а набранная сила остаётся. Неделя засчитывается в серию.";
+  if(st&&st.k==="train"&&w){ if(w.kind==="cardio") return w.id==="p-int"?"Интервалы поднимают МПК сильнее ровного темпа. Отрезки — тяжело, восстановление — легко.":"Ровный темп, в котором можно говорить фразами, — основа выносливости и восстановления.";
+    if(w.dt==="H") return "Тяжёлый день: отдых длиннее, 2–4 минуты — так в следующем подходе сохранятся повторы.";
+    const lp=g.prs.slice(-1)[0]; if(lp&&daysBetween(lp.date,today())<=10&&lp.ex!=="vo2") return `${lp.name}: ${fmtN(lp.prev)} → ${fmtN(lp.v)} ${lp.kind}. Это ваш рекорд — продолжаем.`;
+    const p=g.path; if(p&&p.next) return `${p.next.n} — ${fmtDay(p.next.d)}. Каждый подход по плану двигает путь вперёд.`; }
+  if(st&&st.k==="rest") return "Отдых — тоже тренировка: мышцы растут, пока вы восстанавливаетесь. Сон 7–9 часов.";
+  if(st&&st.k==="done") return "Тренировка в копилке. Завтра — восстановление.";
+  return ""; }
+
+/* ---- отрисовка: кольца, путь, значки ---- */
+function ringSVG(r,size){ const s=size||64, R=s/2-6, L=2*Math.PI*R, f=Math.min(1,r.g?r.v/r.g:0);
+  return `<svg viewBox="0 0 ${s} ${s}" width="${s}" height="${s}" aria-hidden="true"><circle cx="${s/2}" cy="${s/2}" r="${R}" class="rg-bg"/><circle cx="${s/2}" cy="${s/2}" r="${R}" class="rg-fg rg-${r.k}" stroke-dasharray="${(L*f).toFixed(1)} ${L.toFixed(1)}" transform="rotate(-90 ${s/2} ${s/2})"/>${f>=1?`<text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" class="rg-ok">✓</text>`:""}</svg>`; }
+function ringsHTML(g,small){ return `<div class="rings${small?" sm":""}">${g.rings.map(r=>`<div class="ring">${ringSVG(r,small?44:64)}<span><b>${r.n}</b>${small?"":`<span class="muted num">${fmtN(r.v)} из ${r.g}${r.u?" "+r.u:""}</span>`}</span></div>`).join("")}</div>`; }
+function pathHTML(g,mini){ const p=g.path; if(!p) return ""; const th=(GAME.theme||"trail");
+  if(p.pending) return `<div class="path th-${th}"><div class="ptitle"><span class="eyebrow">Глава 1</span><b>Путь начнётся с теста</b></div><div class="bar"><i style="width:2%"></i></div><span class="muted" style="font-size:13px">Ближайшая веха: тестовая тренировка — сегодня.</span></div>`;
+  const nodes=p.nodes.map((n,k)=>`<span class="pn ${n.t}${k<p.pos?" past":k===p.pos?" now":""}" title="${esc(n.n)}">${n.t==="rest"?"⌂":n.t==="test"?"▲":k+1}</span>`).join("");
+  return `<div class="path th-${th}"><div class="ptitle"><span class="eyebrow">Глава ${p.ch}</span><b>${Math.round(p.pct*100)}% пути</b></div>
+    <div class="pnodes">${nodes}</div><div class="bar"><i style="width:${Math.round(p.pct*100)}%"></i></div>
+    <span class="muted" style="font-size:13px">Ближайшая веха: <b>${esc(p.next.n)}</b> — ${fmtDay(p.next.d)}.${mini?"":" Недели — ступени, разгрузка — привал, тест — перевал."}</span></div>`; }
+const CATN={reg:"Регулярность",str:"Сила",end:"Выносливость",skill:"Навыки",rec:"Восстановление",exp:"Исследование",sur:"Сюрпризы"};
+function badgesHTML(g){ return Object.keys(CATN).map(cat=>{ const bs=g.badges.filter(b=>b.cat===cat&&(!b.hidden||b.ok)); if(!bs.length) return "";
+  return `<div class="bcat"><span class="eyebrow">${CATN[cat]}</span><div class="bgrid">${bs.map(b=>`<div class="badge${b.ok?" on":""}" title="${esc(b.h||b.n)}"><span class="bi">${b.ok?"★":"☆"}</span><span>${esc(b.n)}</span></div>`).join("")}</div></div>`; }).join(""); }
+function streakHTML(g){ const w=g.curW, left=Math.max(0,w.need-w.n);
+  return `<div class="streak"><div><span class="sn num">${g.streak}</span><span class="muted">${plural3(g.streak,"неделя","недели","недель")} подряд</span></div>
+    <div class="muted" style="font-size:13px">${w.st==="done"?"Эта неделя уже засчитана ✓":w.st==="deload"?"Разгрузочная неделя засчитывается автоматически":w.st==="frozen"?`Неделя заморожена: ${w.fz==="sick"?"болею":"отпуск"}`:`Эта неделя: ${w.n} из ${w.need} — ${left?`ещё ${left}`:"готово"}`}. Лучшая серия: ${g.best}.</div></div>`; }
+
+/* ---- вкладка «Путь» ---- */
+let shopOpen=false, chForm=null;
+function renderPath(){ const el=$("path"); if(!el) return;
+  if(!loaded.s||!loaded.m){ el.innerHTML=`<div class="empty">Загружаю…</div>`; return; }
+  if(!PROFILE||!PROG){ el.innerHTML=`<div class="pcard hero"><div class="eyebrow">Путь</div><h3>Здесь будет ваш путь</h3><p class="muted">После анкеты и теста здесь появятся главы, ранг, серия недель, кольца, рекорды и значки. Очки дают только за полезное: тренировки по плану, отдых, тест и рекорды.</p><div class="actions"><button class="btn" data-ob>Подобрать программу</button></div></div>`; return; }
+  const g=gameState(); syncTrials(g); const R=g.rank, cw=g.curW, frozenCnt=cycleFreezes();
+  const vol=weekVolumeDone(), tgt=(VOLT[PROG.goal]||VOLT.mass)[PROG.level-1];
+  const mus=MUS_ORDER.map(m=>{ const v=Math.round((vol[m]||0)*2)/2, f=Math.min(1,v/tgt[0]); return `<div class="mm${f>=1?" ok":""}" style="--f:${f}"><span>${MUS[m]}</span><b class="num">${fmtN(v)}</b></div>`; }).join("");
+  const prs=g.prs.slice(-8).reverse().map(p=>`<div class="prr"><span>${esc(p.name)}</span><span class="num">${fmtN(p.prev)} → <b>${fmtN(p.v)}</b> ${p.kind}</span><span class="muted">${fmtDate(p.date)}${p.flag?" · скачок >10% за неделю — проверьте запись":""}</span></div>`).join("");
+  el.innerHTML=`
+  <div class="pcard"><div class="ptop"><div style="min-width:0"><div class="eyebrow">Ранг пути</div><div class="pgoal">${R.name}</div></div><span class="pill">${LEVELS[PROG.level]}</span></div>
+    <div class="bar"><i style="width:${Math.round(R.cur/R.need*100)}%"></i></div>
+    <span class="muted" style="font-size:13px"><b class="num">${R.cur}</b> из ${R.need} очков до ранга «${R.next}» · всего ${g.xp}. Ранг растёт от регулярности. Уровень подготовки — другое: он меняется только по тесту.</span>
+    ${pathHTML(g)}</div>
+  <div class="pcard"><div class="eyebrow">Эта неделя</div>${streakHTML(g)}${ringsHTML(g)}
+    <div class="trials">${g.trials.map(t=>`<div class="tr${t.ok?" ok":""}"><span>${t.ok?"✓":"○"}</span><span><b>${esc(t.n)}</b><span class="muted"> · ${esc(t.p)}${t.noXP?"":" · +100 очков"}</span></span></div>`).join("")}</div>
+    <div class="actions">${cw.st==="frozen"?`<button class="btn ghost small" data-unfreeze>Снять заморозку</button>`:cw.st==="live"?`<button class="btn ghost small" data-freeze="vac">Отпуск</button><button class="btn ghost small" data-freeze="sick">Болею</button>`:""}
+      <span class="muted" style="font-size:12px">Заморозка сохраняет серию: «отпуск» — до 2 недель за цикл (использовано ${frozenCnt}), «болею» — без ограничений и ставит челленджи на паузу с возвратом ставки.</span></div></div>
+  ${g.chapter.length?`<div class="pcard"><div class="eyebrow">Испытания главы ${g.path?g.path.ch:1}</div><div class="trials">${g.chapter.map(t=>`<div class="tr${t.ok?" ok":""}"><span>${t.ok?"✓":"○"}</span><span><b>${esc(t.n)}</b><span class="muted"> · ${esc(t.p)} · +100 очков</span></span></div>`).join("")}</div>
+    <span class="muted" style="font-size:12px">${PROG.level===1?"Новичку — цели-навыки: они дают ощущение роста быстрее, чем цифры.":"Цели на результат к повторному тесту."}</span></div>`:""}
+  <div class="pcard"><div class="eyebrow">Карта мышц · подходов за неделю</div><div class="mmap">${mus}</div>
+    <span class="muted" style="font-size:12px">Цель — ${tgt[0]}–${tgt[1]} подходов на мышцу в неделю; основная мышца — целый подход, вспомогательная — половина.</span></div>
+  <div class="pcard"><div class="eyebrow">Личные рекорды</div>${prs||`<p class="muted">Рекорды появятся сами: расчётный 1ПМ, повторы и время растут — Атлос заметит.</p>`}</div>
+  <div class="pcard"><div class="eyebrow">Значки</div>${badgesHTML(g)}</div>
+  ${goldHTML(g)}`; }
+function weekVolumeDone(){ const m=mondayOf(today()), v={}; sessions.forEach(s=>{ if(s.date<m||s.date>addDays(m,6)) return; (s.items||[]).forEach(it=>{ const x=exOf(it); if(x.kind!=="str") return; const n=doneSets(it).length; (x.mus||[]).forEach(k=>v[k]=(v[k]||0)+n); (x.sec||[]).forEach(k=>v[k]=(v[k]||0)+n*.5); }); }); return v; }
+function cycleStart(){ if(!PROG||!PROG.start) return today(); const C=CYCLE[PROG.level]||CYCLE[1], c=cycleInfo()||{wi:0}; return addDays(PROG.start,Math.floor(c.wi/(C.len+1))*(C.len+1)*7); }
+function cycleFreezes(){ const d0=mondayOf(cycleStart()); return Object.entries(GAME.freezes||{}).filter(([m,k])=>k==="vac"&&m>=d0).length; }
+function extraFreezes(){ const c=cycleInfo()||{no:1}; return (GAME.spends||[]).filter(s=>s.kind==="freeze"&&s.cycle===c.no).length; }
+
+/* ---- золото: кошелёк, челленджи, сезон, магазин ---- */
+function goldHTML(g){ const lock=challengeOpen(), act=g.ch.filter(c=>["active","pending","won-early"].includes(c.res)), sug=lock?null:challengeSuggest(), s=g.season;
+  const chRow=c=>{ const end=c.endD, lbl=c.type==="count"?`не меньше ${c.n} тренировок`:`план в ${c.n} ${plural3(c.n,"неделе","неделях","неделях")} из ${c.weeks}`;
+    return `<div class="chal"><div><b>${lbl}</b><span class="muted"> · ${fmtDate(c.start)} — ${fmtDate(end)} · ставка ${c.stake}</span></div>
+      <div class="bar"><i style="width:${Math.min(100,(c.prog||0)/c.n*100)}%"></i></div><span class="muted" style="font-size:12px">${c.res==="pending"?"Старт в понедельник. До старта можно отменить без потерь.":`Сейчас: ${c.prog||0} из ${c.n}${c.res==="won-early"?" — условие уже выполнено ✓":""}. Засчитываются тренировки, записанные во время тренировки.`}</span>
+      <div class="actions">${c.res==="pending"?`<button class="btn ghost small" data-chcancel="${c.id}">Отменить</button>`:`<button class="btn ghost small" data-chpause="${c.id}">Пауза: болею или травма</button>`}</div></div>`; };
+  const hist=g.ch.filter(c=>["won","lost"].includes(c.res)).slice(-3).reverse().map(c=>`<span class="muted" style="font-size:12px">${fmtDate(c.endD)}: ${c.res==="won"?`выполнен — вернулось ${c.stake+Math.ceil(c.stake*GOLD.winBonus)}`:`не выполнен — ${c.stake} ушло в фонд сообщества`}. Серия и ранг не меняются.</span>`).join("");
+  let form="";
+  if(chForm){ const f=chForm, hard=(f.type==="count"?f.k>sug.k:f.n>sug.n), warn=healthWarn(f.stake);
+    form=`<div class="chform"><div class="obl">Условие</div><div class="chips l">${chip("data-chf-type","weeks",f.type==="weeks","План в N неделях")}${chip("data-chf-type","count",f.type==="count","Не меньше K тренировок")}</div>
+      <div class="kv2"><span>Недель</span><span class="chips l">${[2,3,4,5,6,8].map(n=>chip("data-chf-weeks",n,f.weeks===n,n)).join("")}</span>
+      <span>${f.type==="count"?"Тренировок":"Недель по плану"}</span><span class="stepper2"><button class="btn ghost small" data-chf-d="-1">−</button><b class="num">${f.type==="count"?f.k:f.n}</b><button class="btn ghost small" data-chf-d="1">+</button></span>
+      <span>Ставка</span><span class="chips l">${[10,20,30,50,100].map(n=>chip("data-chf-stake",n,f.stake===n,n)).join("")}</span></div>
+      <span class="muted" style="font-size:12px">Предложено по вашим последним 2 неделям: ${f.type==="count"?`${sug.k} тренировок за ${f.weeks} нед.`:`${sug.n} из ${f.weeks} недель`}. Новички обычно переоценивают будущие тренировки — поэтому цель по факту, а не по желанию.</span>
+      ${hard?`<div class="pban warnb"><span>Цель выше вашей текущей регулярности. Можно, но шанс проиграть ставку выше.</span></div>`:""}
+      ${warn.length?`<div class="pban warnb"><span>Похоже на азарт: ${warn.join(", ")}. Может, сделать паузу в ставках? Тренировки и серия от ставок не зависят.</span></div>`:""}
+      ${f.stake>g.gold?`<p class="hint warn">Не хватает золота: на счету ${g.gold}.</p>`:""}
+      <div class="actions"><button class="btn small" data-chf-go ${f.stake>g.gold?"disabled":""}>Взять обязательство</button><button class="btn ghost small" data-chf-no>Отмена</button></div></div>`; }
+  const shop=shopOpen?`<div class="shop">${THEMES.map(([id,n,p])=>{ const own=p===0||(GAME.spends||[]).some(s=>s.kind==="cosm"&&s.item===id), on=(GAME.theme||"trail")===id;
+      return `<div class="shopi"><span class="sw th-${id}"></span><span><b>${n}</b><span class="muted"> · тема карты пути${p?` · ${p}`:" · бесплатно"}</span></span>${on?`<span class="muted">выбрана</span>`:own?`<button class="btn ghost small" data-theme="${id}">Выбрать</button>`:`<button class="btn ghost small" data-buy="${id}" ${g.gold<p?"disabled":""}>Купить за ${p}</button>`}</div>`; }).join("")}
+      <div class="shopi"><span class="sw">❄</span><span><b>Дополнительная заморозка серии</b><span class="muted"> · сверх 2 за цикл, одна на цикл · ${GOLD.freeze}</span></span><button class="btn ghost small" data-buyfreeze ${g.gold<GOLD.freeze||extraFreezes()>=1?"disabled":""}>${extraFreezes()>=1?"Уже есть":"Купить"}</button></div>
+      <div class="shopi"><span class="sw">♥</span><span><b>Взнос в фонд сообщества</b><span class="muted"> · на втором этапе — в благотворительность</span></span><button class="btn ghost small" data-donate ${g.gold<10?"disabled":""}>10</button></div></div>`:"";
+  return `<div class="pcard"><div class="ptop"><div><div class="eyebrow">Золото</div><div class="pgoal num">${g.gold}</div></div><button class="btn ghost small" data-shop>${shopOpen?"Скрыть":"Потратить"}</button></div>
+    <span class="muted" style="font-size:13px">Золото даёт только регулярность: неделя по плану — ${GOLD.week}, цикл с тестом — ${GOLD.cycle}, рекорд — ${GOLD.pr}, первый тест — ${GOLD.firstTest}. Купить или вывести нельзя. Тренировки, тест и уровень за золото не продаются.</span>
+    ${shop}
+    <div class="eyebrow" style="margin-top:4px">Личное обязательство</div>
+    ${act.map(chRow).join("")}${hist}
+    ${lock?`<p class="muted" style="margin:0;font-size:13px">${esc(lock)}</p>`:act.length>=GOLD.maxActive?`<p class="muted" style="margin:0;font-size:13px">Одновременно — не больше ${GOLD.maxActive} челленджей со ставкой.</p>`:chForm?form:`<div class="actions"><button class="btn small" data-chnew>Новый челлендж</button><span class="muted" style="font-size:12px">Ставка 10–100 только на регулярность. Выполнили — ставка и +20%. Нет — ставка уходит в фонд сообщества, не Атлосу.</span></div>`}
+    <div class="eyebrow" style="margin-top:4px">Сезонное событие</div>
+    <div class="chal"><div><b>${esc(s.title)}</b><span class="muted"> · вход бесплатный · приз ${GOLD.season} и значок</span></div><div class="bar"><i style="width:${Math.min(100,s.n/s.tgt*100)}%"></i></div>
+      <span class="muted" style="font-size:12px">${s.joined?`${s.n} из ${s.tgt}${s.done?" — выполнено ✓":""}. До ${fmtDate(s.endD)}.`:"Участвуют все желающие."}</span>${s.joined?"":`<div class="actions"><button class="btn ghost small" data-season>Участвовать</button></div>`}</div>
+    <span class="muted" style="font-size:12px">Фонд сообщества: ${g.fund}. Лотерей, сундуков и случайных выигрышей нет — ни сейчас, ни потом.</span></div>`; }
+
+$("path").addEventListener("click",async e=>{ const t=e.target;
+  if(t.closest("[data-ob]")) return openOb();
+  const fz=t.closest("[data-freeze]"); if(fz){ const k=fz.dataset.freeze, m=mondayOf(today());
+    if(k==="vac" && cycleFreezes()>=2+extraFreezes()){ toast("Заморозок «отпуск» в этом цикле больше нет — можно купить ещё одну за золото"); return; }
+    GAME.freezes=Object.assign({},GAME.freezes||{},{[m]:k}); if(k==="sick") pauseChallenges("болезнь"); await saveGame(); renderPath(); renderToday(); toast(k==="sick"?"Поправляйтесь. Неделя заморожена, ставки возвращены":"Неделя заморожена: серия сохранится"); return; }
+  if(t.closest("[data-unfreeze]")){ const f=Object.assign({},GAME.freezes||{}); delete f[mondayOf(today())]; GAME.freezes=f; await saveGame(); renderPath(); return; }
+  if(t.closest("[data-shop]")){ shopOpen=!shopOpen; renderPath(); return; }
+  const th=t.closest("[data-theme]"); if(th){ GAME.theme=th.dataset.theme; await saveGame(); renderPath(); return; }
+  const bu=t.closest("[data-buy]"); if(bu){ const it=THEMES.find(x=>x[0]===bu.dataset.buy); if(!it||gameState().gold<it[2]) return; GAME.spends=(GAME.spends||[]).concat([{kind:"cosm",item:it[0],v:it[2],date:today()}]); GAME.theme=it[0]; await saveGame(); renderPath(); toast(`Тема «${it[1]}» — ваша`); return; }
+  if(t.closest("[data-buyfreeze]")){ const c=cycleInfo()||{no:1}; if(gameState().gold<GOLD.freeze||extraFreezes()>=1) return; GAME.spends=(GAME.spends||[]).concat([{kind:"freeze",v:GOLD.freeze,cycle:c.no,date:today()}]); await saveGame(); renderPath(); toast("Ещё одна заморозка на этот цикл"); return; }
+  if(t.closest("[data-donate]")){ if(gameState().gold<10) return; GAME.spends=(GAME.spends||[]).concat([{kind:"fund",v:10,date:today()}]); await saveGame(); renderPath(); toast("Спасибо: 10 золота в фонде сообщества"); return; }
+  if(t.closest("[data-season]")){ const s=seasonInfo(); GAME.season=Object.assign({},GAME.season||{},{[s.key]:{joined:true,at:today()}}); await saveGame(); renderPath(); toast("Вы в сезонном событии"); return; }
+  if(t.closest("[data-chnew]")){ const s=challengeSuggest(); chForm={type:"weeks",weeks:s.weeks,n:s.n,k:s.k,stake:20}; renderPath(); return; }
+  if(t.closest("[data-chf-no]")){ chForm=null; renderPath(); return; }
+  if(chForm){ const ty=t.closest("[data-chf-type]"), wk=t.closest("[data-chf-weeks]"), st=t.closest("[data-chf-stake]"), dd=t.closest("[data-chf-d]");
+    if(ty){ chForm.type=ty.dataset.chfType; renderPath(); return; }
+    if(wk){ const s=challengeSuggest(); chForm.weeks=+wk.dataset.chfWeeks; const r=chForm.weeks/s.weeks; chForm.n=Math.min(chForm.weeks,Math.max(1,Math.round(s.n*r))); chForm.k=Math.max(1,Math.round(s.avg*chForm.weeks)); renderPath(); return; }
+    if(st){ chForm.stake=+st.dataset.chfStake; renderPath(); return; }
+    if(dd){ const d=+dd.dataset.chfD; if(chForm.type==="count") chForm.k=Math.max(1,Math.min(chForm.weeks*7,chForm.k+d)); else chForm.n=Math.max(1,Math.min(chForm.weeks,chForm.n+d)); renderPath(); return; }
+    if(t.closest("[data-chf-go]")){ const f=chForm, s=challengeSuggest(), g=gameState(); if(f.stake>g.gold||g.ch.filter(c=>["active","pending"].includes(c.res)).length>=GOLD.maxActive) return;
+      GAME.challenges=(GAME.challenges||[]).concat([{id:"c"+Date.now().toString(36), created:today(), start:s.start, weeks:f.weeks, type:f.type, n:f.type==="count"?f.k:f.n, stake:Math.min(GOLD.maxStake,f.stake), status:"on"}]);
+      chForm=null; await saveGame(); renderPath(); toast("Обязательство принято. Старт — в понедельник"); return; } }
+  const cc=t.closest("[data-chcancel]"); if(cc){ GAME.challenges=(GAME.challenges||[]).map(c=>c.id===cc.dataset.chcancel?Object.assign({},c,{status:"cancelled"}):c); await saveGame(); renderPath(); toast("Челлендж отменён, ставка вернулась"); return; }
+  const cp=t.closest("[data-chpause]"); if(cp){ GAME.challenges=(GAME.challenges||[]).map(c=>c.id===cp.dataset.chpause?Object.assign({},c,{status:"refunded",why:"болезнь или травма",at:today()}):c); await saveGame(); renderPath(); toast("Пауза: ставка вернулась полностью"); return; }
+});
+function pauseChallenges(why){ let ch=false; GAME.challenges=(GAME.challenges||[]).map(c=>{ const r=evalChallenge(c,gameState().weeks,sessions).res; if(["active","pending","won-early"].includes(r)){ ch=true; return Object.assign({},c,{status:"refunded",why,at:today()}); } return c; }); return ch; }
+
+/* ---- «Сегодня»: тренер, кольца, серия, веха ---- */
+function todayGameHTML(st){ if(!PROG||!loaded.s) return ""; const g=gameState(), line=coachLine(st), lastW=g.weeks.filter(w=>!w.cur).slice(-1)[0], mon=mondayOf(today());
+  const ps=PROG.createdAt?PROG.createdAt.slice(0,10):PROG.start;
+  const review = lastW && GAME.reviewed!==mon && [1,2,3].includes(wdOf(today())) && lastW.m>=mondayOf(ps) ? `<div class="pban"><span><b>Итоги недели.</b> ${lastW.st==="done"?`Неделя засчитана — серия ${g.streak} ${plural3(g.streak,"неделя","недели","недель")}.`:lastW.st==="deload"?"Разгрузочная неделя засчитана: отдых — часть плана.":lastW.st==="frozen"?"Неделя была заморожена — серия сохранена.":`Неделя выпала — бывает. Лучшая серия: ${g.best}. Новая начинается сейчас, план готов.`} Тренировок: ${lastW.n} из ${lastW.need}.</span><button class="btn ghost small" data-reviewed>Понятно</button></div>` : "";
+  return `${line?`<div class="coach"><span class="cav">А</span><span>${esc(line)}</span></div>`:""}${review}
+    <button class="gmini" data-tab-go="path">${ringsHTML(g,true)}<span class="gm2"><b class="num">${g.streak}</b> <span class="muted">${plural3(g.streak,"неделя","недели","недель")} подряд</span><br><span class="muted">${esc(g.rank.name)} · ${g.gold} золота</span></span></button>`; }
+
+/* ---- итог тренировки: что выросло, очки, путь, значки ---- */
+function gameDiffHTML(g0,g1,sid){ if(!g0||!g1) return ""; const dx=g1.xp-g0.xp, prs=g1.prs.filter(p=>p.sid===sid), nb=g1.badges.filter(b=>b.ok&&!(g0.badges.find(x=>x.id===b.id)||{}).ok), up=g1.rank.k>g0.rank.k, dg=g1.gold-g0.gold;
+  const out=[]; if(dx>0) out.push(`<span>+<b class="num">${dx}</b> очков опыта${up?` · новый ранг: <b>${esc(g1.rank.name)}</b>`:` · до ранга «${esc(g1.rank.next)}» ${g1.rank.need-g1.rank.cur}`}</span>`);
+  prs.forEach(p=>out.push(`<span>Рекорд: <b>${esc(p.name)}</b> ${fmtN(p.prev)} → ${fmtN(p.v)} ${p.kind}</span>`));
+  nb.forEach(b=>out.push(`<span>Значок: <b>★ ${esc(b.n)}</b></span>`));
+  if(dg>0) out.push(`<span>+${dg} золота</span>`);
+  if(g1.path&&!g1.path.pending) out.push(`<span class="muted">Путь: ${Math.round(g1.path.pct*100)}% главы ${g1.path.ch} · ${esc(g1.path.next.n)} — ${fmtDay(g1.path.next.d)}</span>`);
+  return out.length?`<div class="tline gsum"><span class="eyebrow">Путь</span>${out.join("")}</div>`:""; }
+
 /* ---- анкета (онбординг) ---- */
 const OB={step:0,p:null};
-const OB_STEPS=["intro","about","health","goal","exp","days","start"];
+const OB_STEPS=["intro","about","health","goal","place","exp","days","start"];
 const SYMS=[["chest","Боль или давление в груди"],["breath","Одышка при небольшой нагрузке"],["faint","Обмороки или сильные головокружения"],["heart","Перебои или сильное сердцебиение без причины"]];
 const DISS=[["heart","Болезнь сердца или сосудов, высокое давление"],["kidney","Болезнь почек"],["metab","Диабет или другое нарушение обмена веществ"]];
 function openOb(){
   OB.step=PROFILE?1:0;
   OB.p=PROFILE?clone(PROFILE):{sex:"",age:"",weight:"",sym:[],dis:[],lim:[],consent:false,goal:"",goal2:"",exp:"",runner:false,wdays:[],start:"test",archive:true};
+  OB.p.loc=OB.p.loc||"gym"; OB.p.inv=Object.assign({db:"none",dbList:"",dbMax:"",kb:false,kbList:"",band:false,doorbar:false,rope:false},OB.p.inv||{}); OB.p.park=Object.assign({dips:true,box:true},OB.p.park||{}); if(OB.p.cardio==null) OB.p.cardio="";
   if(!OB.p.start||OB.p.start==="keep") OB.p.start=TESTS.length?"keep":"test";
   if(OB.p.archive==null) OB.p.archive=true;
   renderOb(); $("ob").hidden=false; setTimeout(()=>$("ob-next").focus(),30);
@@ -2390,6 +3304,7 @@ function obValid(){
   if(s==="about") return (p.sex==="m"||p.sex==="f") && +p.age>=18 && +p.age<=100 && +p.weight>=35 && +p.weight<=250;
   if(s==="health") return !!p.consent && (!p.sym.length||p.clearSym) && (!p.dis.length||p.clearDis);
   if(s==="goal") return !!GOALS[p.goal];
+  if(s==="place") return placeValid(p);
   if(s==="exp") return !!p.exp;
   if(s==="days") return p.wdays.length>=2 && p.wdays.length<=6;
   return true;
@@ -2400,7 +3315,7 @@ function renderOb(){
   const p=OB.p, s=OB_STEPS[OB.step], n=OB_STEPS.length-1;
   $("ob-step").textContent = s==="intro" ? "Атлос · программа" : `Шаг ${OB.step} из ${n}`;
   $("ob-bar").style.width = `${OB.step/n*100}%`;
-  const T={intro:"Подберём программу",about:"О себе",health:"Здоровье",goal:"Цель",exp:"Опыт",days:"Сколько тренироваться",start:"Как начнём"};
+  const T={intro:"Подберём программу",about:"О себе",health:"Здоровье",goal:"Цель",place:"Где тренируетесь",exp:"Опыт",days:"Сколько тренироваться",start:"Как начнём"};
   $("ob-title").textContent=T[s];
   let h="";
   if(s==="intro") h=`<p>Атлос работает как опытный тренер: правила тренировок — из метаанализов и позиций ACSM, NSCA и ВОЗ, готовые программы — из классических систем.</p>
@@ -2419,6 +3334,7 @@ function renderOb(){
     <label class="chk2"><input type="checkbox" data-chk="consent"${p.consent?" checked":""}> Согласен на обработку данных о здоровье для подбора программы</label>`;
   if(s==="goal") h=`<div class="obq"><div class="obl">Главная цель</div><div class="obgrid">${Object.entries(GOALS).map(([k,v])=>card("data-set-goal",k,p.goal===k,v,GOAL_HINT[k])).join("")}</div></div>
     <div class="obq"><div class="obl">Дополнительная цель <span class="muted">· по желанию, около 30% времени</span></div><div class="chips l">${chip("data-set-goal2","",!p.goal2,"Нет")}${Object.entries(GOALS).filter(([k])=>k!==p.goal).map(([k,v])=>chip("data-set-goal2",k,p.goal2===k,v)).join("")}</div></div>`;
+  if(s==="place") h=placeHTML(p);
   if(s==="exp") h=`<div class="obq"><div class="obl">Сколько вы тренируетесь с отягощениями регулярно?</div><div class="obgrid">
       ${card("data-set-exp","0",p.exp==="0","Не тренировался","или перерыв больше года")}${card("data-set-exp","6",p.exp==="6","До 6 месяцев","")}
       ${card("data-set-exp","24",p.exp==="24","От 6 месяцев до 2 лет","")}${card("data-set-exp","99",p.exp==="99","Больше 2 лет","")}</div>
@@ -2429,13 +3345,16 @@ function renderOb(){
     h=`<p style="margin:0">Рекомендуем: <b>${rec} ${plural3(rec,"день","дня","дней")}</b> — ${recT}. Частота — способ распределить недельный объём: меньше дней — тренировки длиннее.</p>
     <div class="obq"><div class="obl">Дней в неделю</div><div class="obgrid g5">${[2,3,4,5,6].map(d=>card("data-days",d,D===d,`${d}${d===rec?" ★":""}`,compText(L,p.goal||"mass",d))).join("")}</div></div>
     <div class="obq"><div class="obl">Дни недели <span class="muted">· можно сдвинуть</span></div><div class="chips l">${WEEK.map(wd=>chip("data-wd",wd,p.wdays.includes(wd),WDS[wd])).join("")}</div>
-    ${warn?`<p class="hint warn">${warn}</p>`:""}</div>`; }
+    ${warn?`<p class="hint warn">${warn}</p>`:""}</div>${cardioHTML(p)}`; }
   if(s==="start"){ const L=obLevel(), last=TESTS[TESTS.length-1], hasOld=Object.values(workouts).some(w=>!w.prog&&!w.archived);
-    h=`<div class="obgrid">${card("data-set-start","test",p.start==="test","Тестовая тренировка · 60–70 мин","Подтягивания, отжимания, ходьба 1,6 км, присед, румынская тяга, жим лёжа, жим гантелей стоя, планка. По результатам — уровень и рабочие веса.")}
+    const testTxt = p.loc==="bars" ? "Подтягивания, отжимания, ходьба 1,6 км, брусья, болгарский сплит-присед, подъёмы коленей в висе, планка. По результатам — уровень и стартовые ступени упражнений."
+      : p.loc==="home" ? "Отжимания, ходьба 1,6 км или ступенчатый тест, силовые с самыми тяжёлыми гантелями на максимум повторов, планка. По результатам — уровень, веса и ступени упражнений."
+      : "Подтягивания, отжимания, ходьба 1,6 км, присед, румынская тяга, жим лёжа, жим гантелей стоя, планка. По результатам — уровень и рабочие веса.";
+    h=`<div class="obgrid">${card("data-set-start","test",p.start==="test",p.loc==="gym"?"Тестовая тренировка · 60–70 мин":"Тестовая тренировка · 45–60 мин",testTxt)}
       ${L===1?card("data-set-start","calib",p.start==="calib","Калибровочная неделя","Первые 2–3 тренировки полноценные, веса подбираются по ходу.") :""}
       ${last?card("data-set-start","keep",p.start==="keep",`Тест от ${fmtDate(last.date)}`,"Использовать результаты последнего теста."):""}</div>
     ${hasOld?`<label class="chk2"><input type="checkbox" data-chk="archive"${p.archive?" checked":""}> Убрать прежние тренировки в архив — история и веса сохранятся</label>`:""}
-    <div class="obsum"><span>Цель: <b>${GOALS[p.goal]}${p.goal2?" + "+GOALS[p.goal2].toLowerCase():""}</b></span><span>Уровень по анкете: <b>${LEVELS[L]}</b></span><span>Сплит: <b>${SPLITN[splitFor(L,composition(L,p.goal,p.wdays.length).S)]}</b></span><span>Дни: <b>${WEEK.filter(d=>p.wdays.includes(d)).map(d=>WDS[d].toLowerCase()).join(", ")}</b> · ${compText(L,p.goal,p.wdays.length)}</span>${(p.dis.length||+p.age>=60)?`<span>Плавное начало: запас повторов не меньше 3${+p.age>=60?", упражнения на баланс в разминке":""}</span>`:""}</div>`; }
+    <div class="obsum"><span>Цель: <b>${GOALS[p.goal]}${p.goal2?" + "+GOALS[p.goal2].toLowerCase():""}</b></span><span>Уровень по анкете: <b>${LEVELS[L]}</b></span><span>Место: <b>${esc(invText(p))}</b></span><span>Сплит: <b>${SPLITN[splitFor(L,composition(L,p.goal,p.wdays.length).S)]}</b></span><span>Дни: <b>${WEEK.filter(d=>p.wdays.includes(d)).map(d=>WDS[d].toLowerCase()).join(", ")}</b> · ${compText(L,p.goal,p.wdays.length)}</span>${(p.dis.length||+p.age>=60)?`<span>Плавное начало: запас повторов не меньше 3${+p.age>=60?", упражнения на баланс в разминке":""}</span>`:""}</div>`; }
   $("ob-body").innerHTML=h;
   $("ob-back").hidden=OB.step===0||(PROFILE&&OB.step===1);
   $("ob-next").textContent = s==="intro"?"Начать" : OB.step===n ? (PROFILE?"Сохранить и пересобрать":"Создать программу") : "Далее";
@@ -2449,16 +3368,16 @@ function gapWarn(wdays,S,split){
 }
 $("ob-body").addEventListener("click",e=>{
   const t=e.target, p=OB.p;
-  const set=t.closest("[data-set-sex],[data-set-goal],[data-set-goal2],[data-set-exp],[data-set-start]");
-  if(set){ const a=[...set.attributes].find(x=>x.name.startsWith("data-set-")); const k=a.name.slice(9); p[k]=a.value; if(k==="goal"&&p.goal2===p.goal) p.goal2="";
+  const set=t.closest("[data-set-sex],[data-set-goal],[data-set-goal2],[data-set-exp],[data-set-start],[data-set-loc],[data-set-db],[data-set-cardio]");
+  if(set){ const a=[...set.attributes].find(x=>x.name.startsWith("data-set-")); const k=a.name.slice(9); if(k==="db") p.inv.db=a.value; else p[k]=a.value; if(k==="goal"&&p.goal2===p.goal) p.goal2=""; if(k==="loc") p.cardio="";
     if(k==="exp" && obLevel()>1 && p.start==="calib") p.start="test"; renderOb(); return; }
   const arr=t.closest("[data-arr-sym],[data-arr-dis],[data-arr-lim]");
   if(arr){ const a=[...arr.attributes].find(x=>x.name.startsWith("data-arr-")); const k=a.name.slice(9), v=a.value; p[k]=p[k].includes(v)?p[k].filter(z=>z!==v):p[k].concat([v]); renderOb(); return; }
   const dd=t.closest("[data-days]"); if(dd){ p.wdays=DEF_DAYS[+dd.dataset.days].slice(); renderOb(); return; }
   const wd=t.closest("[data-wd]"); if(wd){ const v=+wd.dataset.wd; p.wdays=p.wdays.includes(v)?p.wdays.filter(z=>z!==v):p.wdays.concat([v]); renderOb(); return; }
 });
-$("ob-body").addEventListener("change",e=>{ const c=e.target.closest("[data-chk]"); if(c){ OB.p[c.dataset.chk]=c.checked; renderOb(); } });
-$("ob-body").addEventListener("input",e=>{ const i=e.target.closest("[data-in]"); if(i){ OB.p[i.dataset.in]=i.value; $("ob-next").disabled=!obValid(); const a=$("ob-age"); if(a) a.hidden=!(OB.p.age!==""&&+OB.p.age<18); } });
+$("ob-body").addEventListener("change",e=>{ const c=e.target.closest("[data-chk]"); if(c){ setPath(OB.p,c.dataset.chk,c.checked); renderOb(); } });
+$("ob-body").addEventListener("input",e=>{ const i=e.target.closest("[data-in]"); if(i){ setPath(OB.p,i.dataset.in,i.value); $("ob-next").disabled=!obValid(); const a=$("ob-age"); if(a) a.hidden=!(OB.p.age!==""&&+OB.p.age<18); } });
 $("ob").addEventListener("click",async e=>{
   if(e.target.id==="ob"||e.target.closest("#ob-close")){ $("ob").hidden=true; return; }
   if(e.target.closest("#ob-back")){ if(OB.step>0){ OB.step--; renderOb(); } return; }
@@ -2482,17 +3401,21 @@ function renderCi(){
   if(CI.res){ $("ci-body").innerHTML=CI.res; return; }
   $("ci-body").innerHTML=`<p class="muted" style="margin:0">Шкала 1–5: 1 — плохо, 5 — отлично.</p>
     ${row("sleep","Сон","как выспались")}${row("feel","Самочувствие","общее")}${row("sore","Мышцы","5 — не болят, 1 — сильно болят")}
+    <div class="cirow"><div><b>Стоп-сигналы</b><span class="muted">если есть — сегодня не тренируемся</span></div><div class="chips l">${[["chest","боль в груди"],["dizzy","сильное головокружение"],["joint","острая боль в суставе"]].map(([k,l])=>`<button class="chip" data-ci-stop="${k}" aria-pressed="${(v.stop||[]).includes(k)}">${l}</button>`).join("")}</div></div>
     ${PROFILE&&PROFILE.sex==="f"?`<label class="chk2"><input type="checkbox" data-ci-period${v.period?" checked":""}> Менструация <span class="muted">— по желанию; программу не меняет, учитывается только самочувствие</span></label>`:""}
-    <div class="actions"><button class="btn" id="ci-save" ${v.sleep&&v.feel&&v.sore?"":"disabled"}>${CI.mode==="start"?"Сохранить и начать":"Сохранить"}</button></div>`;
+    <div class="actions"><button class="btn" id="ci-save" ${(v.sleep&&v.feel&&v.sore)||(v.stop||[]).length?"":"disabled"}>${CI.mode==="start"?"Сохранить и начать":"Сохранить"}</button></div>`;
 }
 $("ci").addEventListener("click",async e=>{
   const t=e.target;
   if(t.id==="ci"||t.closest("#ci-close")){ $("ci").hidden=true; return; }
+  const sp=t.closest("[data-ci-stop]"); if(sp){ const k=sp.dataset.ciStop, a=CI.v.stop||[]; CI.v.stop=a.includes(k)?a.filter(z=>z!==k):a.concat([k]); renderCi(); return; }
   const b=t.closest("[data-ci-sleep],[data-ci-feel],[data-ci-sore]"); if(b){ const a=[...b.attributes].find(x=>x.name.startsWith("data-ci-")); CI.v[a.name.slice(8)]=+a.value; renderCi(); return; }
   if(t.closest("#ci-save")){
     const c=Object.assign({},CI.v,{date:today()}); CHECKS[today()]=c;
     try{ if(db) await db.collection("checkins").doc(today()).set(cleanObj(c)); }catch(err){}
     renderPlan(); renderFlags(); renderToday();
+    if((c.stop||[]).length){ const paused=pauseChallenges("стоп-сигнал"); if(paused) await saveGame();
+      CI.res=`<div class="pban warnb"><span><b>Сегодня не тренируемся.</b> Боль в груди, сильное головокружение или острая боль в суставе — повод обратиться к врачу. ${paused?"Челленджи поставлены на паузу, ставки вернулись. ":""}Серию можно заморозить кнопкой «Болею» во вкладке «Путь».</span></div><div class="actions"><button class="btn" data-ci-go-stop>Понятно</button></div>`; renderCi(); renderPath(); return; }
     const bad=ciBad(c), three=threeBad();
     if(CI.mode==="start" && (bad||three) && draft && !draft.mode && workouts[draft.wid] && workouts[draft.wid].prog && workouts[draft.wid].kind==="str"){
       CI.res=`<p style="margin:0">${three?"Третий день подряд плохое самочувствие или сон. ":""}Предлагаем облегчённую тренировку: на треть меньше подходов, запас +1 повтор.</p>
@@ -2501,6 +3424,7 @@ $("ci").addEventListener("click",async e=>{
     $("ci").hidden=true; if(CI.after) CI.after(); return; }
   if(t.closest("[data-ci-light]")){ lightDraft(); $("ci").hidden=true; if(CI.after) CI.after(); return; }
   if(t.closest("[data-ci-go]")){ $("ci").hidden=true; if(CI.after) CI.after(); return; }
+  if(t.closest("[data-ci-go-stop]")){ $("ci").hidden=true; return; }
   if(t.closest("[data-ci-deload]")){ PROG.deloadFrom=today(); PROG.deloadSuggest=null; await saveProg(); clearProgDrafts(); $("ci").hidden=true; renderAll(); if(CI.after) CI.after(); toast("Разгрузочная неделя началась"); return; }
 });
 $("ci").addEventListener("change",e=>{ if(e.target.hasAttribute("data-ci-period")) CI.v.period=e.target.checked; });
@@ -2515,6 +3439,13 @@ function renderFlags(){
   if(draft.mode==="deload") out.push(`<div class="banner"><span><b>Разгрузка:</b> подходов вдвое меньше, запас 3–4 повтора, до отказа не доводим. Изменения в этой тренировке не меняют программу.</span></div>`);
   if(draft.mode==="light") out.push(`<div class="banner"><span><b>Облегчённая тренировка:</b> на треть меньше подходов, запас +1 повтор.</span>${draft.items.some(it=>it.sets.some(s=>s.done))?"":`<button class="btn ghost small" data-unlight>Вернуть обычную</button>`}</div>`);
   if(!draft.mode && w.prog && w.kind==="str" && ck && ciBad(ck) && !draft.editing && !draft.items.some(it=>it.sets.some(s=>s.done))) out.push(`<div class="banner"><span>Самочувствие сегодня ниже обычного — можно облегчить тренировку.</span><button class="btn small" data-light>Облегчить</button></div>`);
+  const fresh=!draft.editing && !draft.items.some(it=>it.sets.some(s=>s.done));
+  if(w.prog && w.kind==="str" && fresh){ const e=draft.env||{mode:"plan",off:[]}, loc=locOf();
+    const opts=[["plan","Как обычно"],["travel","В поездке"]].concat(loc==="bars"?[["dipbars","Брусья заняты"],["wet","Мокрая перекладина"]]:loc==="home"&&envFor().has("dumbbell")?[["nodb","Нет гантелей"]]:[]);
+    const on=k=>k==="plan"?(e.mode!=="travel"&&!e.offK):k==="travel"?e.mode==="travel":e.offK===k;
+    out.push(`<div class="envrow"><span class="eyebrow">Что есть сегодня?</span><span class="chips l">${opts.map(([k,l])=>`<button class="chip" data-env="${k}" aria-pressed="${on(k)}">${l}</button>`).join("")}</span>
+      ${e.mode==="travel"||e.offK?`<span class="muted" style="font-size:13px">Замены — только на эту тренировку, программа не меняется. Прогресс пишется по варианту упражнения.${draft.dropped&&draft.dropped.length?` Без замены сегодня: ${esc(draft.dropped.join(", "))}.`:""}</span>`:""}</div>`); }
+  if(w.prog && w.kind==="str" && calibDue() && !draft.mode) out.push(`<div class="banner"><span><b>Калибровка запаса.</b> Сегодня последний подход каждого упражнения со своим весом доведите до отказа — без поломки техники. Так точнее почувствуете, сколько повторов в запасе. Раз в 2–3 недели.</span></div>`);
   if(w.kind==="test") out.push(`<div class="banner"><span><b>Тестовая тренировка.</b> Порядок одинаковый при каждом тесте, иначе результаты не сравнить. В силовых: 2 подводящих подхода, затем один зачётный на 5–10 повторов — его и запишите. После «Завершить» Атлос рассчитает уровень и рабочие веса.</span></div>`);
   if(w.tip) out.push(`<div class="banner"><span>${esc(w.tip)}</span></div>`);
   if(w.kind!=="cardio" && draft.items.length){
@@ -2522,7 +3453,7 @@ function renderFlags(){
     const low=["quads","glutes","hams","calves"].some(m=>ms.has(m)), up=["chest","lats","upper","delts","biceps","triceps"].some(m=>ms.has(m));
     const hr=hrMax(), z2=hr?` (до ${Math.round(hr*.7)} уд/мин)`:"";
     out.push(`<details class="warm"><summary><b>Разминка · 10 мин</b><span class="muted">входит в ≈ ${dur} мин</span></summary><ol>
-      <li>5–7 минут кардио в зоне 1–2${z2}: дорожка, велотренажёр или эллипс.</li>
+      <li>${locOf()==="gym"?`5–7 минут кардио в зоне 1–2${z2}: дорожка, велотренажёр или эллипс.`:`5 минут ходьбы, ходьбы на месте или лёгкого бега в зоне 1–2${z2}, суставная гимнастика${locOf()==="bars"?", 2 виса по 15 секунд. В холод разминка длиннее — 10 минут, первые подходы легче":""}.`}</li>
       <li>Динамическая растяжка: ${[low?DYN.lower:"",up?DYN.upper:""].filter(Boolean).join("; ")||DYN.upper}.</li>
       <li>Подводящие подходы — в карточке каждого упражнения: 50% × 8–10, 70% × 4–5, 85% × 1–2.</li>
       ${PROFILE&&+PROFILE.age>=60?"<li>Баланс: стойка на одной ноге, 2 × 30 с на каждую.</li>":""}
@@ -2530,6 +3461,10 @@ function renderFlags(){
   el.innerHTML=out.join("");
 }
 $("wk-flags").addEventListener("click",e=>{
+  const ev=e.target.closest("[data-env]"); if(ev&&draft&&workouts[draft.wid]){ const k=ev.dataset.env, w=workouts[draft.wid];
+    draft = k==="plan" ? fromTemplate(w) : k==="travel" ? applyEnv(fromTemplate(w),"travel",[]) : Object.assign(applyEnv(fromTemplate(w),null,offTags(k)),{});
+    if(k!=="plan"&&k!=="travel") draft.env.offK=k; saveDraft(); renderHead(); renderItems();
+    toast(k==="plan"?"Тренировка как в программе":k==="travel"?"Режим «в поездке»: упражнения заменены на сегодня":"Упражнения заменены на сегодня"); return; }
   if(e.target.closest("[data-light]")) return lightDraft();
   if(e.target.closest("[data-unlight]")){ draft=fromTemplate(workouts[draft.wid]); saveDraft(); renderHead(); renderItems(); }
 });
@@ -2537,9 +3472,10 @@ $("wk-flags").addEventListener("click",e=>{
 /* ---- карточка упражнения: предписание, разминочные подходы, оценка подхода ---- */
 function rxLine(it,x){
   const r=it.rx; if(!r) return "";
-  if(r.zone!=null) return `<div class="rx">${r.label?`<b>${esc(r.label)}</b> · `:""}${zoneText(r.zone)}${r.rest?` · отдых ${fmtRest(r.rest)}`:""}</div>`;
+  if(r.zone!=null){ const hr=hrMax(), z=r.pct?`${r.pct[0]}–${r.pct[1]}% макс. пульса${hr?` · ${Math.round(hr*r.pct[0]/100)}–${Math.round(hr*r.pct[1]/100)} уд/мин`:""}`:zoneText(r.zone);
+    return `<div class="rx">${r.label?`<b>${esc(r.label)}</b> · `:""}${z}${r.rest?` · отдых ${fmtRest(r.rest)}`:""}${r.note?`<span class="why">${esc(r.note)}</span>`:""}</div>`; }
   if(r.test) return `<div class="rx test">${esc(r.note||"")}</div>`;
-  const p=[]; if(r.lo) p.push(`<b>${r.lo}–${r.hi} ${x.ru||"повт."}</b>`); if(r.rir!=null&&r.lo) p.push(`запас ${r.rir}`); if(r.rest) p.push(`отдых ${fmtRest(r.rest)}`); if(r.dt) p.push(DUP[r.dt].n); else if(r.tier&&TIERN[r.tier]) p.push(TIERN[r.tier]);
+  const p=[]; if(r.lo) p.push(`<b>${r.lo}–${r.hi} ${x.ru||"повт."}</b>`); const LD=it.lad&&LADDERS[it.lad]; if(LD&&LD.includes(it.ex)) p.push(`ступень ${LD.indexOf(it.ex)+1} из ${LD.length}`); if(r.rir!=null&&r.lo) p.push(`запас ${r.rir}`); if(r.rest) p.push(`отдых ${fmtRest(r.rest)}`); if(r.dt) p.push(DUP[r.dt].n); else if(r.tier&&TIERN[r.tier]) p.push(TIERN[r.tier]);
   return `<div class="rx"><span>${p.join(" · ")}</span>${it.why?`<span class="why">${esc(it.why)}</span>`:""}${r.note?`<span class="why">${esc(r.note)}</span>`:""}</div>`;
 }
 function wuLine(i){
@@ -2566,13 +3502,20 @@ function testSummaryHTML(res,noTiles){
   return `${noTiles?"":`<div class="tiles">${tile("Уровень",LEVELS[R.level])}${tile("МПК, мл/кг/мин",R.vo2!=null?fmtN(R.vo2):"—")}${tile("Отжимания",R.pushups!=null?`${R.pushups}`:"—")}${tile("Планка",R.plank?fmtT(R.plank):"—")}</div>`}
     <div class="tline"><span>По анкете — <b>${LEVELS[R.levelStated]}</b>, по тесту — <b>${R.levelTest?LEVELS[R.levelTest]:"не определён"}</b>. ${R.levelTest&&R.levelTest!==R.levelStated?"Берём более низкий.":""}</span>
     ${R.pullups!=null?`<span>Подтягивания: <b>${R.pullups}</b>${R.lv.pullup?` · ${STD5[R.lv.pullup]}`:""}</span>`:""}
-    ${R.pushRate?`<span>Отжимания по нормам ACSM для вашего пола и возраста: <b>${R.pushRate}</b></span>`:""}
+    ${R.pushRate?`<span>Отжимания${R.pushVar==="push_knee"?" с колен":""} по нормам для вашего пола и возраста: <b>${R.pushRate}</b></span>`:""}
+    ${R.aus!=null?`<span>Австралийские подтягивания: <b>${R.aus}</b>${R.hang?` · вис ${R.hang} с`:""}</span>`:""}
+    ${R.dips!=null?`<span>Отжимания на брусьях: <b>${R.dips}</b>${R.support?` · упор ${R.support} с`:""}</span>`:""}
+    ${R.bulg!=null?`<span>Болгарский сплит-присед: <b>${R.bulg}</b> на каждую ногу</span>`:""}
+    ${R.knee!=null?`<span>Подъёмы коленей в висе: <b>${R.knee}</b></span>`:""}
+    ${R.ymca?`<span>Ступенчатый тест: пульс <b>${R.ymca}</b> за минуту · ${R.ymcaRate}</span>`:""}
+    ${R.reps?Object.entries(R.reps).map(([id,v])=>`<span>${esc(LIB[id].name)}: ${fmtN(v.w)} кг × ${v.r} — больше 12 повторов, сравниваем только с собой</span>`).join(""):""}
+    ${R.steps?`<span>Стартовые ступени: ${Object.values(R.steps).filter(id=>LIB[id]).map(id=>esc(LIB[id].name.toLowerCase())).join(", ")}</span>`:""}
     ${R.plank&&prev&&prev.plank?`<span>Планка: ${fmtT(prev.plank)} → <b>${fmtT(R.plank)}</b></span>`:""}
     ${R.vo2!=null&&prev&&prev.vo2!=null?`<span>МПК: ${fmtN(prev.vo2)} → <b>${fmtN(R.vo2)}</b></span>`:""}
     ${R.walk&&!R.walk.hr?`<span class="warn">Для расчёта МПК нужен пульс на финише ходьбы.</span>`:""}
     ${res.changes.map(c=>`<span>${esc(c)}</span>`).join("")}</div>
     ${rows?`<div class="stab"><div class="sr h"><span>Упражнение</span><span>зачёт</span><span>1ПМ</span><span>×вес</span><span>уровень</span></div>${rows}</div>`:""}
-    <p class="muted" style="margin:0;font-size:12px">1ПМ — среднее по формулам Эпли и Бжицки; подход останавливали чуть раньше отказа, поэтому оценка с запасом. Уровень — по стандартам StrengthLog (присед, жим лёжа) и StrengthLevel (подтягивания), итог — средний из трёх. Рабочие веса программы пересчитаны.</p>`;
+    <p class="muted" style="margin:0;font-size:12px">${R.loc?"Уровень — по нормам отжиманий для вашего пола и возраста и стандартам подтягиваний StrengthLevel; если тесты расходятся, берём меньший. Силовые с гантелями до 12 повторов дают оценку 1ПМ по формулам Эпли и Бжицки.":"1ПМ — среднее по формулам Эпли и Бжицки; подход останавливали чуть раньше отказа, поэтому оценка с запасом. Уровень — по стандартам StrengthLog (присед, жим лёжа) и StrengthLevel (подтягивания), итог — средний из трёх. Рабочие веса программы пересчитаны."}</p>`;
 }
 function progSummaryHTML(pr){
   if(!pr) return "";
@@ -2616,7 +3559,7 @@ function wkVisible(){
   const st=todayState(); return ["train","test","retest"].includes(st.k) && st.wid===draft.wid;
 }
 function bootSelect(){
-  if(booted||!loaded.w||!loaded.m||!loaded.s) return; booted=true;
+  if(booted||!loaded.w||!loaded.m||!loaded.s) return; booted=true; migrateV2();
   if(PROG && !started(draft)){ const st=todayState(); if(st.wid&&workouts[st.wid]){ selW=st.wid; store("selW5",selW); draft=getDraft(st.wid); } }
   renderAll();
 }
@@ -2675,6 +3618,7 @@ function renderToday(){
      <div class="actions"><button class="btn ghost" data-go>${st.k==="done"?"Посмотреть следующую":"Потренироваться сегодня"}</button></div>`;
   const ck=CHECKS[td];
   el.innerHTML=`<div class="tcard">${h}${ban.join("")}
+    ${todayGameHTML(st)}
     ${["test","retest"].includes(st.k)?"":stripHTML()}
     ${st.k==="train"?`<div class="pci"><span>${ck?`Самочувствие сегодня: сон ${ck.sleep} · общее ${ck.feel} · мышцы ${ck.sore}${ciBad(ck)?" — можно облегчить тренировку":""}`:"Перед тренировкой отметьте самочувствие — Атлос подстроит нагрузку."}</span><button class="btn ghost small" data-ci>${ck?"Изменить":"Отметить"}</button></div>`:""}
   </div>`;
@@ -2684,6 +3628,8 @@ $("today").addEventListener("click",async e=>{
   if(t.closest("[data-ob]")) return openOb();
   if(t.closest("[data-ci]")) return openCi("day");
   if(t.closest("[data-go]")){ const st=todayState(); if(started(draft)&&draft.wid!==st.wid){ openWorkout(draft.wid); toast("Сначала завершите начатую тренировку"); return; } return openWorkout(st.wid); }
+  const tg=t.closest("[data-tab-go]"); if(tg){ setTab(tg.dataset.tabGo); return; }
+  if(t.closest("[data-reviewed]")){ GAME.reviewed=mondayOf(today()); await saveGame(); renderToday(); return; }
   if(t.closest("[data-undeload]")){ PROG.deloadFrom=null; await saveProg(); clearProgDrafts(); renderAll(); toast("Разгрузка отменена"); return; }
   if(t.closest("[data-deload]")){ PROG.deloadFrom=today(); PROG.deloadSuggest=null; await saveProg(); clearProgDrafts(); renderAll(); toast("Разгрузочная неделя началась"); return; }
   if(t.closest("[data-nodeload]")){ PROG.deloadSuggest=null; await saveProg(); renderAll(); return; }
@@ -2691,7 +3637,7 @@ $("today").addEventListener("click",async e=>{
 
 /* ---- «Программа готова»: после теста и после анкеты ---- */
 function exLine(it){ const x=exOf(it), s=it.sets[0]||{}, n=it.sets.length;
-  const v = x.kind==="cardio" ? `${s.r} мин` : x.type==="time" ? `${n} × ${s.r} с` : x.ru ? `${fmtN(s.w||0)} кг, ${n} × ${s.r} с` : x.type==="w"&&s.w ? `${fmtN(s.w)} кг · ${n} × ${s.r}` : x.type==="assist"&&s.w!=null ? `помощь ${fmtN(s.w)} кг · ${n} × ${s.r}` : `${n} × ${s.r}`;
+  const v = x.kind==="cardio" ? `${s.r} мин` : x.type==="time" ? `${n} × ${s.r} с` : x.ru ? `${fmtN(s.w||0)} кг, ${n} × ${s.r} с` : x.type==="w"&&s.w ? `${fmtN(s.w)} кг · ${n} × ${s.r}` : x.type==="assist"&&s.w!=null ? `помощь ${fmtN(s.w)} кг · ${n} × ${s.r}` : x.type==="band"&&s.w ? `ур. ${fmtN(s.w)} · ${n} × ${s.r}` : x.type==="bw"&&+s.w>0 ? `+${fmtN(s.w)} кг · ${n} × ${s.r}` : `${n} × ${s.r}`;
   return `<li><span>${esc(x.name)}</span><span class="num">${v}</span></li>`; }
 function readyHTML(res){
   const R=res&&res.R, nx=progNext(), C=CYCLE[PROG.level]||CYCLE[1], seq=(PROG.seq||[]).map(id=>workouts[id]).filter(Boolean);
@@ -2709,7 +3655,7 @@ function readyHTML(res){
     <ol class="tl">
       <li>Следующая тренировка — <b>${nx&&workouts[nx.wid]?fmtDay(nx.date)+": "+esc(workouts[nx.wid].name):"по плану"}</b>. В этот день она будет открыта во вкладке «Сегодня».</li>
       <li>На тренировке идите сверху вниз: выполнили подход — нажмите ✓ и ответьте, как он прошёл. Таймер отдыха включится сам.</li>
-      <li>В конце нажмите «Завершить». Атлос сам поменяет веса на следующий раз и покажет, что изменилось.</li>
+      <li>В конце нажмите «Завершить». Атлос сам поменяет веса на следующий раз и покажет, что изменилось и сколько пройдено по пути.</li>
       <li>Через ${C.len} ${plural3(C.len,"неделю","недели","недель")} — разгрузочная неделя${C.every===1?", после неё — повторный тест":", после каждой второй — повторный тест"}.</li>
     </ol>
     <p class="muted" style="margin:0;font-size:13px">Менять можно всё: веса и повторы — касанием по цифре, упражнения — кнопкой ⇄, дни и цель — во вкладке «Программа» → «Подробнее и настройки» → «Анкета и цели».</p>
@@ -2726,7 +3672,36 @@ function howHTML(){ const C=CYCLE[PROG.level]||CYCLE[1], seq=(PROG.seq||[]).map(
     <li>В тренировочный день вкладка «Сегодня» открывает тренировку по плану.${seq.length>1?` ${seq.map(w=>"«"+w.name+"»").join(", ")} чередуются по кругу.`:""}</li>
     <li>Выполнили подход — ✓ и короткая оценка. Отдых включается сам и длится столько, сколько нужно этому упражнению.</li>
     <li>После «Завершить» Атлос меняет веса и повторы на следующий раз — изменения видны в итогах и в карточке «Сегодня».</li>
-    <li>Каждые ${C.len} ${plural3(C.len,"неделю","недели","недель")} — разгрузочная неделя, ${C.every===1?"после неё":"после каждой второй"} — повторный тест.</li></ol>`; }
+    <li>Каждые ${C.len} ${plural3(C.len,"неделю","недели","недель")} — разгрузочная неделя, ${C.every===1?"после неё":"после каждой второй"} — повторный тест.</li>
+    <li>Если повторы в следующем подходе проседают, отдых удлиняется на минуту — таймер сделает это сам.</li>
+    <li>Во вкладке «Путь» — глава, ранг, серия недель, кольца, рекорды, значки и золото. Очки дают только за полезное: тренировки по плану, отдых, тест и рекорды.</li></ol>`; }
+
+/* ---- советы по месту тренировок (Дом, разд. 1, 4, 9; Турники, разд. 4, 9) ---- */
+function locTipsHTML(){ const loc=locOf(); if(loc==="gym") return "";
+  const t=[], g=PROG.goal;
+  t.push(`Место: ${esc(invText())}. Поменять — «Анкета и цели».`);
+  if(g==="strength") t.push(loc==="home"?"Сила дома растёт медленнее, чем от тяжёлых весов: берём самые тяжёлые варианты. Хорошо бы 1–2 тренировки в неделю в зале, разборные гантели или утяжелительный жилет.":"Для силы на площадке — подтягивания и брусья с весом на поясе или в рюкзаке; для ног — 1–2 тренировки в неделю в зале.");
+  if(loc==="bars"&&(g==="mass"||g==="strength")) t.push("Ноги — слабое место площадки: упражнения на одну ногу и медленный темп. Если есть возможность — 1 тренировка ног в неделю в зале или дома с гантелями.");
+  if(loc==="home"&&!envFor().has("bar")) t.push("Без турника полноценной вертикальной тяги нет: её заменяет резинка сверху или пуловер, а тяге к поясу добавлен подход. Дверной турник — лучшая первая покупка.");
+  if(loc==="home"&&!envFor().has("dumbbell")) t.push("Разборные гантели снимают главный потолок домашних тренировок — вес.");
+  t.push(loc==="bars"?"Перед первым подходом проверьте, что перекладина и брусья не шатаются. Мокрая или ледяная перекладина — висы не делаем: кнопка «Мокрая перекладина» заменит упражнения.":"Стул — без колёс, спинкой к стене; стол для тяги — тяжёлый, без стекла; резинки перед тренировкой осматриваем на надрывы.");
+  t.push("Прогресс вне зала — по лестнице вариантов: верх диапазона во всех подходах → следующая ступень. Раз в 2–3 недели последний подход — до отказа, чтобы откалибровать ощущение запаса.");
+  return `<h4>${LOCS[loc]}</h4><ul class="rec">${t.map(x=>`<li>${x}</li>`).join("")}</ul>`; }
+
+/* ---- миграция программы на правила отдыха научной базы от 31.10.2026 ---- */
+const OLD_RESTS={strength:{heavy:240,multi:180,iso:90},mass:{heavy:180,multi:150,iso:90},loss:{heavy:150,multi:120,iso:75},endurance:{heavy:60,multi:60,iso:45},func:{heavy:90,multi:75,iso:60}}, OLD_DUP={H:180,M:150,L:105};
+async function migrateV2(){
+  if(!db||!PROG||(PROG.v||1)>=2) return;
+  const G=PROG.goal, L=PROG.level||1;
+  for(const id of Object.keys(workouts)){ const w=workouts[id]; if(!w.prog||w.kind==="test") continue; let ch=false;
+    (w.items||[]).forEach(it=>{ const r=it.rx; if(!r) return;
+      if(r.zone===4&&!r.pct&&id==="p-int"){ r.pct=[90,95]; r.label="4 × 4 мин на 90–95% макс. пульса, между ними 3 мин легко (около 70%)"; ch=true; return; }
+      if(r.zone!=null||r.test||!r.tier||r.tier==="mob"||r.loc||!r.lo) return;
+      const old = r.dt&&OLD_DUP[r.dt]&&r.tier!=="iso" ? OLD_DUP[r.dt] : (OLD_RESTS[G]||OLD_RESTS.mass)[r.tier];
+      const nw = r.dt&&DUP[r.dt]&&r.tier!=="iso" ? (G==="strength"&&r.dt==="H"?210:DUP[r.dt].rest) : restOf(r.tier,G,L);
+      if(r.rest===old && nw!==old){ r.rest=nw; ch=true; } });
+    if(ch){ try{ await db.collection("workouts").doc(id).update({items:cleanObj(w.items),updatedAt:new Date().toISOString()}); }catch(e){} } }
+  PROG.v=2; if(!PROG.loc) PROG.loc="gym"; await saveProg(); clearProgDrafts(); renderAll(); }
 
 
 /* ===== data: backup / restore ===== */
@@ -2809,12 +3784,12 @@ renderAll();
     renderToday(); bootSelect();
   }, ()=>{ $("status").hidden=false; $("status").textContent="Связь с журналом прервалась. Обновите страницу."; });
   db.collection("meta").onSnapshot(snap=>{
-    PROFILE=null; PROG=null; snap.docs.forEach(d=>{ if(d.id==="profile") PROFILE=clone(d.data()); if(d.id==="program") PROG=clone(d.data()); });
+    PROFILE=null; PROG=null; GAME={}; snap.docs.forEach(d=>{ if(d.id==="profile") PROFILE=clone(d.data()); if(d.id==="program") PROG=clone(d.data()); if(d.id==="game") GAME=clone(d.data()); });
     loaded.m=true;
     renderAll(); bootSelect();
   }, ()=>{ loaded.m=true; renderPlan(); });
-  db.collection("tests").onSnapshot(snap=>{ TESTS=snap.docs.map(d=>({id:d.id,...clone(d.data())})).sort((a,b)=>a.date<b.date?-1:1); renderPlan(); }, ()=>{});
-  db.collection("checkins").onSnapshot(snap=>{ CHECKS={}; snap.docs.forEach(d=>CHECKS[d.id]=clone(d.data())); renderPlan(); renderToday(); renderFlags(); }, ()=>{});
+  db.collection("tests").onSnapshot(snap=>{ TESTS=snap.docs.map(d=>({id:d.id,...clone(d.data())})).sort((a,b)=>a.date<b.date?-1:1); renderPlan(); renderPath(); }, ()=>{});
+  db.collection("checkins").onSnapshot(snap=>{ CHECKS={}; snap.docs.forEach(d=>CHECKS[d.id]=clone(d.data())); renderPlan(); renderToday(); renderFlags(); renderPath(); }, ()=>{});
   db.collection("sessions").onSnapshot(snap=>{
     sessions=snap.docs.map(d=>({id:d.id,...clone(d.data())})).filter(s=>Array.isArray(s.items));
     const first=!loaded.s; loaded.s=true;
