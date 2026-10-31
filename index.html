@@ -609,6 +609,21 @@ body.notimer .toast{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 .shop{display:flex;flex-direction:column;gap:6px}
 .shopi{display:flex;align-items:center;gap:10px;font-size:13px}.shopi>span:nth-child(2){flex:1;min-width:0}
 .gsum{background:var(--sunk);border-radius:16px;padding:10px 12px}
+/* ===== первый запуск ===== */
+body.solo .tabs{display:none}
+.wel{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto}
+.wel-in{min-height:100%;box-sizing:border-box;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:24px;padding:max(24px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom))}
+.wel-top{display:flex;justify-content:space-between;align-items:center}
+.wel-dots{display:flex;gap:6px}.wel-dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.wel-dots i.on{background:var(--fg);width:22px;border-radius:4px}
+.wel-body{flex:1;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.wel-body p{margin:0;font-size:16px;line-height:1.55}
+.wel-h{font-family:var(--display);font-weight:400;font-size:clamp(30px,8vw,40px);line-height:1.08;letter-spacing:-.02em}
+.wel-ol{margin:0;padding:0;list-style:none;counter-reset:w;display:flex;flex-direction:column;gap:14px}
+.wel-ol li{counter-increment:w;display:grid;grid-template-columns:36px 1fr;gap:2px 12px}
+.wel-ol li::before{content:counter(w);grid-row:span 2;width:32px;height:32px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-weight:600}
+.wel-ol li span{color:var(--muted);font-size:14px}
+.wel-foot{display:flex;flex-direction:column;gap:10px}.wel-foot .btn{padding:15px 20px;font-size:16px}
+#ob.full .sheet-panel{max-width:none;height:100%;max-height:none;border-radius:0}
 
 /* standalone app */
 :root{--display:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif;--body:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif;--mono:"Onest",-apple-system,"Helvetica Neue",Arial,sans-serif}
@@ -711,6 +726,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     </div>
     <p class="muted" style="font-size:12px;margin:0">Атлос · версия <span id="app-ver"></span></p>
   </section>
+
+  <section data-pane="log" aria-labelledby="h-set" style="display:flex;flex-direction:column;gap:12px">
+    <h2 id="h-set">Настройки</h2>
+    <div id="reset" style="display:flex;flex-direction:column;gap:8px"></div>
+  </section>
 </div>
 
 <div class="timer" role="region" aria-label="Таймер">
@@ -776,6 +796,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   </div>
 </div>
 
+<div class="wel" id="welcome" hidden role="dialog" aria-modal="true" aria-label="Добро пожаловать"></div>
 <div class="toast" id="toast" hidden role="status"></div>
 
 <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="m-title">
@@ -1222,7 +1243,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.10.31-67d80aa";
+const APP_VERSION="2026.10.31-b4ce32b";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -1716,7 +1737,7 @@ function renderHistory(){
     </details>`;
   }).join("");
 }
-function renderAll(){ renderToday(); if(typeof renderPath==="function") renderPath(); renderPlan(); renderStats(); renderWorkouts(); renderHead(); renderItems(); renderProgress(); renderHistory(); }
+function renderAll(){ renderToday(); if(typeof renderPath==="function") renderPath(); renderPlan(); renderStats(); renderWorkouts(); renderHead(); renderItems(); renderProgress(); renderHistory(); if(typeof renderWelcome==='function'){ renderWelcome(); renderReset(); } }
 
 function selectWorkout(id){
   if(!workouts[id]) return; selW=id; store("selW5",id); confirmW=false; draft=getDraft(id); saveDraft();
@@ -3285,6 +3306,70 @@ function gameDiffHTML(g0,g1,sid){ if(!g0||!g1) return ""; const dx=g1.xp-g0.xp, 
   if(g1.path&&!g1.path.pending) out.push(`<span class="muted">Путь: ${Math.round(g1.path.pct*100)}% главы ${g1.path.ch} · ${esc(g1.path.next.n)} — ${fmtDay(g1.path.next.d)}</span>`);
   return out.length?`<div class="tline gsum"><span class="eyebrow">Путь</span>${out.join("")}</div>`:""; }
 
+/* ===================== Первый запуск: приветствие → анкета → первая тренировка → знакомство с приложением ===================== */
+const WEL={step:0,mode:null,skip:load("atlos:skipwel")};
+const WSL=[
+  {e:"Атлос",t:"Тренер у вас в телефоне",p:"Подберёт программу под вашу цель, место и уровень, посчитает веса и отдых и будет вести вас неделя за неделей. Правила — из метаанализов и позиций ACSM и ВОЗ."},
+  {e:"Как это устроено",t:"Три шага до первой тренировки",list:[["Короткий опрос","2–3 минуты: здоровье, цель, опыт, где и сколько тренируетесь"],["Первая тренировка","Тест на 45–70 минут: по нему Атлос узнает уровень и рабочие веса"],["Ваша программа","Каждый день на главном экране — что делать сегодня. Веса растут сами"]]},
+  {e:"Без перегрузки",t:"Остальное откроется по ходу",p:"Сначала — только сегодняшняя тренировка. После первой тренировки появятся путь, ранги, серия недель и рекорды. Менять можно всё, отменить — тоже."}];
+function renderWelcome(){ const el=$("welcome"); if(!el) return;
+  const first=loaded.m&&loaded.w&&!PROFILE&&!WEL.skip, tour=loaded.m&&PROG&&!PROG.testPending&&!load("atlos:tour")&&!WEL.mode&&$("sum").hidden&&$("ob").hidden;
+  document.body.classList.toggle("solo", !!(loaded.m && (!PROFILE||!PROG||PROG.testPending) && !WEL.skip));
+  if(document.body.classList.contains("solo")&&TAB!=="today") setTab("today",true);
+  if(WEL.mode==="first"){ el.hidden=false; return; }
+  if(first){ const s=WSL[WEL.step], n=WSL.length;
+    el.innerHTML=`<div class="wel-in"><div class="wel-top"><svg class="wel-logo" viewBox="0 0 64 64" width="44" height="44" aria-hidden="true"><rect width="64" height="64" rx="16" fill="currentColor"/><path d="M18 46 32 16l14 30M23 36h18" stroke="var(--bg)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="wel-dots">${WSL.map((_,k)=>`<i class="${k===WEL.step?"on":""}"></i>`).join("")}</span></div>
+      <div class="wel-body"><div class="eyebrow">${s.e}</div><h2 class="wel-h">${s.t}</h2>${s.p?`<p>${s.p}</p>`:""}${s.list?`<ol class="wel-ol">${s.list.map(([a,b])=>`<li><b>${a}</b><span>${b}</span></li>`).join("")}</ol>`:""}</div>
+      <div class="wel-foot"><button class="btn" data-wel-next>${WEL.step<n-1?"Далее":"Пройти опрос"}</button>${WEL.step>0?`<button class="btn ghost" data-wel-back>Назад</button>`:`<button class="btn ghost" data-wel-skip>Сначала осмотреться</button>`}</div></div>`;
+    el.hidden=false; return; }
+  if(tour){ el.innerHTML=`<div class="wel-in"><div class="wel-body"><div class="eyebrow">Программа готова</div><h2 class="wel-h">Что где в Атлосе</h2>
+      <ol class="wel-ol"><li><b>Сегодня</b><span>главный экран: что делать сегодня, тренировка, самочувствие и подсказка тренера</span></li>
+      <li><b>Путь</b><span>глава цикла, ранг, серия недель, кольца, рекорды, значки и золото</span></li>
+      <li><b>Программа</b><span>ваша схема, дни, разгрузки, повторный тест и анкета — здесь всё меняется</span></li>
+      <li><b>Журнал</b><span>история, прогресс по весам и настройки — в том числе «Начать заново»</span></li></ol></div>
+      <div class="wel-foot"><button class="btn" data-tour-ok>Понятно</button></div></div>`; el.hidden=false; return; }
+  el.hidden=true; }
+/* после анкеты: предлагаем первую тренировку */
+function showFirst(){ const nx=progNext(); const w=nx&&workouts[nx.wid]; if(!w){ renderAll(); return; } WEL.mode="first"; const el=$("welcome"), test=w.kind==="test";
+  el.innerHTML=`<div class="wel-in"><div class="wel-body"><div class="eyebrow">Опрос пройден ✓</div><h2 class="wel-h">Ваша первая тренировка</h2>
+    <p><b>${esc(test?"Тестовая тренировка":w.name)}</b> · ${w.items.length} ${plural3(w.items.length,"упражнение","упражнения","упражнений")} · ≈ ${estMin(w.items,w.kind==="cardio")} мин</p>
+    <p class="muted">${test?"Это не экзамен: делайте сколько получится, без отказа и без боли. По результатам Атлос рассчитает уровень, веса и подберёт варианты упражнений.":"Первые 2–3 тренировки — калибровка: веса подберутся по ходу, по вашим ответам после каждого подхода."}</p>
+    <ul class="exl">${w.items.slice(0,9).map(it=>`<li><span>${esc(exOf(it).name)}</span></li>`).join("")}</ul>
+    <p class="muted" style="font-size:13px">Как идти: сверху вниз, выполнили подход — нажмите ✓. Таймер отдыха включится сам. У каждого упражнения есть анимация техники — нажмите на картинку.</p></div>
+    <div class="wel-foot"><button class="btn" data-first-go>Начать сейчас</button><button class="btn ghost" data-first-later>Позже — она будет на главном экране</button></div></div>`;
+  el.hidden=false; }
+$("welcome").addEventListener("click",e=>{ const t=e.target;
+  if(t.closest("[data-wel-next]")){ if(WEL.step<WSL.length-1){ WEL.step++; renderWelcome(); } else { $("welcome").hidden=true; openOb(); } return; }
+  if(t.closest("[data-wel-back]")){ WEL.step=Math.max(0,WEL.step-1); renderWelcome(); return; }
+  if(t.closest("[data-wel-skip]")){ WEL.skip=true; store("atlos:skipwel",true); renderAll(); return; }
+  if(t.closest("[data-tour-ok]")){ store("atlos:tour",true); renderWelcome(); return; }
+  if(t.closest("[data-first-go]")||t.closest("[data-first-later]")){ const go=!!t.closest("[data-first-go]"); WEL.mode=null; $("welcome").hidden=true; store("atlos:tour",null); renderAll();
+    if(go){ const nx=progNext(); if(nx) openWorkout(nx.wid); } return; }
+});
+
+/* ---- Начать заново: удалить всё и войти как новый пользователь ---- */
+let resetAsk=false;
+function renderReset(){ const el=$("reset"); if(!el) return;
+  el.innerHTML = resetAsk ? `<div class="pban warnb"><span><b>Удалить всё?</b> Тренировки, история, анкета, программа, тесты, самочувствие, путь и золото исчезнут без возврата. Если нужна копия — сначала сохраните её.</span>
+    <span class="actions"><button class="btn small" data-reset-yes>Удалить и начать заново</button><button class="btn ghost small" data-reset-no>Отмена</button></span></div>`
+  : `<div class="actions"><button class="btn ghost small" data-ob>Анкета и цели</button><button class="btn ghost small" data-reset>Начать заново</button></div>
+    <p class="muted" style="margin:0;font-size:13px">«Начать заново» стирает все данные — приложение откроется как у нового пользователя.</p>`; }
+async function resetAll(){
+  if(!db) return toast("Журнал недоступен в этом просмотре");
+  const del=(c,id)=>db.collection(c).doc(id).delete().catch(()=>{});
+  const jobs=[]; Object.keys(workouts).forEach(id=>jobs.push(del("workouts",id))); sessions.forEach(s=>jobs.push(del("sessions",s.id)));
+  TESTS.forEach(t=>jobs.push(del("tests",t.id))); Object.keys(CHECKS).forEach(d=>jobs.push(del("checkins",d))); ["profile","program","game"].forEach(id=>jobs.push(del("meta",id)));
+  await Promise.all(jobs);
+  try{ Object.keys(localStorage).filter(k=>/^(dr5-|selW5|rest5|atlos:)/.test(k)).forEach(k=>localStorage.removeItem(k)); }catch(e){}
+  workouts={}; sessions=[]; TESTS=[]; CHECKS={}; PROFILE=null; PROG=null; GAME={}; draft=null; selW=null; WEL.step=0; WEL.skip=false; WEL.mode=null; resetAsk=false; _gk=null;
+  setTab("today"); renderAll(); window.scrollTo({top:0}); }
+$("reset").addEventListener("click",async e=>{ const t=e.target;
+  if(t.closest("[data-ob]")) return openOb();
+  if(t.closest("[data-reset]")){ resetAsk=true; renderReset(); return; }
+  if(t.closest("[data-reset-no]")){ resetAsk=false; renderReset(); return; }
+  if(t.closest("[data-reset-yes]")){ t.disabled=true; await resetAll(); toast("Всё удалено. Добро пожаловать в Атлос"); }
+});
+
 /* ---- анкета (онбординг) ---- */
 const OB={step:0,p:null};
 const OB_STEPS=["intro","about","health","goal","place","exp","days","start"];
@@ -3296,7 +3381,7 @@ function openOb(){
   OB.p.loc=OB.p.loc||"gym"; OB.p.inv=Object.assign({db:"none",dbList:"",dbMax:"",kb:false,kbList:"",band:false,doorbar:false,rope:false},OB.p.inv||{}); OB.p.park=Object.assign({dips:true,box:true},OB.p.park||{}); if(OB.p.cardio==null) OB.p.cardio="";
   if(!OB.p.start||OB.p.start==="keep") OB.p.start=TESTS.length?"keep":"test";
   if(OB.p.archive==null) OB.p.archive=true;
-  renderOb(); $("ob").hidden=false; setTimeout(()=>$("ob-next").focus(),30);
+  $("ob").classList.toggle("full",!PROFILE); if(!PROFILE) OB.step=1; renderOb(); $("ob").hidden=false; setTimeout(()=>$("ob-next").focus(),30);
 }
 function obLevel(){ return statedLevel(OB.p); }
 function obValid(){
@@ -3387,7 +3472,7 @@ $("ob").addEventListener("click",async e=>{
     const p=clone(OB.p); p.gentle=!!(p.dis.length||+p.age>=60); p.age=+p.age; p.weight=+p.weight;
     $("ob-next").disabled=true; $("ob-next").textContent="Собираю программу…";
     try{ await createProgram(p,{archive:!!p.archive}); $("ob").hidden=true; wkOpen=false;
-      if(p.start==="test"){ setTab("today"); renderAll(); toast("Анкета готова. Шаг 2 — тестовая тренировка"); } else showReady(null); }
+      if(!TESTS.length||p.start==="test"){ setTab("today"); renderAll(); showFirst(); } else showReady(null); }
     catch(err){ $("ob-next").disabled=false; renderOb(); toast("Не удалось сохранить программу"); }
   }
 });
