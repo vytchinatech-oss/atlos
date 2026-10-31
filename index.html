@@ -84,6 +84,7 @@ input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outli
 .thumb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .fig line,.fig circle.j{stroke:var(--fg);stroke-width:4.2;stroke-linecap:round;fill:none}
 .fig circle.hd{fill:var(--fg)}
+.fig path.sp{stroke:var(--fg);stroke-width:3.6;fill:none;stroke-linecap:round}
 .fig .far line{stroke:var(--muted);opacity:.75}
 .fig .pr{stroke:var(--muted);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .fig .prf{fill:var(--line);stroke:none}
@@ -761,7 +762,7 @@ const ANIM = (()=>{
     return [j, add(j,mul(unit(sub(b,j)),l2))];
   }
   function resolve(k){
-    const hip=P(...k.hip), sh=add(hip,mul(up(k.t),LEN.torso));
+    const hip=P(...k.hip), sh=add(hip,mul(up(k.t),k.tl||LEN.torso));
     const pt=s=> Array.isArray(s)?P(...s): s.s?add(sh,P(...s.s)): add(hip,P(...s.h));
     const two=v=> Array.isArray(v)&&Array.isArray(v[0])||(Array.isArray(v)&&typeof v[0]==="object") ? v : [v,v];
     return {hip,sh,t:k.t,f:two(k.feet).map(pt),w:two(k.hands).map(pt)};
@@ -895,20 +896,145 @@ const ANIM = (()=>{
       back:J=>L(P(48,53),P(80,53),"pr")+L(P(76,53),P(76,94),"pr")+`<rect class="prf" x="${(J.k[0].x-8).toFixed(1)}" y="${(J.k[0].y+2).toFixed(1)}" width="16" height="4" rx="2"/>`+L(P(J.k[0].x,J.k[0].y+6),P(J.k[0].x,94),"cb")}
   };
 
-  function pose(def,p){
+  /* ===== v13: анимации для всех упражнений ===== */
+  const seat=(x1,x2,y)=>`<rect class="prf" x="${x1}" y="${y}" width="${x2-x1}" height="4" rx="2"/>`+L(P((x1+x2)/2,y+4),P((x1+x2)/2,94),"pr");
+  const pad=(J,o=-5)=>{ const bk=mul(front(J.t),o); return `<line class="pr" style="stroke-width:5" x1="${(J.hip.x+bk.x).toFixed(1)}" y1="${(J.hip.y+bk.y).toFixed(1)}" x2="${(J.sh.x+bk.x).toFixed(1)}" y2="${(J.sh.y+bk.y).toFixed(1)}"/>`; };
+  const handle=w=>L(add(w,P(0,-4)),add(w,P(0,4)),"wl");
+  const hbar=w=>L(add(w,P(-4,0)),add(w,P(4,0)),"wl");
+  const vdb=w=>L(add(w,P(0,-5)),add(w,P(0,5)),"wl")+C(add(w,P(0,-5)),2.8,"wt")+C(add(w,P(0,5)),2.8,"wt");
+  const cable=(x,y,w)=>C(P(x,y),3,"prf")+`<line class="cb" x1="${x}" y1="${y}" x2="${w.x.toFixed(1)}" y2="${w.y.toFixed(1)}"/>`;
+  const still=st([60,49],0,{s:[0,31]});
+  /* шаг: стопы идут по эллипсу (опора — по полу, перенос — над полом), руки — в противофазе */
+  const gait=o=>tau=>{ const th=2*Math.PI*tau, hip=P(o.x,o.y+(o.bob||0)*Math.cos(2*th)), sh=add(hip,mul(up(o.t),LEN.torso));
+    const f=[0,1].map(i=>{ const ph=th+i*Math.PI, s=Math.sin(ph), x=o.x+o.rx*Math.cos(ph), g=o.g?o.g(x):93.5; return P(x, s>=0?g:g+o.lift*s); });
+    const w=[0,1].map(i=>{ const ph=th+i*Math.PI+Math.PI; return o.hold?add(sh,P(...o.hold)):add(sh,P(o.ax*Math.cos(ph),o.ay)); });
+    return {hip,t:o.t,f,w}; };
+  const belt=(x1,y1,x2,y2)=>`<line class="pr" style="stroke-width:4" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`+L(P(x2-4,y2),P(x2-8,y2-46),"pr")+L(P(x2-12,y2-46),P(x2-2,y2-46),"pr");
+  const incl=x=>93-(x-16)*0.12;
+  Object.assign(D,{
+    goblet:{m:"Квадрицепс, ягодицы, мышцы кора",c:["Гантель вертикально у груди, локти вниз.","Садитесь между коленями, спина прямая.","Глубина — до параллели или ниже, пятки на полу.","Вставайте, толкаясь пятками."],
+      A:st([58,49],6,{s:[7,9]}), B:st([45,70],36,{s:[7,9]}), lh:front0, ah:down, front:J=>vdb(J.w[0])},
+    frontsquat:{m:"Квадрицепс, ягодицы, мышцы кора",c:["Гриф на передних дельтах, локти высоко.","Садитесь вертикально, колени по линии носков.","Глубина — до параллели или ниже, корпус прямой.","Вставайте, удерживая локти вверху."],
+      A:st([58,49],4,{s:[7,2]}), B:st([47,70],24,{s:[7,2]}), lh:front0, ah:P(1,-.3), front:J=>plate(add(J.sh,P(5,1)))},
+    rdl:{m:"Бицепс бедра, ягодицы, разгибатели спины",c:["Колени слегка согнуты и почти не меняют угол.","Отводите таз назад, гриф скользит по бёдрам.","Опускайтесь до сильного растяжения задней поверхности бедра.","Спина прямая всё движение."],
+      A:st([47,55],74,{s:[-1,31]}), B:st([58,49],2,{s:[0,31]}), lh:front0, ah:back, front:J=>plate(J.w[0])},
+    hipthrust:{m:"Ягодицы, задняя поверхность бедра",c:["Лопатки на скамье, гриф на сгибе бёдер через мягкую накладку.","Поднимайте таз до прямой линии плечи–колени, сжимая ягодицы.","Подбородок к груди, поясница не прогибается.","Опускайте медленно, не касаясь пола."],
+      A:{hip:[62,86],t:-45,feet:[86,94],hands:{h:[1,-5]}}, B:{hip:[71,66],t:-88,feet:[86,94],hands:{h:[1,-5]}}, lh:upv, ah:down,
+      back:()=>bench(10,44,70), front:J=>plate(J.w[0])},
+    seatcalf:{m:"Камбаловидная, икроножные",c:["Валик на нижней части бёдер, носки на краю платформы.","Поднимайтесь на носки максимально высоко, пауза 1 с.","Опускайте пятки ниже платформы до растяжения.","Без рывков и пружин."],
+      A:{hip:[42,70],t:0,feet:[68,93],hands:{h:[19,-6]}}, B:{hip:[42,70],t:0,feet:[68,88],hands:{h:[19,-9]}}, lh:upv, ah:P(-.3,1), period:1.8,
+      back:()=>seat(28,54,73)+`<rect class="prf" x="60" y="93" width="18" height="3" rx="1"/>`,
+      front:J=>{ const k=J.k[0]; return `<rect class="prf" x="${(k.x-9).toFixed(1)}" y="${(k.y-7).toFixed(1)}" width="18" height="4" rx="2"/>`+L(P(k.x+7,k.y-7),P(k.x+7,k.y-18),"pr")+C(P(k.x+7,k.y-21),5,"wt"); }},
+    superman:{m:"Разгибатели спины, ягодицы",c:["Лёжа на животе, руки вытянуты вперёд.","Одновременно поднимите руки и ноги на 10–15 см.","Пауза 2 с, взгляд в пол, шея ровная.","Опускайтесь медленно."],
+      A:{hip:[52,90],t:90,feet:[7,92],hands:{s:[31,1]}}, B:{hip:[52,89],t:80,feet:[10,82],hands:{s:[30,-7]}}, lh:upv, ah:upv, period:3},
+    chestpress:{m:"Грудные, передние дельты, трицепс",c:["Рукояти на уровне середины груди, лопатки прижаты к спинке.","Выжимайте до почти прямых рук, без удара в конце.","Возвращайте медленно до лёгкого растяжения груди.","Стопы в полу, поясница не отрывается."],
+      A:{hip:[44,70],t:-6,feet:[70,94],hands:{s:[8,9]}}, B:{hip:[44,70],t:-6,feet:[70,94],hands:{s:[31,9]}}, lh:P(1,-1), ah:P(-.6,.6),
+      back:J=>seat(30,58,73)+pad(J)+L(P(92,10),P(92,94),"pr")+`<rect class="prf" x="88" y="40" width="10" height="28" rx="2"/>`, front:J=>handle(J.w[0])+L(J.w[0],P(92,J.w[0].y),"pr")},
+    dbbench:Object.assign({},D.bench,{m:"Грудные, передние дельты, трицепс",front:dumbs}),
+    nbench:Object.assign({},D.bench,{m:"Грудные, трицепс, передние дельты",ah:P(1,.6),front:J=>J.w.map(vdb).join("")}),
+    ohp:Object.assign({},D.dbpress,{m:"Дельты, трицепс, верх груди",A:st([60,49],0,{s:[7,1]}),B:st([60,49],0,{s:[1,-32]}),front:J=>plate(J.w[0]),vb:"0 -22 120 122"}),
+    shpress:{m:"Дельты, трицепс",c:["Рукояти на уровне плеч, спина прижата к спинке.","Выжимайте вверх до почти прямых рук.","Не прогибайтесь в пояснице.","Опускайте под контролем до уровня ушей."],
+      A:{hip:[48,70],t:-4,feet:[72,94],hands:{s:[6,1]}}, B:{hip:[48,70],t:-4,feet:[72,94],hands:{s:[3,-31]}}, lh:P(1,-1), ah:P(1,.3), vb:"0 -6 120 106",
+      back:J=>seat(34,60,73)+pad(J), front:J=>handle(J.w[0])+L(add(J.w[0],P(0,4)),add(J.w[0],P(-10,10)),"pr")},
+    dbpress_s:{m:"Дельты, трицепс",c:["Спинка скамьи почти вертикально, гантели у плеч.","Выжимайте вверх, сводя гантели над головой.","Поясница прижата к спинке.","Опускайте до уровня ушей."],
+      A:{hip:[48,70],t:-4,feet:[72,94],hands:{s:[6,1]}}, B:{hip:[48,70],t:-4,feet:[72,94],hands:{s:[3,-31]}}, lh:P(1,-1), ah:P(1,.3), vb:"0 -6 120 106",
+      back:J=>seat(34,60,73)+pad(J), front:dumbs},
+    reardelt:{m:"Задние дельты, ромбовидные",c:["Наклон корпуса почти до горизонтали, спина прямая.","Разводите руки в стороны, локти чуть согнуты.","Вверху пауза, лопатки не сводите сильно.","Опускайте медленно."],
+      A:st([56,52],70,{s:[2,30]}), B:st([56,52],70,{s:[-1,16]}), lh:front0, ah:P(-1,.2), front:dumbs},
+    shrug:{m:"Трапеции",c:["Гриф в прямых руках перед бёдрами.","Поднимайте плечи вверх к ушам, без вращения.","Пауза 1 с вверху.","Руки не сгибаются."],
+      A:st([60,49],0,{s:[3,31]}), B:Object.assign(st([60,49],0,{s:[3,31]}),{tl:35}), lh:front0, ah:back, period:1.8, front:J=>plate(J.w[0])},
+    french:{m:"Трицепс (длинная головка)",c:["Лёжа, гриф над лбом, плечи вертикально.","Сгибайте только локти, опуская гриф ко лбу.","Локти не разводите в стороны.","Разгибайте до прямых рук."],
+      A:{hip:[62,58],t:-90,feet:[86,94],hands:{s:[-11,-14]}}, B:{hip:[62,58],t:-90,feet:[86,94],hands:{s:[2,-32]}}, lh:P(1,-1), ah:P(.3,-1),
+      back:()=>bench(20,76,61), front:J=>C(J.w[0],4.5,"wt")},
+    tricepdb:{m:"Трицепс",c:["Гантель двумя руками над головой.","Опускайте за голову, сгибая только локти.","Локти смотрят вперёд-вверх и не расходятся.","Разгибайте до прямых рук."],
+      A:st([60,49],0,{s:[-8,-7]}), B:st([60,49],0,{s:[1,-32]}), lh:front0, ah:P(.4,-1), vb:"0 -22 120 122", front:J=>vdb(J.w[0])},
+    facepull:{m:"Задние дельты, ротаторы плеча, трапеции",c:["Блок на уровне лица, канат хватом сверху.","Тяните концы каната к ушам, разводя руки.","Локти выше кистей, лопатки сведены.","Возвращайте медленно."],
+      A:st([54,49],-6,{s:[30,3]}), B:st([54,49],-6,{s:[9,-3]}), lh:front0, ah:P(-.3,-1),
+      back:J=>L(P(108,8),P(108,94),"pr")+cable(108,14,J.w[0]), front:J=>handle(J.w[0])},
+    stepup:{m:"Квадрицепс, ягодицы",c:["Платформа на высоте колена или ниже.","Встаньте на неё, толкаясь пяткой рабочей ноги.","Не отталкивайтесь нижней ногой.","Опускайтесь медленно, все повторы на одну ногу."],
+      A:{hip:[50,54],t:12,feet:[[72,75],[46,94]],hands:{s:[1,30]}}, B:{hip:[73,33],t:2,feet:[[75,75],[63,62]],hands:{s:[1,30]}}, lh:[P(1,-.2),P(1,.3)], ah:back, vb:"0 -14 120 114",
+      back:()=>`<rect class="prf" x="62" y="76" width="30" height="19" rx="2"/>`, front:dumbs},
+    dbrow:{m:"Широчайшие, ромбовидные, задние дельты",c:["Колено и ладонь на скамье, спина параллельна полу.","Тяните гантель к поясу, локоть вдоль корпуса.","Вверху сведите лопатку, без разворота корпуса.","Опускайте до полного растяжения."],
+      A:{hip:[44,50],t:72,feet:[[44,94],[20,67]],hands:[{s:[0,30]},[76,68]]}, B:{hip:[44,50],t:72,feet:[[44,94],[20,67]],hands:[{s:[-12,12]},[76,68]]},
+      lh:[P(1,0),P(0,1)], ah:[P(-.4,-1),P(1,0)], back:()=>bench(12,84,70), front:J=>dumb(J.w[0])},
+    csrow:{m:"Широчайшие, ромбовидные, задние дельты",c:["Лёжа грудью на наклонной скамье 30–45°.","Тяните гантели к поясу, локти вдоль корпуса.","Вверху сведите лопатки.","Поясница разгружена — вариант при болях в спине."],
+      A:{hip:[42,72],t:56,feet:[16,94],hands:{s:[2,31]}}, B:{hip:[42,72],t:56,feet:[16,94],hands:{s:[-10,12]}}, lh:P(1,.3), ah:P(-.5,-1),
+      back:J=>pad(J,6)+L(P(48,82),P(46,94),"pr")+L(P(70,64),P(74,94),"pr"), front:dumbs},
+    bulgarian:{m:"Квадрицепс, ягодицы",c:["Задняя нога носком на скамье.","Опускайтесь вертикально до угла 90° в переднем колене.","Вес на пятке передней ноги, корпус ровно.","Сначала все повторы на одну ногу, потом на другую."],
+      A:{hip:[58,52],t:4,feet:[[74,94],[30,75]],hands:{s:[0,31]}}, B:{hip:[56,70],t:8,feet:[[74,94],[30,75]],hands:{s:[0,31]}}, lh:[P(1,-.2),P(.2,1)], ah:back,
+      back:()=>bench(14,42,77), front:dumbs},
+    assistpull:{m:"Широчайшие, бицепс, верх спины",c:["Колени на платформе, хват чуть шире плеч.","Тяните грудь к перекладине, сводя лопатки.","Опускайтесь до почти прямых рук.","Больше противовес — легче."],
+      A:{hip:[60,73],t:0,feet:{h:[-16,22]},hands:[60,9]}, B:{hip:[60,47],t:0,feet:{h:[-16,22]},hands:[60,9]}, lh:P(1,.4), ah:P(1,.6),
+      back:J=>L(P(34,9),P(86,9),"pr")+L(P(34,9),P(34,3),"pr")+L(P(86,9),P(86,3),"pr")+`<rect class="prf" x="${(J.k[0].x-9).toFixed(1)}" y="${(J.k[0].y+2).toFixed(1)}" width="20" height="4" rx="2"/>`+L(P(J.k[0].x,J.k[0].y+6),P(J.k[0].x,94),"cb")},
+    crossover:Object.assign({},D.pecdeck,{m:"Грудные, передние дельты",A:{hip:[60,52],t:0,feet:[[52,94],[68,94]],hands:[{s:[-29,-1]},{s:[29,-1]}]},B:{hip:[60,52],t:0,feet:[[52,94],[68,94]],hands:[{s:[-4,13]},{s:[4,13]}]},
+      back:J=>cable(10,6,J.w[1])+cable(110,6,J.w[0]), front:J=>J.w.map(handle).join("")}),
+    cablecurl:Object.assign({},D.curl,{m:"Бицепс, плечевая",back:J=>cable(76,92,J.w[0]),front:J=>hbar(J.w[0])}),
+    farmer:{m:"Хват, трапеции, мышцы кора",c:["Тяжёлые гантели в опущенных руках.","Идите короткими шагами, корпус ровно.","Плечи опущены, пресс напряжён.","30–40 секунд ходьбы."],
+      A:still, B:still, cyc:gait({x:60,y:50,t:1,rx:11,lift:5,bob:.6,hold:[1,31]}), lh:front0, ah:back, period:1.2, front:dumbs},
+    run:{m:"Сердечно-сосудистая выносливость",c:["Начинайте с 5 минут быстрой ходьбы.","Темп разговорный: можете говорить фразами.","Шаг короткий, приземление под центром тяжести.","В конце 3–5 минут заминки."],
+      A:still, B:still, cyc:gait({x:56,y:49,t:12,rx:17,lift:11,bob:-1.3,ax:11,ay:19}), lh:P(1,.2), ah:P(-.4,1), period:.75,
+      back:()=>belt(14,95,102,95)},
+    cooper:{m:"Тест выносливости",c:["12 минут бега на пределе.","Ровный темп, без рывка в начале.","Запишите дистанцию в метрах.","Только для тех, кто бегает регулярно."],
+      A:still, B:still, cyc:gait({x:58,y:49,t:12,rx:18,lift:11,bob:-1.3,ax:11,ay:19}), lh:P(1,.2), ah:P(-.4,1), period:.75},
+    inclinewalk:{m:"Выносливость, ягодицы, икры",c:["Наклон 5–12%, скорость 4–6 км/ч.","Не держитесь за поручни.","Шаг короткий, корпус чуть вперёд.","Темп разговорный: говорите фразами."],
+      A:still, B:still, cyc:gait({x:56,y:48,t:9,rx:12,lift:6,bob:.8,ax:8,ay:29,g:incl}), lh:P(1,.1), ah:P(-.2,1), period:1.3,
+      back:()=>`<line class="pr" style="stroke-width:4" x1="14" y1="${incl(14)+2}" x2="104" y2="${incl(104)+2}"/>`+L(P(100,incl(100)),P(96,40),"pr")+L(P(90,40),P(100,40),"pr")},
+    rockport:{m:"Тест выносливости",c:["1,6 км максимально быстрым шагом.","Без перехода на бег.","Сразу на финише — пульс.","Время и пульс нужны для расчёта МПК."],
+      A:still, B:still, cyc:gait({x:58,y:49,t:4,rx:13,lift:6,bob:.8,ax:10,ay:28}), lh:P(1,.1), ah:P(-.2,1), period:1.05},
+    bike:{m:"Квадрицепс, выносливость",c:["Высота седла: нога почти прямая в нижней точке.","Каденс 70–90 об/мин.","Спина ровная, плечи расслаблены.","Нагрузку повышайте постепенно."],
+      A:{hip:[44,52],t:26,feet:[58,80],hands:[78,38]}, B:{hip:[44,52],t:26,feet:[58,80],hands:[78,38]},
+      cyc:tau=>{ const th=2*Math.PI*tau; return {f:[0,1].map(i=>P(58+11*Math.cos(th+i*Math.PI),80+11*Math.sin(th+i*Math.PI)))}; }, lh:P(1,-.4), ah:down, period:1,
+      back:()=>`<rect class="prf" x="35" y="54" width="16" height="4" rx="2"/>`+L(P(44,58),P(58,80),"pr")+L(P(58,80),P(76,42),"pr")+L(P(76,42),P(80,36),"pr")+L(P(74,36),P(84,36),"pr")+`<circle class="pr" cx="82" cy="80" r="9"/>`+L(P(58,80),P(48,94),"pr")+L(P(82,89),P(90,94),"pr")+L(P(40,94),P(96,94),"pr"),
+      front:J=>L(P(58,80),J.f[0],"pr")+hbar(J.f[0])},
+    elliptical:{m:"Сердечно-сосудистая выносливость",c:["Стопы целиком на педалях.","Работайте руками и ногами.","Корпус прямо, не наваливайтесь на поручни.","Нагрузку повышайте сопротивлением."],
+      A:{hip:[58,46],t:4,feet:[60,86],hands:[78,40]}, B:{hip:[58,46],t:4,feet:[60,86],hands:[78,40]},
+      cyc:tau=>{ const th=2*Math.PI*tau; return {hip:P(58,46+.8*Math.cos(2*th)),f:[0,1].map(i=>P(60+13*Math.cos(th+i*Math.PI),86+4*Math.sin(th+i*Math.PI))),w:[0,1].map(i=>P(76+7*Math.cos(th+i*Math.PI+Math.PI),40+1.5*Math.sin(th+i*Math.PI)))}; },
+      lh:P(1,.1), ah:P(-.2,1), period:1.4,
+      back:J=>L(P(30,94),P(100,94),"pr")+L(P(98,94),P(92,26),"pr")+L(P(92,26),J.w[1],"pr")+L(add(J.f[1],P(-6,1)),add(J.f[1],P(6,1)),"wl"),
+      front:J=>L(P(92,26),J.w[0],"pr")+L(add(J.f[0],P(-6,1)),add(J.f[0],P(6,1)),"wl")},
+    rower:{m:"Выносливость, спина, ноги",c:["Сначала ноги, потом корпус, потом руки.","Обратно в обратном порядке.","Спина прямая, без рывка поясницей.","Темп 20–26 гребков в минуту."],
+      A:{hip:[50,84],t:30,feet:[84,84],hands:[86,72]}, B:{hip:[39,84],t:-20,feet:[84,84],hands:{s:[9,11]}}, lh:P(.2,-1), ah:P(-1,.2), period:2.2,
+      back:J=>L(P(10,90),P(100,90),"pr")+`<rect class="prf" x="${(J.hip.x-8).toFixed(1)}" y="87" width="16" height="3" rx="1"/>`+L(P(88,76),P(91,90),"pr")+`<circle class="pr" cx="104" cy="80" r="8"/>`+`<line class="cb" x1="104" y1="80" x2="${J.w[0].x.toFixed(1)}" y2="${J.w[0].y.toFixed(1)}"/>`,
+      front:J=>handle(J.w[0])},
+    mob_hams:{m:"Задняя поверхность бедра",c:["Сидя, одна нога прямая, другая согнута.","Тянитесь грудью к колену прямой ноги с ровной спиной.","Лёгкое натяжение, без боли; дышите спокойно.","По 30 с на каждую ногу."],
+      A:{hip:[36,90],t:2,feet:[[82,92],[54,93]],hands:{s:[10,22]}}, B:{hip:[36,90],t:52,feet:[[82,92],[54,93]],hands:[78,88]}, lh:[upv,upv], ah:P(.2,1), period:4},
+    mob_glutes:{m:"Ягодицы, грушевидная",c:["Лёжа на спине, лодыжка на колене другой ноги.","Подтяните нижнюю ногу к груди руками.","Поясница прижата к полу.","По 30 с на каждую сторону."],
+      A:{hip:[62,90],t:-90,feet:[[82,70],{h:[-2,-24]}],hands:[58,72]}, B:{hip:[62,90],t:-90,feet:[[74,58],{h:[-7,-23]}],hands:[52,73]},
+      lh:[P(-.3,-1),P(1,-.2)], ah:upv, period:4},
+    mob_quads:{m:"Квадрицепс, сгибатели бедра",c:["Стоя, возьмите стопу рукой и подтяните пятку к ягодице.","Колени рядом, таз слегка подкручен вперёд.","Держитесь за опору при необходимости.","По 30 с на каждую ногу."],
+      A:{hip:[60,49],t:0,tl:28,feet:[{h:[-8,4]},[60,94]],hands:[{h:[-8,4]},{s:[16,22]}]}, B:{hip:[60,49],t:2,tl:28,feet:[{h:[-5,-1]},[60,94]],hands:[{h:[-5,-1]},{s:[16,22]}]},
+      lh:[down,front0], ah:[P(-1,.2),P(-.2,1)], period:3.5},
+    mob_chest:{m:"Грудные, передние дельты",c:["Предплечье на стене, локоть на уровне плеча.","Медленно разворачивайте корпус от стены.","Плечо опущено, без боли в суставе.","По 30 с на каждую сторону."],
+      A:{hip:[60,49],t:0,feet:[60,94],hands:[[34,22],{s:[3,30]}]}, B:{hip:[64,50],t:6,feet:[[65,94],[60,94]],hands:[[34,22],{s:[3,30]}]}, lh:front0, ah:[P(0,1),P(-.2,1)], period:4,
+      back:()=>`<rect class="prf" x="26" y="4" width="6" height="91" rx="1"/>`},
+    mob_shoulder:{m:"Задние дельты, верх спины",c:["Прямая рука поперёк груди.","Другой рукой прижмите её выше локтя к себе.","Плечо не поднимается к уху.","По 30 с на каждую руку."], frontView:true,
+      A:{hip:[60,50],t:0,feet:[[53,94],[67,94]],hands:[{s:[-25,8]},{s:[-11,11]}]}, B:{hip:[60,50],t:0,feet:[[53,94],[67,94]],hands:[{s:[-29,5]},{s:[-15,8]}]},
+      lh:[P(-1,0),P(1,0)], ah:[P(0,1),P(1,.5)], period:3.5},
+    mob_catcow:{m:"Разгибатели спины, пресс",c:["Стоя на четвереньках, ладони под плечами.","На вдохе прогнитесь, взгляд вперёд.","На выдохе округлите спину, подбородок к груди.","Медленно, 8–10 циклов за 30–40 с."],
+      A:{hip:[40,66],t:90,feet:[16,93],hands:[71,93]}, B:{hip:[40,68],t:90,feet:[16,93],hands:[71,93]}, lh:P(.3,1), ah:P(1,0), period:4,
+      spine:J=>lerp(-9,7,J.p), headOff:J=>P(0,lerp(6,-5,J.p))}
+  });
+
+  D.rdl_db=Object.assign({},D.rdl,{m:"Бицепс бедра, ягодицы, разгибатели спины",front:dumbs});
+  D.dbpress.vb="0 -22 120 122";
+  function pose(def,p,tau){
     const A=resolve(def.A), B=resolve(def.B);
-    const hip=lerpP(A.hip,B.hip,p), t=lerp(A.t,B.t,p), sh=add(hip,mul(up(t),LEN.torso));
+    let hip=lerpP(A.hip,B.hip,p), t=lerp(A.t,B.t,p); const tl=lerp(def.A.tl||LEN.torso,def.B.tl||LEN.torso,p);
     const lh=hint2(def.lh), ah=hint2(def.ah);
-    const f=[0,1].map(i=>lerpP(A.f[i],B.f[i],p)), w=[0,1].map(i=>lerpP(A.w[i],B.w[i],p));
+    let f=[0,1].map(i=>lerpP(A.f[i],B.f[i],p)), w=[0,1].map(i=>lerpP(A.w[i],B.w[i],p));
+    if(def.cyc){ const o=def.cyc(tau||0,p); if(o.hip) hip=o.hip; if(o.t!=null) t=o.t; if(o.f) f=o.f; if(o.w) w=o.w; }
+    const sh=add(hip,mul(up(t),tl));
     const legs=f.map((ft,i)=>ik(hip,ft,LEN.thigh,LEN.shin,lh[i])), arms=w.map((wr,i)=>ik(sh,wr,LEN.up,LEN.fore,ah[i]));
     return {hip,sh,t,head:add(sh,mul(up(t),10)),k:legs.map(l=>l[0]),f:legs.map(l=>l[1]),e:arms.map(a=>a[0]),w:arms.map(a=>a[1])};
   }
   function draw(svg,id,p,tau){
-    const def=D[id], J=pose(def,p); J.tau=tau; J.p=p;
+    const def=D[id], J=pose(def,p,tau); J.tau=tau; J.p=p; if(def.headOff) J.head=add(J.head,def.headOff(J));
+    svg.setAttribute("viewBox",def.vb||"0 0 120 100");
+    const torso = def.spine ? (()=>{ const m=lerpP(J.hip,J.sh,.5), c=add(m,mul(front(J.t),def.spine(J))); return `<path class="sp" d="M${J.hip.x.toFixed(1)} ${J.hip.y.toFixed(1)} Q${c.x.toFixed(1)} ${c.y.toFixed(1)} ${J.sh.x.toFixed(1)} ${J.sh.y.toFixed(1)}"/>`; })() : L(J.hip,J.sh);
     const limb=i=>L(J.hip,J.k[i])+L(J.k[i],J.f[i])+L(J.sh,J.e[i])+L(J.e[i],J.w[i]);
     svg.innerHTML=`<g class="fig">${def.noGround?"":L(P(2,95.5),P(118,95.5),"gr")}
       <g class="${def.frontView?"":"far"}">${limb(1)}</g>${def.back?def.back(J):""}
-      ${L(J.hip,J.sh)}${C(J.head,6,"hd")}<g>${limb(0)}</g>${def.front?def.front(J):""}</g>`;
+      ${torso}${C(J.head,6,"hd")}<g>${limb(0)}</g>${def.front?def.front(J):""}</g>`;
   }
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const wave = tau => (1-Math.cos(2*Math.PI*tau))/2;
@@ -953,7 +1079,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.10.30-c502ad9";
+const APP_VERSION="2026.10.31-31bb77f";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -1056,6 +1182,8 @@ const LIB_RAW = [
   ["mob_catcow","Кошка-корова","Растяжка","bw","time",null,null,0,0,{tu:"сек",m:"Разгибатели спины, пресс",c:["Стоя на четвереньках, ладони под плечами.","На вдохе прогнитесь, взгляд вперёд.","На выдохе округлите спину, подбородок к груди.","Медленно, 8–10 циклов за 30–40 с."]}]
 ];
 const LIB={}; LIB_RAW.forEach(([id,name,g,eq,type,anim,ref,ratio,base,extra])=>LIB[id]=Object.assign({id,name,g,eq,type,anim,ref,ratio,base},extra||{}));
+/* у каждого упражнения — своя анимация техники */
+["goblet","frontsquat","rdl","rdl_db","hipthrust","seatcalf","superman","chestpress","dbbench","nbench","ohp","shpress","dbpress_s","reardelt","shrug","french","tricepdb","facepull","stepup","dbrow","csrow","bulgarian","assistpull","crossover","cablecurl","farmer","run","cooper","inclinewalk","rockport","bike","elliptical","rower","mob_hams","mob_glutes","mob_quads","mob_chest","mob_shoulder","mob_catcow"].forEach(id=>{ if(LIB[id]) LIB[id].anim=id; });
 /* taxonomy v2: what to train (muscle) · training type · what equipment it needs · movement pattern */
 const MUS={chest:"Грудь",lats:"Широчайшие",upper:"Верх спины",lower:"Поясница",delts:"Плечи",biceps:"Бицепс",triceps:"Трицепс",abs:"Пресс",glutes:"Ягодицы",quads:"Квадрицепс",hams:"Бицепс бедра",calves:"Икры"};
 const MUS_ORDER=["chest","lats","upper","lower","delts","biceps","triceps","abs","glutes","quads","hams","calves"];
