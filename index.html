@@ -610,7 +610,7 @@ body.notimer .toast{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 .shopi{display:flex;align-items:center;gap:10px;font-size:13px}.shopi>span:nth-child(2){flex:1;min-width:0}
 .gsum{background:var(--sunk);border-radius:16px;padding:10px 12px}
 /* ===== первый запуск ===== */
-body.solo .tabs{display:none}
+
 .wel{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto}
 .wel-in{min-height:100%;box-sizing:border-box;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:24px;padding:max(24px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom))}
 .wel-top{display:flex;justify-content:space-between;align-items:center}
@@ -740,18 +740,17 @@ input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent)}
 .tabs button[aria-selected="true"] .tic{background:var(--accent-soft)}
 .tabs .tic{width:52px;height:30px;border-radius:99px;display:grid;place-items:center;transition:background .2s}
 .wrap{padding-bottom:calc(var(--nav-h) + 110px + env(safe-area-inset-bottom,0px))!important}
-body.solo .wrap{padding-bottom:120px!important}
 
 /* таймер — плавающая панель над навигацией */
 .timer{left:10px;right:10px;bottom:calc(var(--nav-h) + 8px + env(safe-area-inset-bottom,0px));border-radius:22px;border:1px solid var(--console-line);overflow:hidden;padding:10px 14px;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
-body.solo .timer{bottom:calc(10px + env(safe-area-inset-bottom,0px))}
 .clock{font-family:var(--display);font-weight:600;font-size:28px}
 .clock.run{color:var(--lime)}
 .tprog i{background:var(--grad)}
 .timer #stop{background:var(--lime);color:#111}
+.timer .btn.ghost{background:transparent;color:var(--console-fg);border-color:var(--console-line);box-shadow:none}
+.timer .btn.ghost[aria-pressed="true"]{background:var(--console-fg);color:var(--console)}
 .toast{bottom:calc(var(--nav-h) + 92px + env(safe-area-inset-bottom,0px));border-radius:16px;background:var(--fg);color:var(--bg)}
 body.notimer .toast{bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px))}
-body.solo .toast{bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 .wprog{top:calc(8px + env(safe-area-inset-top,0px));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:color-mix(in srgb,var(--surface) 88%,transparent)}
 @media (min-width:900px){.tabs{left:50%;right:auto;bottom:16px;transform:translateX(-50%);width:440px;border-radius:24px;border:1px solid var(--line);box-shadow:var(--shadow)}
   .timer{left:50%;right:auto;transform:translateX(-50%);width:min(860px,calc(100% - 32px));bottom:96px}}
@@ -1383,7 +1382,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.11.19-b9ecbf9";
+const APP_VERSION="2026.11.19-ccdf6bb";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -3455,7 +3454,6 @@ const WSL=[
 function renderWelcome(){ const el=$("welcome"); if(!el) return;
   const first=loaded.m&&loaded.w&&!PROFILE&&!WEL.skip, tour=loaded.m&&PROG&&!PROG.testPending&&!load("atlos:tour")&&!WEL.mode&&$("sum").hidden&&$("ob").hidden;
   document.body.classList.toggle("solo", !!(loaded.m && (!PROFILE||!PROG||PROG.testPending) && !WEL.skip));
-  if(document.body.classList.contains("solo")&&TAB!=="today") setTab("today",true);
   if(WEL.mode==="first"){ el.hidden=false; return; }
   if(first){ const s=WSL[WEL.step], n=WSL.length;
     el.innerHTML=`<div class="wel-in"><div class="wel-top"><svg class="wel-logo" viewBox="0 0 64 64" width="44" height="44" aria-hidden="true"><rect width="64" height="64" rx="16" fill="currentColor"/><path d="M18 46 32 16l14 30M23 36h18" stroke="var(--bg)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="wel-dots">${WSL.map((_,k)=>`<i class="${k===WEL.step?"on":""}"></i>`).join("")}</span></div>
@@ -4130,8 +4128,8 @@ renderAll();
   /* ---- автозапуск при первом заходе на экран ---- */
   let qT=null;
   function queue(){ clearTimeout(qT); qT=setTimeout(()=>{ if(cur||blocked()) return;
-    if(TAB==="today"&&!seen.today&&!document.body.classList.contains("solo")&&run("today")) return;
-    if(TAB==="today"&&!seen.wk&&vis($("wk"))&&pick("#items .row:not(.hdr) .cell")&&(seen.today||document.body.classList.contains("solo"))&&run("wk")) return;
+    if(TAB==="today"&&!seen.today&&run("today")) return;
+    if(TAB==="today"&&!seen.wk&&vis($("wk"))&&pick("#items .row:not(.hdr) .cell")&&seen.today&&run("wk")) return;
     if(TAB!=="today"&&!seen[TAB]) run(TAB); },700); }
   const _setTab=setTab; setTab=function(){ const r=_setTab.apply(this,arguments); close(false); queue(); return r; };
   const _renderAll=renderAll; renderAll=function(){ const r=_renderAll.apply(this,arguments); addHintRow(); if(!cur) queue(); return r; };
