@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Атлос</title>
 <meta name="description" content="Конструктор тренировок и журнал подходов">
-<meta name="theme-color" content="#f2f2f0" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f3f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0b11" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -639,6 +639,146 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .welcome{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:22px 18px;display:flex;flex-direction:column;gap:12px}
 .welcome h3{font-family:var(--display);font-weight:400;font-size:22px;margin:0}
 .hdate{font-size:clamp(28px,7vw,40px)}
+
+/* ===== v15: молодёжный нативный дизайн ===== */
+:root{
+  --bg:#f3f3f8; --surface:#ffffff; --sunk:#ececf3; --fg:#0f0f17; --muted:#7c7c92; --line:#e2e2ec;
+  --accent:#6c4dff; --accent-2:#b04dff; --accent-soft:#ece8ff; --lime:#c8ff3d; --ok:#16a35a; --ok-soft:#e0f7ea; --warn:#d97706; --plate:#6c4dff;
+  --grad:linear-gradient(135deg,#6c4dff 0%,#b04dff 100%);
+  --console:#13131c; --console-fg:#f7f7fb; --console-muted:#8e8ea6; --console-line:#2a2a3a;
+  --shadow:0 1px 2px rgba(20,16,60,.04),0 8px 24px rgba(20,16,60,.07);
+  --display:"Onest",system-ui,sans-serif; --body:"Onest",system-ui,-apple-system,sans-serif; --mono:"Onest",system-ui,sans-serif;
+  --nav-h:64px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b0b11; --surface:#16161f; --sunk:#20202c; --fg:#f5f5fb; --muted:#8d8da4; --line:#2a2a38;
+  --accent:#8b75ff; --accent-2:#c06bff; --accent-soft:#251f45; --ok:#3ddc84; --ok-soft:#15301f; --plate:#8b75ff;
+  --console:#000; --console-line:#262633; --shadow:0 1px 0 rgba(255,255,255,.03) inset; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b0b11; --surface:#16161f; --sunk:#20202c; --fg:#f5f5fb; --muted:#8d8da4; --line:#2a2a38;
+  --accent:#8b75ff; --accent-2:#c06bff; --accent-soft:#251f45; --ok:#3ddc84; --ok-soft:#15301f; --plate:#8b75ff;
+  --console:#000; --console-line:#262633; --shadow:0 1px 0 rgba(255,255,255,.03) inset; color-scheme:dark}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:var(--body);font-weight:500;letter-spacing:0}
+button,.btn,.chip,.cell,.chk,.wcard,.obc,.eqb,.segb,.tabs button{-webkit-user-select:none;user-select:none;touch-action:manipulation}
+@media (prefers-reduced-motion:no-preference){
+  .btn,.chip,.cell,.chk,.wcard,.obc,.eqb,.gmini,.addex,.addset,.play,.tabs button,.libmain,.hint-help{transition:transform .12s ease,background .2s,color .2s,box-shadow .2s}
+  .btn:active,.chip:active,.cell:active,.chk:active,.wcard:active,.obc:active,.eqb:active,.gmini:active,.addex:active,.addset:active,.play:active,.libmain:active{transform:scale(.96)}
+  .wrap>[data-pane]{animation:paneIn .28s ease both}
+  .sheet:not([hidden]) .sheet-panel{animation:sheetUp .32s cubic-bezier(.2,.9,.3,1) both}
+  .toast:not([hidden]){animation:toastIn .25s ease both}
+}
+@keyframes paneIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* шапка */
+header{position:relative;padding-right:52px}
+header h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,9vw,46px);letter-spacing:-.03em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;width:max-content}
+.eyebrow{color:var(--muted);letter-spacing:.14em}
+section>h2{color:var(--fg);font-family:var(--display);font-size:13px;letter-spacing:.06em;font-weight:600}
+h2,h3,.tcard h3,.pcard.hero h3,.wel-h,.pgoal{font-family:var(--display);font-weight:600;letter-spacing:-.02em}
+.tcard h3{font-size:24px}
+.hint-help{all:unset;cursor:pointer;position:absolute;top:0;right:0;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--surface);box-shadow:var(--shadow);font-family:var(--display);font-weight:700;font-size:16px;color:var(--accent)}
+.hint-help:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* кнопки */
+.btn{background:var(--grad);color:#fff;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px -6px color-mix(in srgb,var(--accent) 70%,transparent)}
+.btn.ghost{background:var(--surface);color:var(--fg);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:var(--accent)}
+.btn.ghost[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+#finish{border-radius:18px;width:100%;box-sizing:border-box;text-transform:none;letter-spacing:.01em;font-size:16px;padding:17px}
+.actions:has(#finish){flex-direction:column;align-items:stretch}
+.pill{background:var(--lime);color:#14140a}
+.chip[aria-pressed="true"],.eqb[aria-pressed="true"],.obc[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.obc[aria-pressed="true"] span,.eqb[aria-pressed="true"] span{color:#fff}
+input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent)}
+
+/* карточки */
+.tcard,.pcard,.ex,.wcard,.prog,details,.wprog{border-radius:24px;box-shadow:var(--shadow);border:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
+.pdet,.warm,.chg,.rw,.coach,.pban,.path,.gsum{border:none}
+.tcard:first-child{position:relative;overflow:hidden}
+.tcard:first-child::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;border-radius:50%;background:var(--grad);opacity:.14;filter:blur(8px);pointer-events:none}
+.wcard[aria-pressed="true"]{background:var(--grad);color:#fff}
+.wcard[aria-pressed="true"] .m,.wcard[aria-pressed="true"] .m2{color:rgba(255,255,255,.75)}
+.wcard.add{border:1.5px dashed var(--accent);color:var(--accent)}
+.addex{border:1.5px dashed var(--accent);color:var(--accent);text-transform:none;letter-spacing:.01em;border-radius:18px}
+.addex:hover{background:var(--accent-soft);color:var(--accent)}
+.stats span{border:1px solid var(--line)}
+.stepper .on{background:var(--accent);color:#fff}
+.road li::before,.wel-ol li::before{background:var(--grad);color:#fff}
+.cav{background:var(--grad);color:#fff}
+.coach{background:var(--accent-soft)}
+
+/* подходы */
+.cell{font-family:var(--display);font-weight:500;font-size:18px;border-radius:14px}
+.cell:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.row.ok{background:var(--ok-soft)}
+.row.ok .cell{color:var(--fg)}
+.row.ok .sn,.row.ok .pv,.pv.fbv{color:var(--muted)}
+.chk{background:var(--sunk);color:var(--muted)}
+.chk[aria-pressed="true"],.row.ok .chk{background:var(--ok);color:#fff;box-shadow:0 4px 12px -4px var(--ok)}
+.addset{border-radius:14px}
+.play{background:var(--accent);color:#fff}
+.bar{height:10px}
+.bar i,.obar i{background:var(--grad)}
+.wd.done{background:var(--grad);color:#fff}.wd.done b{color:#fff}
+.wd.on{box-shadow:inset 0 0 0 2px var(--accent)}
+.pn.past{background:var(--accent);border-color:var(--accent);color:#fff}
+.rg-str{stroke:var(--accent)}.rg-cardio{stroke:#21b8e6}.rg-rec{stroke:var(--ok)}
+.vbar i{background:var(--accent)}
+.thumb{background:var(--accent-soft)}
+.wel-dots i.on{background:var(--accent)}
+.fig .wt{fill:var(--accent)}.fig .wl{stroke:var(--accent)}
+
+/* нижняя навигация как в приложении */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:12;margin:0!important;border-radius:0;display:grid;padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px));
+  background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:saturate(1.6) blur(18px);-webkit-backdrop-filter:saturate(1.6) blur(18px);border-top:1px solid var(--line);gap:0}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px 4px;border-radius:14px;font-size:11px;font-weight:600;color:var(--muted);background:none!important;box-shadow:none!important}
+.tabs button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabs button[aria-selected="true"]{color:var(--accent)}
+.tabs button[aria-selected="true"] .tic{background:var(--accent-soft)}
+.tabs .tic{width:52px;height:30px;border-radius:99px;display:grid;place-items:center;transition:background .2s}
+.wrap{padding-bottom:calc(var(--nav-h) + 110px + env(safe-area-inset-bottom,0px))!important}
+body.solo .wrap{padding-bottom:120px!important}
+
+/* таймер — плавающая панель над навигацией */
+.timer{left:10px;right:10px;bottom:calc(var(--nav-h) + 8px + env(safe-area-inset-bottom,0px));border-radius:22px;border:1px solid var(--console-line);overflow:hidden;padding:10px 14px;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+body.solo .timer{bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.clock{font-family:var(--display);font-weight:600;font-size:28px}
+.clock.run{color:var(--lime)}
+.tprog i{background:var(--grad)}
+.timer #stop{background:var(--lime);color:#111}
+.toast{bottom:calc(var(--nav-h) + 92px + env(safe-area-inset-bottom,0px));border-radius:16px;background:var(--fg);color:var(--bg)}
+body.notimer .toast{bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px))}
+body.solo .toast{bottom:calc(90px + env(safe-area-inset-bottom,0px))}
+.wprog{top:calc(8px + env(safe-area-inset-top,0px));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:color-mix(in srgb,var(--surface) 88%,transparent)}
+@media (min-width:900px){.tabs{left:50%;right:auto;bottom:16px;transform:translateX(-50%);width:440px;border-radius:24px;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .timer{left:50%;right:auto;transform:translateX(-50%);width:min(860px,calc(100% - 32px));bottom:96px}}
+
+/* ===== подсказки ===== */
+.hint-spot{position:fixed;z-index:60;border-radius:18px;box-shadow:0 0 0 3px var(--accent),0 0 0 9999px rgba(8,6,20,.62);pointer-events:none;transition:all .28s cubic-bezier(.2,.9,.3,1)}
+.hint-shield{position:fixed;inset:0;z-index:59}
+.hint-pop{position:fixed;z-index:61;max-width:min(330px,calc(100vw - 24px));box-sizing:border-box;background:var(--surface);color:var(--fg);border-radius:20px;padding:14px 16px 12px;box-shadow:0 18px 50px -12px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.45}
+@media (prefers-reduced-motion:no-preference){.hint-pop{animation:paneIn .22s ease both}}
+.hint-pop .hp-top{display:flex;gap:10px;align-items:center}
+.hint-pop .hp-ic{flex:none;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-weight:800;font-family:var(--display);font-size:13px}
+.hint-pop b{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.hint-pop p{margin:0;color:var(--muted)}
+.hint-pop .hp-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:2px}
+.hint-pop .hp-dots{display:flex;gap:4px}.hint-pop .hp-dots i{width:6px;height:6px;border-radius:3px;background:var(--line)}.hint-pop .hp-dots i.on{width:16px;background:var(--accent)}
+.hint-pop .hp-skip{all:unset;cursor:pointer;font-size:13px;color:var(--muted);padding:6px 4px}
+.hint-pop .btn{padding:8px 16px;font-size:13px}
+.tipi{all:unset;cursor:pointer;flex:none;width:20px;height:20px;border-radius:50%;display:inline-grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;font-family:var(--display);letter-spacing:0;text-transform:none}
+.tipi:focus-visible{outline:2px solid var(--accent)}
+.hintrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:16px;background:var(--sunk);font-size:14px}
+.wel-logo{color:var(--accent);border-radius:16px;box-shadow:0 8px 22px -8px var(--accent)}
+.wel-logo path{stroke:#fff}
+/* PWA-шапка: бренд + дата */
+header h1.hdate{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--fg);width:auto;font-weight:600;letter-spacing:-.02em}
+.brand span{font-family:var(--display);font-weight:600;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand img{border-radius:10px;box-shadow:0 6px 16px -6px var(--accent)}
+.note-card,.dcard,.welcome{border-radius:22px}
 </style>
 </head>
 <body>
@@ -1243,7 +1383,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.10.31-b4ce32b";
+const APP_VERSION="2026.11.19-b9ecbf9";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -3884,6 +4024,127 @@ renderAll();
   }, ()=>{});
 })();
 
+</script>
+<script>
+/* ===== v15: нижняя навигация с иконками и подсказки ===== */
+(()=>{
+  const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const ICO={
+    today:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    path:'<path d="M4 20c4 0 4-6 8-6s4-6 8-6"/><circle cx="4" cy="20" r="1.6"/><circle cx="20" cy="8" r="1.6"/><path d="M18 3h3v3"/>',
+    prog:'<rect x="3.5" y="4.5" width="17" height="16" rx="3"/><path d="M3.5 9.5h17M8 2.5v4M16 2.5v4M8 14h3M8 17h6"/>',
+    log:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'
+  };
+  $$(".tabs [data-tab]").forEach(b=>{ const t=b.textContent.trim(); b.innerHTML=`<span class="tic"><svg viewBox="0 0 24 24" aria-hidden="true">${ICO[b.dataset.tab]||""}</svg></span><span>${t}</span>`; });
+
+  /* ---- тексты подсказок ---- */
+  const TOURS={
+    today:[
+      [".tabs","Четыре раздела","«Сегодня» — что делать прямо сейчас. «Путь» — ранги, серии и награды. «Программа» — весь план. «Журнал» — история и рост весов."],
+      ["#today .tcard","Ваш день","Здесь всегда видно, какая тренировка сегодня, сколько она займёт и почему именно она. Нажмите кнопку — и вперёд."],
+      ["#today [data-ci]","Самочувствие","Отметьте сон и состояние перед тренировкой. Если день тяжёлый — Атлос сам облегчит нагрузку."],
+      ["#today .gmini","Кольца недели","Сила, кардио и восстановление. Закройте все три — неделя засчитается в серию."],
+      ["#today .wstrip","Неделя","Дни с тренировками по плану. Закрашенные — уже сделаны."],
+      [".hint-help","Подсказки всегда рядом","Нажмите «?», чтобы снова посмотреть подсказки для любого раздела."]
+    ],
+    wk:[
+      ["#items .ex .thumb","Техника","Нажмите на фигурку — откроется анимация упражнения и советы по технике."],
+      ["#items .row:not(.hdr) .cell","Вес и повторы","Нажмите на цифру и прокрутите барабан. Рекомендованный вес Атлос уже подставил."],
+      ["#items .row:not(.hdr) .chk","Подход сделан","Жмите галочку после каждого подхода — таймер отдыха запустится сам."],
+      [".timer","Таймер отдыха","Отсчитывает отдых между подходами. Можно выбрать время вручную или добавить 15 секунд."],
+      ["#add-ex","Своё упражнение","Добавьте любое упражнение из библиотеки — с фильтром по мышцам и оборудованию."],
+      ["#finish","Финиш","В конце сохраните тренировку: Атлос посчитает объём и рекорды и подберёт веса на следующий раз."]
+    ],
+    path:[
+      ["#path .rings","Три кольца","Сила, кардио и восстановление за неделю. Все три закрыты — серия растёт."],
+      ["#path .path","Карта пути","Каждая тренировка — шаг вперёд. Пройденные главы повышают ранг."],
+      ["#path .trials","Испытания","Небольшие цели на неделю. Выполнили — получили очки и золото."],
+      ["#path .gsum, #path .shop","Золото","Тратьте золото на темы карты и заморозку серии, если пропустили неделю."]
+    ],
+    prog:[
+      ["#plan .pcard","Ваша программа","Цель, частота и схема подобраны по научной базе. Раскройте детали, чтобы увидеть, почему так."],
+      ["#plan details","Почему так","Здесь объяснение: объём на мышцу, отдых, прогрессия весов. Всё можно поменять под себя."],
+      ["#wgrid","Все тренировки","Нажмите карточку, чтобы открыть тренировку. Карточка с «+» — создать свою."]
+    ],
+    log:[
+      ["#stats","Итоги","Сколько тренировок в журнале, когда была последняя и какая следующая по очереди."],
+      ["#prog","Прогресс по весам","Как растут рабочие веса в каждом упражнении. Зелёный — рост."],
+      ["#hist","История","Все прошлые тренировки. Нажмите, чтобы раскрыть подробности."]
+    ]
+  };
+  const TIPS={
+    "h-path":"Игровой слой: кольца недели, серии, ранги и испытания. Помогает не бросить.",
+    "h-plan":"План на цикл 8–12 недель: цель, дни, разгрузки и повторный тест.",
+    "h-w":"Все тренировки программы и ваши собственные. Можно редактировать.",
+    "h-st":"Сводка по всем завершённым тренировкам.",
+    "h-prog":"Рост рабочих весов по каждому упражнению от первой тренировки до последней.",
+    "h-hist":"Журнал всех завершённых тренировок с подходами и весами.",
+    "h-set":"Тема, сброс прогресса и повтор подсказок."
+  };
+
+  const KEY="atlos:hints";
+  let seen=load(KEY)||{}; const saveSeen=()=>store(KEY,seen);
+  let cur=null; // {key,steps,i}
+  const vis=el=>{ if(!el) return false; const r=el.getBoundingClientRect(); return r.width>0&&r.height>0&&getComputedStyle(el).visibility!=="hidden"; };
+  const pick=sel=>$$(sel).find(vis);
+  const blocked=()=>{ const w=$("welcome"); if(w&&!w.hidden) return true; if($$(".sheet").some(s=>!s.hidden)) return true; const m=$("modal"); return !!(m&&!m.hidden); };
+
+  let spot,shield,pop;
+  function close(markSeen){ if(cur&&markSeen){ seen[cur.key]=1; saveSeen(); } cur=null; [spot,shield,pop].forEach(n=>n&&n.remove()); spot=shield=pop=null; window.removeEventListener("resize",place); window.removeEventListener("scroll",place,true); }
+  function place(){ if(!cur) return; const st=cur.steps[cur.i]; const el=st.el; if(!vis(el)){ return; }
+    const r=el.getBoundingClientRect(), pad=6, vw=innerWidth, vh=innerHeight;
+    Object.assign(spot.style,{left:(r.left-pad)+"px",top:(r.top-pad)+"px",width:(r.width+pad*2)+"px",height:(r.height+pad*2)+"px"});
+    const pw=pop.offsetWidth, ph=pop.offsetHeight; let top=r.bottom+14; if(top+ph>vh-12) top=r.top-ph-14; if(top<12) top=Math.max(12,Math.min(vh-ph-12,r.top+r.height/2-ph/2));
+    let left=Math.min(Math.max(12,r.left+r.width/2-pw/2),vw-pw-12); pop.style.top=top+"px"; pop.style.left=left+"px"; }
+  function show(){ const st=cur.steps[cur.i], n=cur.steps.length;
+    st.el.scrollIntoView({block:"center",behavior:"auto"});
+    pop.innerHTML=`<div class="hp-top"><span class="hp-ic">${cur.i+1}</span><b>${st.t}</b></div><p>${st.d}</p>
+      <div class="hp-foot"><div class="hp-dots">${n>1?cur.steps.map((_,k)=>`<i class="${k===cur.i?"on":""}"></i>`).join(""):""}</div>
+      <span>${cur.i<n-1?'<button class="hp-skip" data-hskip>Пропустить</button> ':""}<button class="btn" data-hnext>${cur.i<n-1?"Дальше":"Понятно"}</button></span></div>`;
+    requestAnimationFrame(place); setTimeout(place,120); pop.querySelector("[data-hnext]").focus({preventScroll:true}); }
+  function run(key,force){ if(cur||blocked()) return false; if(!force&&seen[key]) return false;
+    const steps=(TOURS[key]||[]).map(([sel,t,d])=>({el:pick(sel),t,d})).filter(s=>s.el); if(!steps.length) return false;
+    cur={key,steps,i:0};
+    shield=document.createElement("div"); shield.className="hint-shield";
+    spot=document.createElement("div"); spot.className="hint-spot";
+    pop=document.createElement("div"); pop.className="hint-pop"; pop.setAttribute("role","dialog"); pop.setAttribute("aria-live","polite");
+    document.body.append(shield,spot,pop);
+    pop.addEventListener("click",e=>{ if(e.target.closest("[data-hskip]")) return close(true);
+      if(e.target.closest("[data-hnext]")){ if(cur.i<cur.steps.length-1){ cur.i++; if(!vis(cur.steps[cur.i].el)) cur.steps[cur.i].el=pick("body"); show(); } else close(true); } });
+    shield.addEventListener("click",()=>{ if(cur.i<cur.steps.length-1){ cur.i++; show(); } else close(true); });
+    window.addEventListener("resize",place); window.addEventListener("scroll",place,true);
+    show(); return true; }
+  function tip(btn,text){ close(false); pop=document.createElement("div"); pop.className="hint-pop"; pop.innerHTML=`<div class="hp-top"><span class="hp-ic">i</span><b>${btn.dataset.ttl||"Подсказка"}</b></div><p>${text}</p><div class="hp-foot"><span></span><button class="btn" data-tclose>Понятно</button></div>`;
+    shield=document.createElement("div"); shield.className="hint-shield"; document.body.append(shield,pop);
+    const r=btn.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight; let top=r.bottom+10; if(top+ph>innerHeight-12) top=r.top-ph-10;
+    pop.style.top=Math.max(12,top)+"px"; pop.style.left=Math.min(Math.max(12,r.left-pw/2),innerWidth-pw-12)+"px";
+    const off=()=>{ pop&&pop.remove(); shield&&shield.remove(); pop=shield=null; }; shield.onclick=off; pop.querySelector("[data-tclose]").onclick=off; }
+
+  /* ---- кнопка «?» и значки «i» у разделов ---- */
+  const help=document.createElement("button"); help.className="hint-help"; help.textContent="?"; help.setAttribute("aria-label","Подсказки по экрану");
+  document.querySelector("header").appendChild(help);
+  help.addEventListener("click",()=>{ close(false); const wkOn=TAB==="today"&&vis($("wk"))&&vis(pick("#items .row:not(.hdr) .cell"));
+    if(!(wkOn&&run("wk",true))) if(!run(TAB,true)) toast("Для этого экрана пока нет подсказок"); });
+  Object.entries(TIPS).forEach(([id,txt])=>{ const h=$(id); if(!h) return; const b=document.createElement("button"); b.className="tipi"; b.textContent="i"; b.dataset.ttl=h.textContent.trim(); b.setAttribute("aria-label","Что это: "+h.textContent.trim()); b.addEventListener("click",e=>{ e.stopPropagation(); tip(b,txt); }); h.appendChild(b); });
+
+  /* ---- автозапуск при первом заходе на экран ---- */
+  let qT=null;
+  function queue(){ clearTimeout(qT); qT=setTimeout(()=>{ if(cur||blocked()) return;
+    if(TAB==="today"&&!seen.today&&!document.body.classList.contains("solo")&&run("today")) return;
+    if(TAB==="today"&&!seen.wk&&vis($("wk"))&&pick("#items .row:not(.hdr) .cell")&&(seen.today||document.body.classList.contains("solo"))&&run("wk")) return;
+    if(TAB!=="today"&&!seen[TAB]) run(TAB); },700); }
+  const _setTab=setTab; setTab=function(){ const r=_setTab.apply(this,arguments); close(false); queue(); return r; };
+  const _renderAll=renderAll; renderAll=function(){ const r=_renderAll.apply(this,arguments); addHintRow(); if(!cur) queue(); return r; };
+  const _openWorkout=openWorkout; openWorkout=function(){ const r=_openWorkout.apply(this,arguments); queue(); return r; };
+  document.addEventListener("click",e=>{ if(e.target.closest(".sheet,#welcome,#modal")) setTimeout(queue,400); },true);
+
+  /* ---- настройки: показать подсказки заново ---- */
+  function addHintRow(){ const r=$("reset"); if(!r||r.querySelector(".hintrow")) return;
+    const d=document.createElement("div"); d.className="hintrow"; d.innerHTML=`<span>Подсказки по экранам</span><button class="btn ghost small" data-hreset>Показать заново</button>`;
+    r.appendChild(d); }
+  document.addEventListener("click",e=>{ if(e.target.closest("[data-hreset]")){ seen={}; saveSeen(); toast("Подсказки снова включены"); setTab("today"); } });
+  addHintRow(); queue();
+})();
 </script>
 </body>
 </html>
