@@ -1382,7 +1382,7 @@ const ANIM = (()=>{
 
 
 /* ===== local storage database: same shape as the cloud store, data stays on this phone ===== */
-const APP_VERSION="2026.11.19-ccdf6bb";
+const APP_VERSION="2026.11.19-24a2504";
 const LocalDB=(()=>{
   const KEY="atlos:data:v1"; let data;
   try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ data=null; }
@@ -2282,7 +2282,11 @@ const GOALS={mass:"Масса",strength:"Сила",loss:"Похудение",end
 const GOAL_HINT={mass:"рост мышц",strength:"больше вес в базовых упражнениях",loss:"меньше жира, мышцы сохраняются",endurance:"дольше и легче работать",func:"сила и подвижность для жизни"};
 const LEVELS=["","новичок","средний","продвинутый"];
 const WDS=["Вс","Пн","Вт","Ср","Чт","Пт","Сб"], WEEK=[1,2,3,4,5,6,0];
-const DEF_DAYS={2:[1,4],3:[1,3,5],4:[1,2,4,5],5:[1,2,3,5,6],6:[1,2,3,4,5,6]};
+const DEF_DAYS={1:[3],2:[1,4],3:[1,3,5],4:[1,2,4,5],5:[1,2,3,5,6],6:[1,2,3,4,5,6],7:[1,2,3,4,5,6,0]};
+/* стиль тренировок: меняет наполнение силовых и кардио, цель и уровень остаются */
+const STYLES={classic:"Силовая",box:"Бокс",func:"Функциональная"};
+const STYLE_HINT={classic:"классика с отягощениями: базовые упражнения и прогрессия весов",box:"сила и мощность для удара, кор с вращением, раунды боя с тенью, скакалка",func:"круги из многосуставных упражнений, переносы груза, махи гирей, бёрпи"};
+const styleOf = p => { p=p||PROFILE; return (p&&STYLES[p.style]&&p.style)||"classic"; };
 const CYCLE={1:{len:8,every:1},2:{len:5,every:2},3:{len:4,every:2}};
 const SPLITN={fb2:"Всё тело",fb3:"Всё тело, 3 варианта",ul:"Верх / низ",ppl:"Тяни-толкай-ноги",pplul:"Тяни-толкай-ноги + верх/низ"};
 const ZONES=[null,{lo:50,hi:60,t:"говорите свободно",u:"разминка, восстановление"},{lo:60,hi:70,t:"говорите фразами",u:"основа выносливости и похудения"},{lo:70,hi:80,t:"короткие фразы с трудом",u:"темповая работа"},{lo:80,hi:90,t:"отдельные слова",u:"интервалы"},{lo:90,hi:100,t:"говорить не можете",u:"короткие интервалы"}];
@@ -2413,7 +2417,14 @@ function composition(level,goal,D){
   else S = D<=3?D : D===4?3 : 4;
   return {S, C:D-S};
 }
-const splitFor = (level,S) => S<=2?"fb2" : S===3?(level===1?"fb2":"fb3") : level===1?"fb2" : S===4||level===2?"ul" : S===5?"pplul" : "ppl";
+const splitFor = (level,S) => S<=2?"fb2" : S===3?(level===1?"fb2":"fb3") : level===1||S===4||level===2?"ul" : S===5?"pplul" : "ppl";
+/* выбор человека: силовых 1–7 и кардио 0–7 в неделю. Если всё не помещается в выбранные дни — лишнее кардио идёт после силовой */
+function compOf(p,level){
+  const D=(p.wdays||[]).length;
+  if(p.nS>=1){ const S=Math.min(p.nS,D||p.nS), C=Math.max(0,(D||S)-S), nC=Math.max(+p.nC||0,0); return {S,C,X:Math.max(0,nC-C),user:true}; }
+  const r=composition(level,p.goal,D||3); return Object.assign(r,{X:0,user:false}); }
+const cTot = o => (o.C||0)+(o.X||0);
+function compLine(o){ const c=cTot(o); return `${o.S} ${plural3(o.S,"силовая","силовые","силовых")}${c?` + ${c} кардио`:""}`; }
 function compText(level,goal,D){ const {S,C}=composition(level,goal,D); return `${S} ${plural3(S,"силовая","силовые","силовых")}${C?` + ${C} кардио`:""}`; }
 function plural3(n,a,b,c){ n=Math.abs(n)%100; const m=n%10; if(n>10&&n<20) return c; if(m>1&&m<5) return b; if(m===1) return a; return c; }
 
@@ -2445,17 +2456,36 @@ function makeItem(id,ctx,o){
 function buildTpl(key,ctx){
   if(ctx.loc&&ctx.loc!=="gym") return buildTplL(key,ctx);
   const used=new Set(), items=[]; let isoN=0;
-  const hyp=["mass","loss","strength"].includes(ctx.goal) || ctx.goal2==="mass";
+  const hyp=(["mass","loss","strength"].includes(ctx.goal) || ctx.goal2==="mass") && (ctx.style==="classic"||!ctx.style||ctx.goal==="mass");
   SLOTS[key].forEach(sl=>{
-    if(sl.g==="hyp"){ if(!hyp) return; if(ctx.goal==="strength" && ctx.goal2!=="mass" && isoN++>=1) return; }
+    if(sl.g==="hyp"){ if(!hyp) return; if(((ctx.goal==="strength" && ctx.goal2!=="mass") || (ctx.style&&ctx.style!=="classic")) && isoN++>=1) return; }
     const id=pickEx(sl,ctx,used); if(!id) return; used.add(id);
     items.push(makeItem(id,ctx,{first:items.length===0,n:sl.n}));
   });
-  if((ctx.goal==="func"||ctx.goal2==="func") && LIB.farmer) items.splice(Math.max(0,items.length-1),0,makeItem("farmer",ctx,{}));
+  if((ctx.goal==="func"||ctx.goal2==="func") && ctx.style!=="func" && LIB.farmer) items.splice(Math.max(0,items.length-1),0,makeItem("farmer",ctx,{}));
+  styleAdd(items,ctx,id=>makeItem(id,ctx,{}));
   if(ctx.finish) items.push(cardioItem(ctx,15,"Кардио после силовой"));
   return items;
 }
-function cardioTpl(ctx){ const min=(ctx.level===1?25:ctx.level===2?35:40)+(ctx.goal==="endurance"?10:0); return [cardioItem(ctx,min,"Ровный темп",2)]; }
+function cardioTpl(ctx){ const min=(ctx.level===1?25:ctx.level===2?35:40)+(ctx.goal==="endurance"?10:0);
+  if(ctx.style==="box"){ const R=ctx.level===1?4:ctx.level===2?6:8, env=ctx.env||new Set(), jr=env.has("rope")&&!noJump(ctx);
+    return [cardioItem(ctx,8,"Разогрев",1),
+      {ex:jr?"rope":"highknees",rx:{tier:"cardio",zone:3,rest:60,label:"Скакалка: 3 раунда по 3 мин, отдых 1 мин"},sets:Array.from({length:3},()=>({w:null,r:3}))},
+      {ex:"shadow",rx:{tier:"cardio",zone:3,rest:60,label:`Бой с тенью: ${R} раундов по 3 мин, отдых 1 мин — комбинации, работа ног, защита`},sets:Array.from({length:R},()=>({w:null,r:3}))}]; }
+  if(ctx.style==="func"){ const R=ctx.level===1?3:ctx.level===2?4:5, jump=!noJump(ctx), kb=ctx.env&&ctx.env.has("kb");
+    const st=[jump?"burpee":"highknees", kb?"kbswing":"jacks", jump?"jacks":"shadow"].filter((v,i,a)=>a.indexOf(v)===i);
+    return [cardioItem(ctx,6,"Разогрев",1)].concat(st.map((id,i)=>{ const x=LIB[id], sec=x.tu==="сек", tm=x.kind==="cardio";
+      return tm?{ex:id,rx:{tier:"cardio",zone:3,rest:20,label:`Круг ${i+1}/${st.length}: ${R} × 40 с работы, 20 с отдыха`},sets:Array.from({length:R},()=>({w:null,r:sec?40:.7}))}
+               :Object.assign(makeItemL(id,ctx,{}),{rx:Object.assign(makeRxL(x,ctx),{lo:12,hi:15,rest:30,note:"в круге: подряд с другими упражнениями"})}); })); }
+  return [cardioItem(ctx,min,"Ровный темп",2)]; }
+/* добавки стиля к силовой: бокс — кор с вращением и раунды боя с тенью; функциональная — перенос груза и махи */
+function styleAdd(items,ctx,mk){
+  if(ctx.style==="box"){ const env=ctx.env||new Set(GYM_ENV), core=["pallof","sideplank","plank"].find(id=>LIB[id]&&needOK(LIB[id],env)&&!items.some(it=>it.ex===id));
+    if(core) items.push(mk(core));
+    items.push({ex:"shadow",rx:{tier:"cardio",zone:3,rest:60,label:"Бой с тенью: 3 раунда по 3 мин, отдых 1 мин"},sets:[{w:null,r:3},{w:null,r:3},{w:null,r:3}]}); }
+  if(ctx.style==="func"){ const env=ctx.env||new Set(GYM_ENV);
+    ["kbswing","farmer","packcarry"].filter(id=>LIB[id]&&needOK(LIB[id],env)&&!items.some(it=>it.ex===id)).slice(0,2).forEach(id=>{ const ci=items.findIndex(it=>LIB[it.ex]&&LIB[it.ex].pat==="core"); items.splice(ci<0?items.length:ci,0,mk(id)); }); }
+  return items; }
 function weekPlan(wdays,S){
   const pos=d=>(d+6)%7, days=wdays.slice().sort((a,b)=>pos(a)-pos(b)), D=days.length, out=[];
   const comb=(k,st,acc)=>{ if(acc.length===k){ out.push(acc.slice()); return; } for(let q=st;q<D;q++){ acc.push(q); comb(k,q+1,acc); acc.pop(); } };
@@ -2466,21 +2496,21 @@ function weekPlan(wdays,S){
 }
 function buildProgram(p,opt){
   const level=(opt&&opt.level)||statedLevel(p), D=(p.wdays||[]).length||3;
-  const loc=locOf(p), env=envFor(p), {S,C}=composition(level,p.goal,D); let split=splitFor(level,S); if(loc!=="gym"&&(split==="ppl"||split==="pplul")) split="ul";
+  const loc=locOf(p), env=envFor(p), cp=compOf(p,level), {S,C,X}=cp; let split=splitFor(level,S); if(loc!=="gym"&&(split==="ppl"||split==="pplul")) split="ul";
   const dts = loc==="gym" && level>1 && ["mass","strength","loss"].includes(p.goal) ? DTS[split][p.goal==="strength"?"s":"m"] : null;
-  const ctx={level,goal:p.goal,goal2:p.goal2||"",C,lim:p.lim||[],gentle:!!p.gentle||+p.age>=60,pullOK:pullOK(),runner:!!p.runner,split,loc,env,cardio:p.cardio||"",steps:opt&&opt.steps,stepsW:opt&&opt.stepsW};
+  const ctx={level,goal:p.goal,goal2:p.goal2||"",C,lim:p.lim||[],gentle:!!p.gentle||+p.age>=60,pullOK:pullOK(),runner:!!p.runner,split,loc,env,cardio:p.cardio||"",style:styleOf(p),steps:opt&&opt.steps,stepsW:opt&&opt.stepsW};
   const keys=SPLIT_T[split], W={};
   // недостающие кардио-сессии (похудение — 2–3, выносливость — 3–4, доп. цель — 2 в неделю) — после силовых
-  const tgtC = p.goal==="endurance"?3 : p.goal==="loss"?2 : (p.goal2==="loss"||p.goal2==="endurance")?2 : 0, need=Math.max(0,tgtC-C);
+  const tgtC = p.goal==="endurance"?3 : p.goal==="loss"?2 : (p.goal2==="loss"||p.goal2==="endurance")?2 : 0, need=cp.user ? X : Math.max(0,tgtC-C);
   const fin=new Set(); for(let k=0;k<Math.min(need,keys.length);k++) fin.add(Math.round(k*keys.length/Math.min(need,keys.length)));
-  const tip = p.goal==="endurance" ? "Можно выполнять кругом: по одному подходу каждого упражнения подряд, отдых 30–60 с." : p.goal==="func" ? "Можно выполнять кругом: многосуставные упражнения подряд, отдых 60–90 с." : "";
+  const tip = ctx.style==="box" ? "Боксёрский стиль: в многосуставных упражнениях поднимайте вес быстро и мощно, опускайте под контролем. Раунды боя с тенью в конце — 3 мин работы, 1 мин отдыха." : ctx.style==="func" || p.goal==="func" ? "Можно выполнять кругом: многосуставные упражнения подряд, отдых 60–90 с." : p.goal==="endurance" ? "Можно выполнять кругом: по одному подходу каждого упражнения подряд, отдых 30–60 с." : "";
   keys.forEach((k,q)=>{ const dt=dts?dts[q]:null, b={name:TPLN[k], order:q+1, prog:true, kind:"str", items:buildTpl(k,Object.assign({},ctx,{dt,finish:fin.has(q)||need>=keys.length}))}; if(dt) b.dt=dt; if(tip) b.tip=tip; W["p-"+k]=b; });
-  const plan=weekPlan(p.wdays&&p.wdays.length?p.wdays:DEF_DAYS[3],S);
+  const plan=weekPlan(p.wdays&&p.wdays.length?p.wdays:DEF_DAYS[Math.min(7,Math.max(S,3))],S);
   let nInt=0; if(level>1){ if(p.goal==="endurance") nInt=C>=4?2:C>=2?1:0; else if(p.goal2==="endurance"||p.goal==="loss") nInt=C>=2?1:0; }
   const cdays=Object.keys(plan).map(Number).filter(d=>plan[d]==="C"), intDays=cdays.filter(d=>plan[(d+1)%7]!=="S").slice(0,nInt);
-  if(C>0) W["p-cardio"]={name:"Кардио · зона 2",order:keys.length+1,prog:true,kind:"cardio",items:cardioTpl(ctx)};
+  if(C>0) W["p-cardio"]={name:ctx.style==="box"?"Бокс · раунды":ctx.style==="func"?"Функциональный круг":"Кардио · зона 2",order:keys.length+1,prog:true,kind:"cardio",items:cardioTpl(ctx)};
   if(intDays.length) W["p-int"]={name:loc==="gym"?"Интервалы 4×4":loc==="bars"?"Интервалы 6×400 м":"Интервалы 30/30",order:keys.length+2,prog:true,kind:"cardio",items:intervalTpl(ctx)};
-  const prog={v:2, level, levelStated:statedLevel(p), split, S, C, seq:keys.map(k=>"p-"+k), plan, intDays, start:today(), goal:p.goal, goal2:p.goal2||"", loc, createdAt:new Date().toISOString()};
+  const prog={v:2, level, levelStated:statedLevel(p), split, S, C, X, style:ctx.style, seq:keys.map(k=>"p-"+k), plan, intDays, start:today(), goal:p.goal, goal2:p.goal2||"", loc, createdAt:new Date().toISOString()};
   const st=(opt&&opt.steps)||(PROG&&PROG.loc===loc&&PROG.steps); if(loc!=="gym"&&st) prog.steps=st; const sw=(opt&&opt.stepsW)||(PROG&&PROG.loc===loc&&PROG.stepsW); if(loc!=="gym"&&sw) prog.stepsW=sw;
   return {prog,W};
 }
@@ -2505,7 +2535,7 @@ function cycleInfo(d){
   const C=CYCLE[PROG.level]||CYCLE[1], per=C.len+1, wi=Math.max(0,Math.floor(daysBetween(PROG.start,d)/7)), pos=wi%per, no=Math.floor(wi/per)+1;
   const planned=pos===C.len, dd=PROG.deloadFrom?daysBetween(PROG.deloadFrom,d):-1, manual=dd>=0&&dd<7;
   const retest=planned && no%C.every===0;
-  const weeksSinceTest=PROG.testDate?Math.floor(daysBetween(PROG.testDate,d)/7):wi;
+  const tref=[PROG.testDate,PROG.retestSkip].filter(Boolean).sort().pop(), weeksSinceTest=tref?Math.floor(daysBetween(tref,d)/7):wi;
   return {wi,pos,no,len:C.len,every:C.every,deload:planned||manual,manual,retest,overdue:!PROG.testPending&&weeksSinceTest>=per*C.every,deloadEnd:manual?addDays(PROG.deloadFrom,6):addDays(PROG.start,wi*7+6)};
 }
 const deloadOn = d => { const c=cycleInfo(d); return !!(c&&c.deload); };
@@ -2744,7 +2774,7 @@ function renderPlan(){
   if(!loaded.m){ el.innerHTML=`<div class="empty">Загружаю программу…</div>`; return; }
   if(!PROFILE||!PROG){
     el.innerHTML=`<div class="pcard hero"><div class="eyebrow">Программы пока нет</div><h3>Программа под вашу цель</h3>
-      <p class="muted">Анкета на 2 минуты и тестовая тренировка — и Атлос составит тренировки: упражнения, веса, отдых, разгрузочные недели и рост весов. Менять можно всё.</p>
+      <p class="muted">Анкета на 2 минуты (тест — по желанию) — и Атлос составит тренировки: упражнения, веса, отдых, разгрузочные недели и рост весов. Менять можно всё.</p>
       <div class="actions"><button class="btn" data-ob>Подобрать программу</button></div></div>`; return; }
   const c=cycleInfo()||{}, C=CYCLE[PROG.level]||CYCLE[1], cm=cardioWeekMin();
   const days=WEEK.filter(d=>PROG.plan[d]).map(d=>WDS[d].toLowerCase()+(PROG.plan[d]==="C"?" (кардио)":"")).join(", ");
@@ -2752,7 +2782,7 @@ function renderPlan(){
   const tw = PROG.testPending ? "сначала тест" : `≈ ${fmtDate(addDays(PROG.start,(C.len+1)*C.every*7-1))}`;
   el.innerHTML=`<div class="pcard">
     <div class="ptop"><div style="min-width:0"><div class="eyebrow">Цель</div><div class="pgoal">${GOALS[PROG.goal]||""}${PROG.goal2?` <span class="muted">+ ${GOALS[PROG.goal2].toLowerCase()}</span>`:""}</div></div><span class="pill">${LEVELS[PROG.level]}</span></div>
-    <div class="kv"><span>Схема</span><b>${SPLITN[PROG.split]} · ${PROG.S} ${plural3(PROG.S,"силовая","силовые","силовых")}${PROG.C?` + ${PROG.C} кардио`:""} в неделю</b><span>Дни</span><b>${days}</b><span>Цикл</span><b>${cyc}</b><span>Повторный тест</span><b>${tw}</b></div>
+    <div class="kv"><span>Схема</span><b>${SPLITN[PROG.split]}${PROG.style&&PROG.style!=="classic"?" · стиль «"+STYLES[PROG.style]+"»":""} · ${compLine(PROG)} в неделю</b><span>Дни</span><b>${days}</b><span>Цикл</span><b>${cyc}</b><span>Повторный тест</span><b>${tw}</b></div>
     ${stripHTML()}
     <div class="pcm"><div class="wp-top"><span>Кардио на этой неделе</span><span class="num"><b>${cm}</b> из 150 мин</span></div><div class="bar"><i style="width:${Math.min(100,cm/150*100)}%"></i></div><span class="muted" style="font-size:12px">Норма ВОЗ: 150–300 минут умеренной нагрузки в неделю; интенсивные минуты считаются вдвое.</span></div>
     <details class="pdet"><summary>Как это работает</summary>${howHTML()}</details>
@@ -2817,10 +2847,10 @@ function envFor(p,mode){ p=p||PROFILE||{}; const loc=mode==="travel"?"travel":lo
   if(loc==="gym") GYM_ENV.forEach(t=>s.add(t));
   else if(loc==="travel") ["box","table","wall","pack"].forEach(t=>s.add(t));
   else if(loc==="home"){ const v=p.inv||{}; ["box","table","wall","pack"].forEach(t=>s.add(t)); if(dbWeights(p).length) s.add("dumbbell"); if(dbWeights(p,"kb").length) s.add("kb"); if(v.band) s.add("band"); if(v.doorbar) s.add("bar"); if(v.rope) s.add("rope"); }
-  else { const v=p.park||{}; s.add("bar"); if(v.dips!==false) s.add("dipbars"); if(v.box!==false) s.add("box"); ["lowbar","wallbars","monkey","abbench","band","pack","wall"].forEach(t=>{ if(v[t]) s.add(t); }); }
+  else { const v=p.park||{}; s.add("bar"); if(dbWeights(p).length) s.add("dumbbell"); if(dbWeights(p,"kb").length) s.add("kb"); if(v.dips!==false) s.add("dipbars"); if(v.box!==false) s.add("box"); ["lowbar","wallbars","monkey","abbench","band","pack","wall"].forEach(t=>{ if(v[t]) s.add(t); }); }
   return s; }
 /* веса, которые реально есть дома (гантели и гири) */
-function availW(x){ if(locOf()!=="home"||!x||!(x.eq==="dumbbell"||x.eq==="kb")) return null;
+function availW(x){ if(!["home","bars"].includes(locOf())||!x||!(x.eq==="dumbbell"||x.eq==="kb")) return null;
   const a=x.eq==="kb"?dbWeights(null,"kb"):[...new Set(dbWeights().concat((x.need||[]).some(n=>String(n).includes("kb"))?dbWeights(null,"kb"):[]))].sort((p,q)=>p-q);
   return a.length?a:null; }
 const nextW = (x,w) => { const a=availW(x); if(!a) return null; const n=a.find(v=>v>(+w||0)+1e-9); return n==null?null:n; };
@@ -2858,10 +2888,10 @@ function nextStep(lad,id,env,dir=1){ const L=LADDERS[lad]||[]; if(L.indexOf(id)<
 
 /* ---- роли в тренировке: паттерн → варианты по месту (Дом, разд. 6; Турники, разд. 6) ---- */
 const ROLE={
-  squat:{home:["goblet","dbsquat","band_squat","@sq"],bars:["@sq"],travel:["@sq"]},
-  hinge:{home:["rdl_db","kbswing","band_gm","@post"],bars:["@post"],travel:["@post"]},
-  hinge2:{home:["rdl1","kbswing","band_gm","@post"],bars:["@post"],travel:["@post"]},
-  lunge:{home:["stepup","lunge","bulgarian","@lg"],bars:["@lg"],travel:["@lg"]},
+  squat:{home:["goblet","dbsquat","band_squat","@sq"],bars:["goblet","@sq"],travel:["@sq"]},
+  hinge:{home:["rdl_db","kbswing","band_gm","@post"],bars:["rdl_db","kbswing","@post"],travel:["@post"]},
+  hinge2:{home:["rdl1","kbswing","band_gm","@post"],bars:["rdl1","kbswing","@post"],travel:["@post"]},
+  lunge:{home:["stepup","lunge","bulgarian","@lg"],bars:["bulgarian","lunge","@lg"],travel:["@lg"]},
   hpush:{home:["dbfloor","@push"],bars:["@push"],travel:["@push"]},
   push:{home:["@push"],bars:["@push"],travel:["@push"]},
   dips:{home:["benchdip","pushclose"],bars:["@dips","pushclose"],travel:["benchdip","pushclose"]},
@@ -2931,14 +2961,15 @@ function makeItemL(id,ctx,o){
   if(id==="tablerow") it.rx.note="стол тяжёлый, на четырёх ножках, без стекла";
   return it; }
 function buildTplL(key,ctx){
-  const used=new Set(), items=[], hyp=["mass","loss","strength"].includes(ctx.goal)||ctx.goal2==="mass";
+  const used=new Set(), items=[], hyp=(["mass","loss","strength"].includes(ctx.goal)||ctx.goal2==="mass") && (ctx.style==="classic"||!ctx.style||ctx.goal==="mass");
   const T=LTPL[ctx.loc]||LTPL.home, roles=T[key]||T.fbA; let noV=false;
   let isoN=0;
-  roles.forEach(r=>{ if(ISO_ROLES.has(r)){ if(!hyp) return; if(ctx.goal==="strength"&&ctx.goal2!=="mass"&&isoN>=1) return; }
+  roles.forEach(r=>{ if(ISO_ROLES.has(r)){ if(!hyp) return; if(((ctx.goal==="strength"&&ctx.goal2!=="mass")||(ctx.style&&ctx.style!=="classic"))&&isoN>=1) return; }
     const pk=pickRole(r,ctx,used); if(!pk){ if(r==="vpull") noV=true; return; }
     used.add(pk.id); if(ISO_ROLES.has(r)) isoN++; items.push(makeItemL(pk.id,ctx,{first:items.length===0,lad:pk.lad})); });
   if(noV){ const h=items.find(it=>LIB[it.ex].pat==="hpull"); if(h){ h.sets.push(Object.assign({},h.sets[0])); h.rx.note="без турника и резинки полноценной вертикальной тяги нет — сюда добавлен подход"; } }
-  if((ctx.goal==="func"||ctx.goal2==="func")){ const c=["farmer","packcarry"].find(id=>LIB[id]&&needOK(LIB[id],ctx.env)); if(c) items.splice(Math.max(0,items.length-1),0,makeItemL(c,ctx,{})); }
+  if((ctx.goal==="func"||ctx.goal2==="func") && ctx.style!=="func"){ const c=["farmer","packcarry"].find(id=>LIB[id]&&needOK(LIB[id],ctx.env)); if(c) items.splice(Math.max(0,items.length-1),0,makeItemL(c,ctx,{})); }
+  styleAdd(items,ctx,id=>makeItemL(id,ctx,{}));
   if(ctx.finish) items.push(cardioItem(ctx,15,"Кардио после силовой"));
   return items; }
 
@@ -3102,30 +3133,36 @@ function invText(p){ p=p||PROFILE||{}; const loc=locOf(p);
   if(loc==="home"){ const a=[], d=dbWeights(p), k=dbWeights(p,"kb"), v=p.inv||{};
     if(d.length) a.push(`гантели ${v.db==="adj"?"до "+fmtN(d[d.length-1]):d.map(fmtN).join(", ")} кг`); if(k.length) a.push(`гиря ${k.map(fmtN).join(", ")} кг`);
     if(v.band) a.push("резинки"); if(v.doorbar) a.push("дверной турник"); if(v.rope) a.push("скакалка"); return "дом"+(a.length?": "+a.join(", "):": свой вес и мебель"); }
-  const v=p.park||{}, a=["турник"]; if(v.dips!==false) a.push("брусья"); if(v.box!==false) a.push("лавка");
+  const v=p.park||{}, a=["турник"], d=dbWeights(p), k=dbWeights(p,"kb"), iv=p.inv||{}; if(v.dips!==false) a.push("брусья"); if(v.box!==false) a.push("лавка");
   [["lowbar","низкая перекладина"],["wallbars","шведская стенка"],["monkey","рукоход"],["abbench","скамья для пресса"],["wall","стена"],["band","резинка"],["pack","вес в рюкзаке"]].forEach(([k,l])=>{ if(v[k]) a.push(l); });
+  if(d.length) a.push(`гантели ${iv.db==="adj"?"до "+fmtN(d[d.length-1]):d.map(fmtN).join(", ")} кг`); if(k.length) a.push(`гиря ${k.map(fmtN).join(", ")} кг`);
   return "площадка: "+a.join(", "); }
 function placeHTML(p){
   const inv=p.inv||{}, pk=p.park||{};
   let h=`<div class="obq"><div class="obl">Где вы тренируетесь чаще всего</div><div class="obgrid">${["gym","home","bars"].map(k=>card("data-set-loc",k,p.loc===k,LOCS[k],LOC_HINT[k])).join("")}</div>
     <p class="hint">Программа строится под это место. В поездке перед тренировкой нажмите «В поездке» — упражнения заменятся на один день, программа не изменится.</p></div>`;
-  if(p.loc==="home") h+=`<div class="obq"><div class="obl">Гантели</div><div class="chips l">${chip("data-set-db","none",!inv.db||inv.db==="none","Нет")}${chip("data-set-db","fixed",inv.db==="fixed","Фиксированные")}${chip("data-set-db","adj",inv.db==="adj","Разборные")}</div>
-      ${inv.db==="fixed"?`<label class="obin">Веса гантелей, кг<input data-in="inv.dbList" inputmode="decimal" placeholder="например: 5, 8, 12" value="${esc(inv.dbList||"")}"></label>`:""}
-      ${inv.db==="adj"?`<label class="obin">Максимальный вес одной гантели, кг<input data-in="inv.dbMax" inputmode="decimal" placeholder="например: 20" value="${esc(inv.dbMax||"")}"></label>`:""}</div>
-    <div class="obq"><div class="obl">Ещё есть</div>
-      <label class="chk2"><input type="checkbox" data-chk="inv.kb"${inv.kb?" checked":""}> Гиря</label>
-      ${inv.kb?`<label class="obin">Веса гирь, кг<input data-in="inv.kbList" inputmode="decimal" placeholder="например: 8, 16" value="${esc(inv.kbList||"")}"></label>`:""}
+  if(p.loc==="home") h+=ownInvHTML(inv,"Свой инвентарь")+`<div class="obq"><div class="obl">Ещё есть</div>
       <label class="chk2"><input type="checkbox" data-chk="inv.band"${inv.band?" checked":""}> Резинки и крепление для двери</label>
       <label class="chk2"><input type="checkbox" data-chk="inv.doorbar"${inv.doorbar?" checked":""}> Дверной турник</label>
       <label class="chk2"><input type="checkbox" data-chk="inv.rope"${inv.rope?" checked":""}> Скакалка</label>
       <p class="hint">Стул, кровать, стол и стену учитываем всегда. Если будете докупать — сначала разборные гантели и дверной турник: гантели снимают потолок по весу, турник даёт вертикальную тягу, которую дома больше нечем заменить.</p></div>`;
   if(p.loc==="bars") h+=`<div class="obq"><div class="obl">Что есть на площадке <span class="muted">· турник есть всегда</span></div>
-      ${[["dips","Брусья",pk.dips!==false],["box","Лавка, парапет или ступени",pk.box!==false],["lowbar","Низкая перекладина на уровне пояса",pk.lowbar],["wallbars","Шведская стенка",pk.wallbars],["monkey","Рукоход",pk.monkey],["abbench","Скамья для пресса",pk.abbench],["wall","Стена рядом",pk.wall],["band","Своя резинка для помощи",pk.band],["pack","Рюкзак или пояс с весом",pk.pack]].map(([k,l,on])=>`<label class="chk2"><input type="checkbox" data-chk="park.${k}"${on?" checked":""}> ${l}</label>`).join("")}</div>`;
+      ${[["dips","Брусья",pk.dips!==false],["box","Лавка, парапет или ступени",pk.box!==false],["lowbar","Низкая перекладина на уровне пояса",pk.lowbar],["wallbars","Шведская стенка",pk.wallbars],["monkey","Рукоход",pk.monkey],["abbench","Скамья для пресса",pk.abbench],["wall","Стена рядом",pk.wall],["band","Своя резинка для помощи",pk.band],["pack","Рюкзак или пояс с весом",pk.pack]].map(([k,l,on])=>`<label class="chk2"><input type="checkbox" data-chk="park.${k}"${on?" checked":""}> ${l}</label>`).join("")}</div>`
+      +ownInvHTML(inv,"Свой инвентарь <span class=\"muted\">· если берёте с собой</span>","Гантели и гиря закрывают слабое место площадки — ноги: гоблет-присед, румынская тяга, выпады с весом.");
   if(p.loc&&p.loc!=="gym"&&p.goal==="strength") h+=`<div class="pban warnb"><span><b>Сила вне зала — честно:</b> максимальная сила растёт заметно лучше от тяжёлых весов. Программа возьмёт самые тяжёлые варианты — на одну конечность, с медленным темпом${p.loc==="bars"?", с весом на поясе":""} — но лучше добавить 1–2 тренировки в неделю в зале${p.loc==="home"?" или докупить разборные гантели или утяжелительный жилет":""}.</span></div>`;
   if(p.loc==="bars"&&(p.goal==="mass"||p.goal==="strength")) h+=`<p class="hint">Ноги — слабое место площадки: без внешнего веса упражнения на них быстро становятся лёгкими. Будут упражнения на одну ногу и медленный темп. Если есть возможность — 1 тренировка ног в неделю в зале или дома с гантелями.</p>`;
   return h; }
+/* свой инвентарь: гантели (нет / фиксированные / разборные) и гиря — одним блоком */
+function ownInvHTML(inv,title,hint){
+  return `<div class="obq"><div class="obl">${title}</div>
+    <div class="obl" style="font-size:13px">Гантели</div><div class="chips l">${chip("data-set-db","none",!inv.db||inv.db==="none","Нет")}${chip("data-set-db","fixed",inv.db==="fixed","Фиксированные")}${chip("data-set-db","adj",inv.db==="adj","Разборные")}</div>
+    ${inv.db==="fixed"?`<label class="obin">Веса гантелей, кг<input data-in="inv.dbList" inputmode="decimal" placeholder="например: 5, 8, 12" value="${esc(inv.dbList||"")}"></label>`:""}
+    ${inv.db==="adj"?`<label class="obin">Максимальный вес одной гантели, кг<input data-in="inv.dbMax" inputmode="decimal" placeholder="например: 20" value="${esc(inv.dbMax||"")}"></label>`:""}
+    <label class="chk2"><input type="checkbox" data-chk="inv.kb"${inv.kb?" checked":""}> Гиря</label>
+    ${inv.kb?`<label class="obin">Веса гирь, кг<input data-in="inv.kbList" inputmode="decimal" placeholder="например: 8, 16" value="${esc(inv.kbList||"")}"></label>`:""}
+    ${hint?`<p class="hint">${hint}</p>`:""}</div>`; }
 function placeValid(p){ if(!LOCS[p.loc]||p.loc==="travel") return false;
-  if(p.loc==="home"){ const v=p.inv||{}; if(v.db==="fixed"&&!numList(v.dbList).length) return false; if(v.db==="adj"&&!(+String(v.dbMax||"").replace(",",".")>0)) return false; if(v.kb&&!numList(v.kbList).length) return false; }
+  if(p.loc==="home"||p.loc==="bars"){ const v=p.inv||{}; if(v.db==="fixed"&&!numList(v.dbList).length) return false; if(v.db==="adj"&&!(+String(v.dbMax||"").replace(",",".")>0)) return false; if(v.kb&&!numList(v.kbList).length) return false; }
   return true; }
 function cardioHTML(p){ const loc=p.loc||"gym", env=envFor(p), opts=CARDIO_OPT[loc].filter(id=>LIB[id]&&needOK(LIB[id],env));
   return `<div class="obq"><div class="obl">Кардио, которое вам удобно</div><div class="chips l">${chip("data-set-cardio","",!p.cardio,"Подберите сами")}${opts.map(id=>chip("data-set-cardio",id,p.cardio===id,LIB[id].name)).join("")}</div>
@@ -3515,8 +3552,8 @@ const SYMS=[["chest","Боль или давление в груди"],["breath"
 const DISS=[["heart","Болезнь сердца или сосудов, высокое давление"],["kidney","Болезнь почек"],["metab","Диабет или другое нарушение обмена веществ"]];
 function openOb(){
   OB.step=PROFILE?1:0;
-  OB.p=PROFILE?clone(PROFILE):{sex:"",age:"",weight:"",sym:[],dis:[],lim:[],consent:false,goal:"",goal2:"",exp:"",runner:false,wdays:[],start:"test",archive:true};
-  OB.p.loc=OB.p.loc||"gym"; OB.p.inv=Object.assign({db:"none",dbList:"",dbMax:"",kb:false,kbList:"",band:false,doorbar:false,rope:false},OB.p.inv||{}); OB.p.park=Object.assign({dips:true,box:true},OB.p.park||{}); if(OB.p.cardio==null) OB.p.cardio="";
+  OB.p=PROFILE?clone(PROFILE):{sex:"",age:"",weight:"",sym:[],dis:[],lim:[],consent:false,goal:"",goal2:"",style:"classic",exp:"",runner:false,wdays:[],start:"test",archive:true};
+  OB.p.loc=OB.p.loc||"gym"; OB.p.inv=Object.assign({db:"none",dbList:"",dbMax:"",kb:false,kbList:"",band:false,doorbar:false,rope:false},OB.p.inv||{}); OB.p.park=Object.assign({dips:true,box:true},OB.p.park||{}); if(OB.p.cardio==null) OB.p.cardio=""; if(!STYLES[OB.p.style]) OB.p.style="classic";
   if(!OB.p.start||OB.p.start==="keep") OB.p.start=TESTS.length?"keep":"test";
   if(OB.p.archive==null) OB.p.archive=true;
   $("ob").classList.toggle("full",!PROFILE); if(!PROFILE) OB.step=1; renderOb(); $("ob").hidden=false; setTimeout(()=>$("ob-next").focus(),30);
@@ -3529,7 +3566,7 @@ function obValid(){
   if(s==="goal") return !!GOALS[p.goal];
   if(s==="place") return placeValid(p);
   if(s==="exp") return !!p.exp;
-  if(s==="days") return p.wdays.length>=2 && p.wdays.length<=6;
+  if(s==="days") return p.nS>=1 && p.nS<=7 && p.wdays.length>=p.nS && p.wdays.length<=7;
   return true;
 }
 function chip(attr,v,on,label,extra){ return `<button class="chip" ${attr}="${v}" aria-pressed="${!!on}"${extra||""}>${label}</button>`; }
@@ -3542,7 +3579,7 @@ function renderOb(){
   $("ob-title").textContent=T[s];
   let h="";
   if(s==="intro") h=`<p>Атлос работает как опытный тренер: правила тренировок — из метаанализов и позиций ACSM, NSCA и ВОЗ, готовые программы — из классических систем.</p>
-    <ol class="obsteps"><li><b>Анкета</b> — здоровье, цель, опыт и дни. 2 минуты.</li><li><b>Тестовая тренировка</b> — 60–70 минут. По ней рассчитаем уровень и рабочие веса.</li><li><b>Программа</b> — упражнения, подходы, веса, отдых, разгрузочные недели и повторный тест. Менять можно всё.</li></ol>`;
+    <ol class="obsteps"><li><b>Анкета</b> — здоровье, цель, опыт и дни. 2 минуты.</li><li><b>Тестовая тренировка — по желанию</b> — 60–70 минут, точнее рассчитаем уровень и веса. Можно начать сразу: веса подберутся по ходу.</li><li><b>Программа</b> — упражнения, подходы, веса, отдых, разгрузочные недели и повторный тест. Менять можно всё.</li></ol>`;
   if(s==="about") h=`<div class="obq"><div class="obl">Пол</div><div class="chips l">${chip("data-set-sex","m",p.sex==="m","Мужчина")}${chip("data-set-sex","f",p.sex==="f","Женщина")}</div>
       <p class="hint">Программы для мужчин и женщин одинаковые. Пол учитываем только в стандартах силы и формуле МПК.</p></div>
     <div class="obq two"><label>Возраст<input type="number" inputmode="numeric" data-in="age" min="18" max="100" value="${esc(p.age)}"></label><label>Вес, кг<input type="number" inputmode="decimal" step="0.1" data-in="weight" min="35" max="250" value="${esc(p.weight)}"></label></div>
@@ -3556,28 +3593,34 @@ function renderOb(){
     ${p.lim.length?`<p class="hint">Упражнения с нагрузкой на ${p.lim.map(k=>({knee:"колено",back:"поясницу",shoulder:"плечо"})[k]).join(", ")} уберём и заменим безопасными. При травме окончательное решение — за врачом или реабилитологом.</p>`:""}
     <label class="chk2"><input type="checkbox" data-chk="consent"${p.consent?" checked":""}> Согласен на обработку данных о здоровье для подбора программы</label>`;
   if(s==="goal") h=`<div class="obq"><div class="obl">Главная цель</div><div class="obgrid">${Object.entries(GOALS).map(([k,v])=>card("data-set-goal",k,p.goal===k,v,GOAL_HINT[k])).join("")}</div></div>
-    <div class="obq"><div class="obl">Дополнительная цель <span class="muted">· по желанию, около 30% времени</span></div><div class="chips l">${chip("data-set-goal2","",!p.goal2,"Нет")}${Object.entries(GOALS).filter(([k])=>k!==p.goal).map(([k,v])=>chip("data-set-goal2",k,p.goal2===k,v)).join("")}</div></div>`;
+    <div class="obq"><div class="obl">Дополнительная цель <span class="muted">· по желанию, около 30% времени</span></div><div class="chips l">${chip("data-set-goal2","",!p.goal2,"Нет")}${Object.entries(GOALS).filter(([k])=>k!==p.goal).map(([k,v])=>chip("data-set-goal2",k,p.goal2===k,v)).join("")}</div></div>
+    <div class="obq"><div class="obl">Стиль тренировок</div><div class="obgrid">${Object.entries(STYLES).map(([k,v])=>card("data-set-style",k,styleOf(p)===k,v,STYLE_HINT[k])).join("")}</div>
+      <p class="hint">Стиль меняет наполнение тренировок, цель и рост весов остаются. Поменять можно в любой момент: «Программа» → «Анкета и цели».</p></div>`;
   if(s==="place") h=placeHTML(p);
   if(s==="exp") h=`<div class="obq"><div class="obl">Сколько вы тренируетесь с отягощениями регулярно?</div><div class="obgrid">
       ${card("data-set-exp","0",p.exp==="0","Не тренировался","или перерыв больше года")}${card("data-set-exp","6",p.exp==="6","До 6 месяцев","")}
       ${card("data-set-exp","24",p.exp==="24","От 6 месяцев до 2 лет","")}${card("data-set-exp","99",p.exp==="99","Больше 2 лет","")}</div>
       <p class="hint">Это заявленный уровень. Если тест покажет ниже — возьмём более низкий.</p></div>
     <label class="chk2"><input type="checkbox" data-chk="runner"${p.runner?" checked":""}> Регулярно бегаю — в тесте будет бег Купера вместо ходьбы</label>`;
-  if(s==="days"){ const L=obLevel(), rec=recDays(L,p.goal), S0=composition(L,p.goal,rec).S, recT=`${compText(L,p.goal,rec)}, ${SPLITN[splitFor(L,S0)].toLowerCase()}`;
-    const D=p.wdays.length, {S}=composition(L,p.goal||"mass",D||rec), warn=D?gapWarn(p.wdays,S,splitFor(L,S)):"";
-    h=`<p style="margin:0">Рекомендуем: <b>${rec} ${plural3(rec,"день","дня","дней")}</b> — ${recT}. Частота — способ распределить недельный объём: меньше дней — тренировки длиннее.</p>
-    <div class="obq"><div class="obl">Дней в неделю</div><div class="obgrid g5">${[2,3,4,5,6].map(d=>card("data-days",d,D===d,`${d}${d===rec?" ★":""}`,compText(L,p.goal||"mass",d))).join("")}</div></div>
+  if(s==="days"){ const L=obLevel(), rec=recDays(L,p.goal), r0=composition(L,p.goal,rec), recT=`${compText(L,p.goal,rec)}, ${SPLITN[splitFor(L,r0.S)].toLowerCase()}`;
+    const cp=compOf(p,L), D=p.wdays.length, lowD=D<p.nS, warn=D&&cp.S&&!lowD?gapWarn(p.wdays,cp.S,splitFor(L,cp.S)):"";
+    const hi = p.nS>(L===1?4:L===2?5:6) ? `Для уровня «${LEVELS[L]}» ${p.nS} силовых — больше, чем нужно для роста: восстановление станет узким местом. Можно — следите за самочувствием, Атлос предложит разгрузку раньше срока.` : "";
+    h=`<p style="margin:0">Тренер советует: <b>${recT}</b>. Но решаете вы — выберите сколько угодно силовых и кардио.</p>
+    <div class="obq"><div class="obl">Силовых тренировок в неделю</div><div class="chips l">${[1,2,3,4,5,6,7].map(n=>chip("data-ns",n,p.nS===n,`${n}${n===r0.S?" ★":""}`)).join("")}</div></div>
+    <div class="obq"><div class="obl">Кардио в неделю <span class="muted">· по желанию</span></div><div class="chips l">${[0,1,2,3,4,5,6,7].map(n=>chip("data-nc",n,(+p.nC||0)===n,`${n}${n===r0.C&&r0.C?" ★":""}`)).join("")}</div>
+      ${!(+p.nC)&&["loss","endurance"].includes(p.goal)?`<p class="hint">Для цели «${GOALS[p.goal].toLowerCase()}» кардио — основной инструмент. Советуем хотя бы ${r0.C||2}.</p>`:""}</div>
     <div class="obq"><div class="obl">Дни недели <span class="muted">· можно сдвинуть</span></div><div class="chips l">${WEEK.map(wd=>chip("data-wd",wd,p.wdays.includes(wd),WDS[wd])).join("")}</div>
-    ${warn?`<p class="hint warn">${warn}</p>`:""}</div>${cardioHTML(p)}`; }
+    ${lowD?`<p class="hint warn">Отметьте хотя бы ${p.nS} ${plural3(p.nS,"день","дня","дней")} — по одному на каждую силовую.</p>`:p.nS?`<p class="hint">Получается: <b>${compLine(cp)}</b>${cp.X?` — ${cp.X} кардио не помещается в отдельные дни и пойдёт после силовой`:""}.</p>`:""}
+    ${warn?`<p class="hint warn">${warn}</p>`:""}${hi?`<p class="hint warn">${hi}</p>`:""}</div>${cardioHTML(p)}`; }
   if(s==="start"){ const L=obLevel(), last=TESTS[TESTS.length-1], hasOld=Object.values(workouts).some(w=>!w.prog&&!w.archived);
     const testTxt = p.loc==="bars" ? "Подтягивания, отжимания, ходьба 1,6 км, брусья, болгарский сплит-присед, подъёмы коленей в висе, планка. По результатам — уровень и стартовые ступени упражнений."
       : p.loc==="home" ? "Отжимания, ходьба 1,6 км или ступенчатый тест, силовые с самыми тяжёлыми гантелями на максимум повторов, планка. По результатам — уровень, веса и ступени упражнений."
       : "Подтягивания, отжимания, ходьба 1,6 км, присед, румынская тяга, жим лёжа, жим гантелей стоя, планка. По результатам — уровень и рабочие веса.";
     h=`<div class="obgrid">${card("data-set-start","test",p.start==="test",p.loc==="gym"?"Тестовая тренировка · 60–70 мин":"Тестовая тренировка · 45–60 мин",testTxt)}
-      ${L===1?card("data-set-start","calib",p.start==="calib","Калибровочная неделя","Первые 2–3 тренировки полноценные, веса подбираются по ходу.") :""}
+      ${card("data-set-start","calib",p.start==="calib","Без теста — начать сразу","Первые 2–3 тренировки полноценные, веса подбираются по ходу — по вашим ответам после подходов.")}
       ${last?card("data-set-start","keep",p.start==="keep",`Тест от ${fmtDate(last.date)}`,"Использовать результаты последнего теста."):""}</div>
     ${hasOld?`<label class="chk2"><input type="checkbox" data-chk="archive"${p.archive?" checked":""}> Убрать прежние тренировки в архив — история и веса сохранятся</label>`:""}
-    <div class="obsum"><span>Цель: <b>${GOALS[p.goal]}${p.goal2?" + "+GOALS[p.goal2].toLowerCase():""}</b></span><span>Уровень по анкете: <b>${LEVELS[L]}</b></span><span>Место: <b>${esc(invText(p))}</b></span><span>Сплит: <b>${SPLITN[splitFor(L,composition(L,p.goal,p.wdays.length).S)]}</b></span><span>Дни: <b>${WEEK.filter(d=>p.wdays.includes(d)).map(d=>WDS[d].toLowerCase()).join(", ")}</b> · ${compText(L,p.goal,p.wdays.length)}</span>${(p.dis.length||+p.age>=60)?`<span>Плавное начало: запас повторов не меньше 3${+p.age>=60?", упражнения на баланс в разминке":""}</span>`:""}</div>`; }
+    <div class="obsum"><span>Цель: <b>${GOALS[p.goal]}${p.goal2?" + "+GOALS[p.goal2].toLowerCase():""}</b></span><span>Уровень по анкете: <b>${LEVELS[L]}</b></span><span>Место: <b>${esc(invText(p))}</b></span><span>Стиль: <b>${STYLES[styleOf(p)]}</b></span><span>Сплит: <b>${SPLITN[splitFor(L,compOf(p,L).S)]}</b></span><span>Дни: <b>${WEEK.filter(d=>p.wdays.includes(d)).map(d=>WDS[d].toLowerCase()).join(", ")}</b> · ${compLine(compOf(p,L))}</span>${(p.dis.length||+p.age>=60)?`<span>Плавное начало: запас повторов не меньше 3${+p.age>=60?", упражнения на баланс в разминке":""}</span>`:""}</div>`; }
   $("ob-body").innerHTML=h;
   $("ob-back").hidden=OB.step===0||(PROFILE&&OB.step===1);
   $("ob-next").textContent = s==="intro"?"Начать" : OB.step===n ? (PROFILE?"Сохранить и пересобрать":"Создать программу") : "Далее";
@@ -3591,12 +3634,12 @@ function gapWarn(wdays,S,split){
 }
 $("ob-body").addEventListener("click",e=>{
   const t=e.target, p=OB.p;
-  const set=t.closest("[data-set-sex],[data-set-goal],[data-set-goal2],[data-set-exp],[data-set-start],[data-set-loc],[data-set-db],[data-set-cardio]");
+  const set=t.closest("[data-set-sex],[data-set-goal],[data-set-goal2],[data-set-exp],[data-set-start],[data-set-loc],[data-set-db],[data-set-cardio],[data-set-style]");
   if(set){ const a=[...set.attributes].find(x=>x.name.startsWith("data-set-")); const k=a.name.slice(9); if(k==="db") p.inv.db=a.value; else p[k]=a.value; if(k==="goal"&&p.goal2===p.goal) p.goal2=""; if(k==="loc") p.cardio="";
-    if(k==="exp" && obLevel()>1 && p.start==="calib") p.start="test"; renderOb(); return; }
+    renderOb(); return; }
   const arr=t.closest("[data-arr-sym],[data-arr-dis],[data-arr-lim]");
   if(arr){ const a=[...arr.attributes].find(x=>x.name.startsWith("data-arr-")); const k=a.name.slice(9), v=a.value; p[k]=p[k].includes(v)?p[k].filter(z=>z!==v):p[k].concat([v]); renderOb(); return; }
-  const dd=t.closest("[data-days]"); if(dd){ p.wdays=DEF_DAYS[+dd.dataset.days].slice(); renderOb(); return; }
+  const ns=t.closest("[data-ns],[data-nc]"); if(ns){ if(ns.hasAttribute("data-ns")) p.nS=+ns.dataset.ns; else p.nC=+ns.dataset.nc; p.wdays=DEF_DAYS[Math.min(7,Math.max(1,p.nS+(+p.nC||0)))].slice(); renderOb(); return; }
   const wd=t.closest("[data-wd]"); if(wd){ const v=+wd.dataset.wd; p.wdays=p.wdays.includes(v)?p.wdays.filter(z=>z!==v):p.wdays.concat([v]); renderOb(); return; }
 });
 $("ob-body").addEventListener("change",e=>{ const c=e.target.closest("[data-chk]"); if(c){ setPath(OB.p,c.dataset.chk,c.checked); renderOb(); } });
@@ -3606,7 +3649,7 @@ $("ob").addEventListener("click",async e=>{
   if(e.target.closest("#ob-back")){ if(OB.step>0){ OB.step--; renderOb(); } return; }
   if(e.target.closest("#ob-next")){
     if(!obValid()) return;
-    if(OB.step<OB_STEPS.length-1){ OB.step++; if(OB_STEPS[OB.step]==="days"&&!OB.p.wdays.length) OB.p.wdays=DEF_DAYS[recDays(obLevel(),OB.p.goal)].slice(); renderOb(); $("ob-body").scrollTop=0; return; }
+    if(OB.step<OB_STEPS.length-1){ OB.step++; if(OB_STEPS[OB.step]==="days"){ const P=OB.p, L=obLevel(); if(!(P.nS>=1)){ const r=P.wdays.length?composition(L,P.goal,P.wdays.length):composition(L,P.goal,recDays(L,P.goal)); P.nS=r.S; P.nC=r.C; } if(!P.wdays.length) P.wdays=DEF_DAYS[Math.min(7,P.nS+(+P.nC||0))].slice(); } renderOb(); $("ob-body").scrollTop=0; return; }
     const p=clone(OB.p); p.gentle=!!(p.dis.length||+p.age>=60); p.age=+p.age; p.weight=+p.weight;
     $("ob-next").disabled=true; $("ob-next").textContent="Собираю программу…";
     try{ await createProgram(p,{archive:!!p.archive}); $("ob").hidden=true; wkOpen=false;
@@ -3818,7 +3861,7 @@ function renderToday(){
   if(st.k==="load"){ el.innerHTML=`<div class="empty">Загружаю…</div>`; return; }
   if(st.k==="none"){ const own=wList().filter(w=>!w.prog);
     el.innerHTML=`<div class="tcard hero"><div class="eyebrow">Начните с программы</div><h3>Атлос составит тренировки под вас</h3>
-      <ol class="road"><li><b>Анкета</b><span>здоровье, цель, опыт и дни — 2 минуты</span></li><li><b>Тестовая тренировка</b><span>60–70 минут: узнаем уровень и рабочие веса</span></li><li><b>Программа</b><span>каждый день здесь будет видно, что делать; веса растут сами</span></li></ol>
+      <ol class="road"><li><b>Анкета</b><span>здоровье, цель, опыт и дни — 2 минуты</span></li><li><b>Тестовая тренировка — по желанию</b><span>60–70 минут: точнее узнаем уровень и веса. Можно начать и без неё</span></li><li><b>Программа</b><span>каждый день здесь будет видно, что делать; веса растут сами</span></li></ol>
       <div class="actions"><button class="btn" data-ob>Подобрать программу</button></div>
       ${own.length&&draft?`<p class="muted" style="margin:0;font-size:13px">Пока можно тренироваться по своим тренировкам: ниже открыта «${esc(workouts[draft.wid].name)}», остальные — во вкладке «Программа».</p>`:""}</div>`; return; }
   const c=cycleInfo()||{}, w=workouts[st.wid], dur=w?estMin(w.items,w.kind==="cardio"):0, ban=[];
@@ -3830,8 +3873,9 @@ function renderToday(){
      <p>${w.items.length} упражнений, 60–70 минут. Идите сверху вниз и отмечайте каждый подход галочкой ✓:</p>
      <ul class="tl"><li>подтягивания, отжимания и планка — максимум, сколько получится;</li><li>ходьба — время на 1,6 км и пульс сразу на финише;</li><li>силовые — два лёгких подхода и один зачётный на 5–10 повторов: последние повторы тяжело, но технично.</li></ul>
      <p>В конце нажмите «Завершить тест» — Атлос рассчитает уровень, подберёт веса и покажет готовую программу.</p>
-     <div class="actions"><button class="btn" data-go>К тесту ↓</button></div>`;
-  else if(st.k==="retest") h=`<div class="eyebrow">Пора</div><h3>Повторный тест</h3><p>Цикл тренировок пройден. Тест покажет прогресс, а Атлос пересчитает уровень, веса и объём на следующий цикл. 60–70 минут.</p><div class="actions"><button class="btn" data-go>К тесту ↓</button></div>`;
+     <div class="actions"><button class="btn" data-go>К тесту ↓</button><button class="btn ghost" data-skiptest>Начать без теста</button></div>
+     <p class="muted" style="margin:0;font-size:13px">Тест — по желанию. Без него веса подберутся по ходу первых 2–3 тренировок, по вашим ответам после каждого подхода.</p>`;
+  else if(st.k==="retest") h=`<div class="eyebrow">Пора</div><h3>Повторный тест</h3><p>Цикл тренировок пройден. Тест покажет прогресс, а Атлос пересчитает уровень, веса и объём на следующий цикл. 60–70 минут.</p><div class="actions"><button class="btn" data-go>К тесту ↓</button><button class="btn ghost" data-skiptest>Пропустить, тренироваться дальше</button></div>`;
   else if(st.k==="train") h=`<div class="eyebrow">Сегодня по плану</div><h3>${esc(w.name)}</h3><div class="tmeta">${w.kind==="cardio"?"кардио":`${w.items.length} ${plural3(w.items.length,"упражнение","упражнения","упражнений")}`} · ≈ ${dur} мин${w.dt?" · "+DUP[w.dt].n:""}${c.deload?" · разгрузка":""}</div>
      ${whyList(w)}
      <div class="actions"><button class="btn" data-go>${draft&&draft.wid===w.id&&draft.startedAt?"Продолжить тренировку ↓":"Открыть тренировку ↓"}</button></div>`;
@@ -3855,6 +3899,7 @@ $("today").addEventListener("click",async e=>{
   if(t.closest("[data-reviewed]")){ GAME.reviewed=mondayOf(today()); await saveGame(); renderToday(); return; }
   if(t.closest("[data-undeload]")){ PROG.deloadFrom=null; await saveProg(); clearProgDrafts(); renderAll(); toast("Разгрузка отменена"); return; }
   if(t.closest("[data-deload]")){ PROG.deloadFrom=today(); PROG.deloadSuggest=null; await saveProg(); clearProgDrafts(); renderAll(); toast("Разгрузочная неделя началась"); return; }
+  if(t.closest("[data-skiptest]")){ const first=PROG.testPending; if(first) Object.assign(PROG,{testPending:false,calib:true,start:today()}); else PROG.retestSkip=today(); await saveProg(); clearProgDrafts(); renderAll(); toast(first?"Начинаем без теста: веса подберутся по ходу":"Тест пропущен, напомним в следующем цикле"); return; }
   if(t.closest("[data-nodeload]")){ PROG.deloadSuggest=null; await saveProg(); renderAll(); return; }
 });
 
@@ -3872,7 +3917,7 @@ function readyHTML(res){
     <p class="muted" style="margin:0;font-size:13px">По анкете — ${LEVELS[R.levelStated]}, по тесту — ${R.levelTest?LEVELS[R.levelTest]:"не определён"}${R.levelTest&&R.levelTest!==R.levelStated?": берём более низкий":""}.</p>
     <details class="chg"><summary>Результаты теста подробно</summary>${testSummaryHTML(res,true)}</details>`;
   h+=`<h4 class="rh">Ваша программа</h4>
-    <p style="margin:0"><b>${GOALS[PROG.goal]}${PROG.goal2?" + "+GOALS[PROG.goal2].toLowerCase():""}</b> · ${SPLITN[PROG.split].toLowerCase()} · ${PROG.S} ${plural3(PROG.S,"силовая","силовые","силовых")}${PROG.C?` + ${PROG.C} кардио`:""} в неделю: ${days}.${seq.length>1?` Тренировки ${seq.map(w=>"«"+w.name+"»").join(", ")} чередуются по кругу.`:""}</p>
+    <p style="margin:0"><b>${GOALS[PROG.goal]}${PROG.goal2?" + "+GOALS[PROG.goal2].toLowerCase():""}</b> · ${SPLITN[PROG.split].toLowerCase()} · ${compLine(PROG)} в неделю: ${days}.${seq.length>1?` Тренировки ${seq.map(w=>"«"+w.name+"»").join(", ")} чередуются по кругу.`:""}</p>
     <div class="rws">${seq.map((w,q)=>`<details class="rw"${q===0?" open":""}><summary><b>${esc(w.name)}</b><span class="muted">${w.items.length} упр. · ≈ ${estMin(w.items)} мин</span></summary><ul class="exl">${w.items.map(exLine).join("")}</ul></details>`).join("")}</div>
     <h4 class="rh">Что делать дальше</h4>
     <ol class="tl">
